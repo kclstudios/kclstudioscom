@@ -1,0 +1,37 @@
+<?php 
+
+function sandbox_form_alter(&$form, &$form_state, $form_id) {
+  // see if webform_client_form_ is in the form_id
+  if(strstr($form_id, 'webform_client_form_')) {
+    // get the nid so we can use it in the wrapper value
+    $nid = $form['#node']->nid;
+    // add the ajax properties to the submit button
+    $form['actions']['submit']['#ajax'] = array(
+      'callback' => 'sandbox_webform_js_submit',
+      'wrapper' => 'webform-client-form-' . $nid,
+      'method' => 'replace',
+      'effect' => 'fade',
+    );
+  }
+}
+ 
+function sandbox_webform_js_submit($form, $form_state) {
+  // define the $sid variable (submission id from webform)
+  $sid = $form_state['values']['details']['sid'];
+  // if we have a sid then we know the form was properly submitted, otherwise, we'll just return the existing $form array
+  if ($sid) {
+    // first we have to load up the webform node object
+    $node = node_load($form_state['values']['details']['nid']);
+    // create an array up with the confirmation message, retreived from the webform node
+    $confirmation = array(
+      '#type' => 'markup',
+      '#markup' => check_markup($node->webform['confirmation'], $node->webform['confirmation_format'], '', TRUE),
+    );
+    // return the confirmation message
+    return $confirmation;
+  }
+  else {
+    // return the form
+    return $form;
+  }
+}

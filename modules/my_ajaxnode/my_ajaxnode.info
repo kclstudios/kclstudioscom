@@ -1,0 +1,3 @@
+name = My Ajax Node
+description = Allows for dynamic ajax loading of nodes.
+core = 7.x

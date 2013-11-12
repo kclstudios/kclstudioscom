@@ -1,0 +1,129 @@
+<?php
+// $Id: my_ajaxnode.module
+/**
+* Implementation of hook_menu().
+*
+* This lets you make changes to any form in the site. You can alter, remove
+* or add form elements. You can also alter the validation and submission
+* behavior. The name will always be modulename_form_alter.
+*/
+
+function my_ajaxnode_menu() {
+  $items['ajax/%foo_tail'] = array(
+    'title' => 'AJAX Node Loader',
+    'load arguments' => array('%map', '%index'),
+    'page callback' => 'ajax_node_loader',
+    'page arguments' => array(1),
+    'access' => TRUE,
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function foo_tail_to_arg($arg, $map, $index) {
+  return implode('/', array_slice($map, $index));
+}
+
+function foo_tail_load($arg, $map, $index) {
+  return implode('/', array_slice($map, $index));
+}
+
+
+
+
+
+
+
+$my_alias = '';
+$my_system_path = '';
+$parent_candidates = '';
+$my_print_path = '';
+$my_page_count = '';
+
+function ajax_node_loader($arg) {
+
+  global $my_alias, $my_system_path, $my_page_count;
+  $my_system_path = drupal_lookup_path("source", $arg);
+  $my_alias = $arg;
+  $node = menu_get_object("node", 1, $my_system_path);
+
+	// theme the node and output the generated HTML
+
+	$output =  node_view($node, $view_mode='full');
+	print drupal_render($output);
+
+}
+
+
+
+
+function my_ajaxnode_preprocess_node(&$variables){
+
+
+
+global $my_alias, $my_system_path, $my_print_path, $parent_candidates, $my_page_count;
+
+$my_print_path = $my_system_path;
+$parent_candidates = _get_parent_candidates(drupal_get_path_alias($my_system_path));
+
+
+$matched_menus = array();
+$matched_link_titles = array();
+$results = db_select('menu_links','ml')
+ ->fields('ml',array('menu_name','link_path','link_title','depth'))
+ ->condition('link_path',$parent_candidates,'IN')
+ ->execute();
+
+foreach ($results as $record) {
+
+ 
+ // If there is more than one matched link in a menu, use the deepest
+ if (!isset($matched_menus[$record->menu_name]) or $record->depth > $matched_menus[$record->menu_name]['depth']) {
+ $matched_menus[$record->menu_name]['link_path'] = $record->link_path;
+ $matched_menus[$record->menu_name]['depth'] = $record->depth;
+ }
+
+ // Get the Link Title if it can be found in a menu item
+ if ($record->link_title AND !isset($matched_link_titles[$record->link_path])) {
+ $matched_link_titles[$record->link_path] = $record->link_title;
+ }
+}
+
+
+
+ // First breadcrumbs is always Home
+ $breadcrumbs[] = l(t('Home'),'<front>');
+ //$breadcrumbs[] = l(t(global $my_alias),'<front>');
+ // Remove current page from breadcrumb
+ //array_pop($parent_candidates);
+
+ foreach($parent_candidates as $link_path) {
+
+ // If title of the page is found on a menu item, use it
+ if (isset($matched_link_titles[$link_path])) {
+ $breadcrumbs[] = l($matched_link_titles[$link_path],$link_path,array('attributes' => array('class' => array('ajax'))));
+ }
+ 
+ }
+ drupal_set_breadcrumb($breadcrumbs); 
+ }
+
+
+
+
+function _get_parent_candidates($path = NULL) {
+  $pieces = explode('/', $path);
+  $path = '';
+  $parent_candidates = array();
+  foreach ($pieces as $piece) {
+    $path .= $piece . '/';
+    $parent_candidates[] = drupal_get_normal_path(rtrim($path, '/'));
+  }
+  return $parent_candidates;
+}
+
+
+  
+
