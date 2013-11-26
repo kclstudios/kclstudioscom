@@ -34,6 +34,7 @@ cursor: pointer;
 outline: medium none;
 text-decoration: none;
 font-weight:700;
+transition: color 0.4s;
 }
 a.on,a.on:hover{
 color:#525456 !important;
@@ -66,6 +67,7 @@ text-shadow: -2px -2px #1d1e20;
 }
 a.panelControl:link,a.panelControl:visited {
 color: #4488bb;
+
 }
 a.panelControl:hover{
 color: #ee6600;
@@ -220,6 +222,7 @@ filter:alpha(opacity=15); -moz-opacity:0.15; -khtml-opacity:0.15; opacity:0.15;
 position: absolute;
 top: 0;
 width: 100%;
+transition: opacity 0.4s;
 }
 .hover .trans{
 background: none repeat scroll 0 0 #fff;
