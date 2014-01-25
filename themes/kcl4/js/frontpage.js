@@ -4,7 +4,7 @@
 	
 var layerTimers = new Array()
 var layerDelays = new Array()
-var loopsOn = 1
+var animateOn = true
 var activeUrl
 var activePanel
 var activeIndex
@@ -24,198 +24,187 @@ var resizeTimer
 var contentTimer
 var introTimer
 
-
-function showAlert(msg){
-	
+/********************
+* Function
+********************/
+function showAlert(msg){	
 	$("#alertScreen").empty().append("<div>" + msg + "</div>").css({left:0})
-
 }
 
-function hideAlert(msg){
-	
+/********************
+* Function
+********************/
+function hideAlert(msg){	
 	$("#alertScreen").css({left:"-100%"})
-
 }
 
+/********************
+* Function
+********************/
 function formatHash(){
-
 	if (location.hash == undefined || location.hash == "" || location.hash == "#/"){
-
 		if(location.pathname == undefined || location.pathname == "" || location.pathname == "/"){
-
 			location.hash = $(".panel > a.main").attr('href')
 			hashReady = true
-
 		} else {	
-
 			if(location.pathname != "/user"){
-			var hashfromPath = "/#" + location.pathname	
-			location.href = hashfromPath
-
+				var hashfromPath = "/#" + location.pathname	
+				location.href = hashfromPath
 			}
-
 		}
-
-	} else {
-		
+	} else {		
 		hashReady = true
 	}	
-	
 }
 
-
+/********************
+* Function
+********************/
 var parseHash = function(){		
-		
-		activeUrl = window.location.hash.replace(/#\//,"")
-		dirLevels = activeUrl.replace(/\?.*$/,"").split("\/") //remove the query and split the path
-		activePanel = $('a[href=/' + dirLevels[0] + ']').parent('div.panel')			
-		activeIndex = $(activePanel).index()
-		activeContainer = $('.container',activePanel)
-		activeContent = $('.panelContent',activePanel)
-		
-		if (activeIndex === -1){
-
-				showAlert("Sorry for the mix-up, but you have tried to access content which is restricted or does not exist.")
-									
-		}else{
-				hideAlert()
-				$('#panelContainer').activatePanel()
-				_gaq.push(['_trackEvent', 'Urls', 'Display', activeUrl]) // Log event for Google analytics event tracking
-		}
-
-
-
+	activeUrl = window.location.hash.replace(/#\//,"")
+	dirLevels = activeUrl.replace(/\?.*$/,"").split("\/") //remove the query and split the path
+	activePanel = $('a[href=/' + dirLevels[0] + ']').parent('div.panel')			
+	activeIndex = $(activePanel).index()
+	activeContainer = $('.container',activePanel)
+	activeContent = $('.panelContent',activePanel)
+	if (activeIndex === -1){
+		showAlert("Sorry for the mix-up, but you have tried to access content which is restricted or does not exist.")
+	}else{
+		hideAlert()
+		$('#panelContainer').activatePanel()
+		_gaq.push(['_trackEvent', 'Urls', 'Display', activeUrl]) // Log event for Google analytics event tracking
+	}
 }
 
-
-$.fn.writeHash = function(){		
-				
-		location.hash = $(this).attr("href")		
-
+/********************
+* Stop scene animation functions and clear timers
+********************/
+$.fn.writeHash = function(){						
+	location.hash = $(this).attr("href")	
 }
 
-
+/********************
+* A main-interface panel has been clicked, so initiate some processes
+********************/
 $.fn.activatePanel = function(){
-	//readOut("Activating panel " + activeIndex)
-	
+	//readOut("Activating panel " + activeIndex)	
 	hideScrollElem()
 	$('.container').stop()//Stop any current function affecting a .container class 
 	$(activeContainer).fadeTo(0,0)//fadeOut even if no change made to activePanel
-	$('customScrollBox').removeClass('loading')
-	
-	
+	$('customScrollBox').removeClass('loading')	
 	if(!($(activePanel).hasClass("active"))) {	
 		//if(soundReady == true){soundManager.play('panelSound')}
 		$("#panelContainer .panel").addClass('inactive')
-
-			readOutPosition()
-			var mode = "start"
-			loadScene(activeIndex,mode)			
-			
-			$("#panelContainer div.active").removeClass('active').animate({width:panelInactiveWidth},500,'easeOutExpo')
-		
-			$(activePanel).removeClass('inactive').addClass('active').animate({width:panelActiveWidth},500,'easeOutExpo', function(){				
-				
-				prepContent()
-				//soundReady = true						
-			
-			})
-
-
-	} else {
-		
-				prepContent()		
-
-	}
-		
+		readOutPosition()
+		var mode = "start"
+		loadScene(activeIndex,mode)			
+		$("#panelContainer div.active").removeClass('active').animate({width:panelInactiveWidth},500,'easeOutExpo')
+		$(activePanel).removeClass('inactive').addClass('active').animate({width:panelActiveWidth},500,'easeOutExpo', function(){				
+			prepContent()
+			//soundReady = true						
+		})
+	} else {		
+		prepContent()
+	}		
 }
 
-
-
-
-
-/**
-###### Stop scene animation functions and clear timers
-*/
+/********************
+* Stop scene animation functions and clear timers
+*********************/
 function resetScenes(){
-	$("#scene .sceneLayer").each(function(){
+	$("#scene .scene-layer").each(function(){
 		$(this).stop()
 		//readOut("Stopped layer" + $(this).attr("id"))
-
 	})
 	for (var i = 0; i < layerTimers.length; i++)	{
-		clearTimeout(layerTimers[i])
-		    	
+		clearTimeout(layerTimers[i])		    	
 	}
 	for (var i = 0; i < layerDelays.length; i++)	{
-		clearTimeout(layerDelays[i])
-		    	
+		clearTimeout(layerDelays[i])		    	
 	}
 }
 
+/********************
+* Define our scene area
+*********************/
+function matteDim() {	
+	var outer = document.getElementById('outer'); 
+	var outerWidth = outer.clientWidth; 
+	var outerHeight = outer.clientHeight; 
+	var boxSize
+	var scale
+	if (outerHeight > 2500 || outerWidth > 2500) {
+		boxSize = 2500
+		scale = 1		
+	} else {
+		if (outerHeight < outerWidth) {
+			boxSize = outerWidth
+		} else {
+			boxSize = outerHeight
+		}
+		scale = outerWidth/2500
+	}
+	//$('#scenesContainer').height(boxSize+'px')
+	//$('#scenesContainer').width(boxSize+'px')
+	//console.log('Outer Height: ' + outerHeight + '  Width: ' + outerWidth)
+	//console.log('Scenes Height: ' + $('#scenesContainer').height() + '  Width: ' + $('#scenesContainer').width())
+	var hoffset = (outerWidth - boxSize)/2
+	var voffset = (outerHeight - boxSize)/2
+	//console.log(hoffset)
+	$('#scenesContainer').css({left:hoffset,top:voffset})
+	return(scale)	
+}
 
-
- 
-var loadScene = function(panel,mode){	
+/********************
+* Function
+********************/ 
+var loadScene = function(panel,mode){		
+	
+	var outer = document.getElementById('outer'); 
+	var outerWidth = outer.clientWidth; 
+	var outerHeight = outer.clientHeight; 
+	var boxSize
+	var scale
+	if (outerHeight > 2500 || outerWidth > 2500) {
+		boxSize = 2500
+		scale = 1		
+	} else {
+		if (outerHeight < outerWidth) {
+			boxSize = outerWidth
+		} else {
+			boxSize = outerHeight
+		}
+		scale = outerWidth/2500
+	}
+	$('#scenesContainer').height(boxSize+'px')
+	$('#scenesContainer').width(boxSize+'px')
+	//console.log('Outer Height: ' + outerHeight + '  Width: ' + outerWidth)
+	//console.log('Scenes Height: ' + $('#scenesContainer').height() + '  Width: ' + $('#scenesContainer').width())
+	var hoffset = (outerWidth - boxSize)/2
+	var voffset = (outerHeight - boxSize)/2
+	//console.log(hoffset)
+	$('#scenesContainer').css({left:hoffset,top:voffset})	
+	var ratio = scale
+	//console.log(ratio)
 	
 	sceneId = sceneData[panel][0]
-
-
-		if(activeSceneId !== sceneId || (activeSceneId == sceneId && mode == "resume")){
-		
-		activeSceneId = sceneId		
-
-		
+	if(activeSceneId !== sceneId || (activeSceneId == sceneId && mode == "resume")){		
+		activeSceneId = sceneId			
 		$("#sceneAssets").empty()
-
 		matteImg = sceneData[panel][1] != '' ? sceneData[panel][1] : ''
-
 		//readOut(matteImg)
 		if(matteImg != ''){
 			$("#sceneAssets").append('<img src="' + matteImg + '" />')
-		}	
-				
-		
-			
-		layers = sceneData[panel][2]
-		
-			
+		}				
+		layers = sceneData[panel][2]			
 		if (layers != null) {
 			var count = 0
-			layers.forEach(function(){
-			
-			
-			
-			bgImg = layers[count][0]  != '' ? layers[count][0] : ''
-					
-			
-
-	
-			$("#sceneAssets").append('<img src="' + bgImg + '" />')
-
-		
-			
-		
-
-
-			count++
+			layers.forEach(function(){			
+				bgImg = layers[count][0]  != '' ? layers[count][0] : ''	
+				$("#sceneAssets").append('<img src="' + bgImg + '" />')
+				count++
 			})//end forEach
-
-
-
 		}//endif
-		
-
-		
-		
-		
-
-			
-
-		
-	
-
-
 
 		var assetCount = $("#sceneAssets > img").size()
 
@@ -229,14 +218,14 @@ var loadScene = function(panel,mode){
 			$(this).load(function(){
 			
 			assetsLoaded++
-
+			
 			//readOut("Asset " + assetsLoaded + " of " + assetCount + " loaded.")			
 
 				if (assetsLoaded == assetCount) {
 					resetScenes()
 					$("#screen").stop().fadeIn(300,function(){							
 
-			$("#scene div.sceneLayer").remove()
+			$("#scene .scene-layer").remove()
 
 			if(matteImg != ''){
 			$("#matteImg").attr("src", matteImg)
@@ -244,31 +233,43 @@ var loadScene = function(panel,mode){
 		} else {
 			$("#matte").css('display','none')
 		}	
-
+		
 
 		if (layers != null) {
 			var count = 0
-			layers.forEach(function(){
-			
-			$("#scene").append('<div class="sceneLayer" id="layer' + count + '"></div>')
-			
-			bgImg = layers[count][0]  != '' ? layers[count][0] : ''
-			bgStartX = layers[count][1] != '' ? layers[count][1] : '0px'
-			bgEndX = layers[count][2] != '' ? layers[count][2] : '0px'		
-			bgStartY = layers[count][3] != '' ? layers[count][3] : '0px'
-			bgEndY = layers[count][4] != '' ? layers[count][4] : '0px'
-			bgRepeat = layers[count][5] != '' ? layers[count][5] : 'no-repeat'		
-			bgDuration = layers[count][6] != '' ? layers[count][6] : '0'
-			bgLoop = layers[count][7] != '' ? layers[count][7] : '0'
-			bgInterval = layers[count][8] != '' ? layers[count][8] : '0'
-			bgDelay = layers[count][9] != '' ? layers[count][9] : '0'
-					
-			$("#scene > #layer" + count).parallaxLayer(count,bgImg,bgRepeat,bgStartX,bgStartY,bgEndX,bgEndY,bgDuration,bgLoop,bgInterval,bgDelay)			
-		
-			count++
-
+			layers.forEach(function(){	
+				var imgSrc = layers[count][0]  != '' ? layers[count][0] : ''
+				var startX = layers[count][1] != '' ? layers[count][1] : '0px'
+				var endX = layers[count][2] != '' ? layers[count][2] : '0px'		
+				var startY = layers[count][3] != '' ? layers[count][3] : '0px'
+				var endY = layers[count][4] != '' ? layers[count][4] : '0px'
+				var duration = layers[count][6] != '' ? layers[count][6] : '0'
+				var loop = layers[count][7] != '' ? layers[count][7] : '0'
+				var interval = layers[count][8] != '' ? layers[count][8] : '0'
+				var delay = layers[count][9] != '' ? layers[count][9] : '0'		
+				var bgRepeat = layers[count][5] != '' ? layers[count][5] : 'no-repeat'		
+				if (bgRepeat == 'no-repeat') {
+					var elem = $('<img>', {
+						'class' : 'scene-layer',
+						src : imgSrc						
+					})	
+					$("#scene").append(elem)	
+					elem.height(elem.height()*ratio)
+					elem.animateElement(count,startX,startY,endX,endY,duration,loop,interval,delay)			
+				} else {
+					var elem = $('<div/>', {
+						'class' : 'scene-layer'
+					})	
+					elem.css({
+						'background-image' : 'url('+imgSrc+')',
+						'background-repeat' : bgRepeat,
+						'background-size' : (ratio*100) + '%'
+					})	
+					$("#scene").append(elem)	
+					$(elem).animateBg(count,startX,startY,endX,endY,duration,loop,interval,delay)			
+				}				
+				count++
 			})//end forEach
-
 		}//endif
 
 
@@ -276,42 +277,31 @@ var loadScene = function(panel,mode){
 					
 						$(this).fadeOut(300)
 
-					})//end fadeIn
-					
+					})//end fadeIn					
 				}//end if assetsLoaded 
-
-			})
-			
+			})			
 		}) 
-
 	} //end check for change in activeSceneId
-
 }
 
-
-
+/********************
+* Write output to front end 
+********************/
 var readOut = function(output){	
 	$("#readOut").append("<div>" + output + "</div>")
 }
 
-
-
+/********************
+* Move readOut display away from active content panel
+********************/
 var readOutPosition = function(){	
-	//var myArray = new Array("bottom","top")
-	//var myArrayIndex = Math.round(Math.random())
-	//var yPos = myArray[myArrayIndex]
 	if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"}
-	//$("#readOut").css('top','','bottom','').css('left',xPos).css(yPos,'0px')
 	$("#readOut").css('left',xPos)
 }
-	
 
-
-/**
- *
- Write strings one character at a time
- *
- */
+/********************
+* Write strings one character at a time
+********************/
  $.fn.writeText = function(content,callback) {
         var contentArray = content.split("")
         var current = 0
@@ -334,69 +324,67 @@ var readOutPosition = function(){
 
     	loopsiloop()
 }
-    
-
-
-
 				
-/**
- *
- Background animation handler
- *
- */
-$.fn.parallaxLayer =  function(count,img,re,sx,sy,ex,ey,d,l,int,delay){  	
-
-		var bg = img
+/********************
+* Scene element animation handler
+********************/
+$.fn.animateElement =  function(count,sx,sy,ex,ey,d,l,int,delay){ 
+		var self = $(this)		
 		var loop = l
-		var startPos = sx + " " + sy
-		var endPos = ex + " " + ey
 		var looper = null
-		var self = $(this)	
-		var bgRun = 0
-		//if (bgRun == 0){var wait = delay}else{var wait=0}
-		var wait = delay
-			
- 	 
- 	    self.css('background', 'url("' + img + '") ' + re + ' ' + sx + ' ' + sy)
-
- 		if(loopsOn == 1){ 
-
- 			if(loop == 1){
-
+		var loopCounter = 0		
+		self.css({left:sx,top:sy})	
+	
+		//if (loopCounter == 0){var wait = delay}else{var wait=0}
+		if(animateOn == true){ //global var check
+ 			if(loop == true){
 				looper =  function(){
-
 					layerTimers[count] = setTimeout(function(){
-
-						self.parallaxLayer(count,img,re,sx,sy,ex,ey,d,l,int,delay)					
-
-					}, int)	
-								
+						self.animateElement(count,sx,sy,ex,ey,d,l,int,delay)
+					}, int)									
 				}
-
 			} 
-
-			
-
-			layerDelays[count] = setTimeout(function(){
-				
-					$(self).animate({backgroundPosition: endPos},eval(d),'linear',looper)
-								
-			}, wait)	
-			
+			layerDelays[count] = setTimeout(function(){			//Here's the actual animation function to be called				
+				self.animate({left:ex,top:ey},eval(d),'linear',looper)				
+			}, delay)			
 		} 		
-    	 
-    	bgRun++
-    	
-     	//readOut("parallaxBack instance:" + bgRun)     	
-      
+   	loopCounter++    	
+    readOut("animateElement instance:" + loopCounter)       
 }	
 
 
-/**
- *
+/********************
+* Scene background animation handler
+********************/
+$.fn.animateBg =  function(count,sx,sy,ex,ey,d,l,int,delay){ 
+		var self = $(this)		
+		var loop = l
+		var looper = null
+		var loopCounter = 0		
+		var startPos = sx + " " + sy
+		var endPos = ex + " " + ey		
+		self.css('background-position', startPos)		
+		//if (loopCounter == 0){var wait = delay}else{var wait=0}
+		var wait = delay 	 
+		if(animateOn == true){ //global var check
+ 			if(loop == true){
+				looper =  function(){
+					layerTimers[count] = setTimeout(function(){
+						self.animateBg(count,sx,sy,ex,ey,d,l,int,delay)
+					}, int)									
+				}
+			} 
+			layerDelays[count] = setTimeout(function(){			//Here's the actual animation function to be called					
+				$(self).animate({'background-position': endPos},eval(d),'linear',looper)			
+			}, wait)			
+		} 		
+   	loopCounter++    	
+    readOut("animateBg instance:" + loopCounter)       
+}	
+
+/********************
  Handle the content display, either default or dynamic
- *
- */
+********************/
 var prepContent = function(){
 	$('.content .dynamic').removeClass('loading')
 	$('.content .static',activeContainer).stop().css('opacity','0').hide(0)
@@ -435,11 +423,8 @@ var prepContent = function(){
 				}
 
 			},int)
-
-		})		
-						
+		})								
 	}//end if dirLevels
-
 }//end prepContent
 
 
@@ -495,19 +480,17 @@ function displayContent(div){
 /**
  * Stop all this looping animation and clear timeouts
  **/
+ 
 $("a#loop-terminate").click(function(){
-
 	if(!($(this).hasClass("disabled"))) {
 		$(this).addClass("disabled").text("Enable")		
 		resetScenes()
-		loopsOn = 0
+		animateOn = false
 	} else {
-		$(this).removeClass("disabled").text("Disable")
-		var mode = "resume"		
-		loopsOn = 1
-		loadScene(activeIndex,mode)
+		$(this).removeClass("disabled").text("Disable")	
+		animateOn = true
+		loadScene(activeIndex,"resume")
 	}
-
 	return false
 })
 
@@ -531,26 +514,19 @@ $("a.tabClose").click(function(){
  *
 */ 
 
-
 $('a.tabControl').click(function(){	
-
 	$('#panelContainer').removeClass('ghost')
-
 	if($(this).hasClass('on')){			
 		$(this).removeClass('on')
 	} else {
 		$('a.tabControl').removeClass('on')			
 		$(this).addClass('on')
 		$('#panelContainer').addClass('ghost')
-	}
-
-	
+	}	
 	$('a.tabControl').each(function() {
-
 		var tabId = $(this).attr('href')
 		var offText = $(this).text().replace(/.$/,"+")
 		var onText = $(this).text().replace(/.$/,"-")
-
 		if($(this).hasClass('on')){
 			$(tabId).fadeIn('1500').addClass('show')
 			$(this).text(onText)
@@ -558,14 +534,9 @@ $('a.tabControl').click(function(){
 			$(tabId).fadeOut(0).removeClass('show')
 			$(this).text(offText)
 		}		
-
-
 	})
-
 	return false
 })
-
-
 
 /**
  *
@@ -740,18 +711,19 @@ function intro(){
  *
 */ 
 
-
-
 formatHash()
+
 adjustResize()
 
 $("a.ajax").live("click",function(){	
 	$(this).writeHash()
 	return false
 })
+
 $("a.panelControl").bind('mouseenter',function(){	
 	$(this).parent('.panel').addClass('hover')	
 })
+
 $("a.panelControl").mouseleave(function(){	
 	$(this).parent('.panel').removeClass('hover')	
 })
@@ -782,7 +754,6 @@ $('#cssControl a#css2').trigger('click');
  *
 */ 
 window.onresize = function(){
-
 	if(resizeTimer != null) {
 		clearTimeout(resizeTimer)
 	}
@@ -790,26 +761,19 @@ window.onresize = function(){
 		adjustResize()
 		prebuildSlideMenu()		
 	}, 500);
-
 }
-
 
 /**
  *
  * Begin timer to determine if loading sequence will be shown. Timer might be cleared in intro() function
  *
 */ 
-if (hashReady == true){
-	
+if (hashReady == true){	
 	clearTimeout(introTimer)	
 	introTimer = setTimeout(function(){
-
-		$('#status').addClass("loading")
-				
-	}, 500)	
-		
+		$('#status').addClass("loading")				
+	}, 500)			
 }
-
 
 /**
  *
@@ -817,14 +781,12 @@ if (hashReady == true){
  *
 */ 
 $(window).load(function(){	
-	
 	editPagerLink()
 	$('#top').css({height:"50%"})
 	$('#bottom').css({height:"50%"})
 	$('#panelContainer .panel').css({width: panelInactiveWidth})
 	$(window).bind('hashchange',parseHash)		
-	intro()		
-
+	intro()
 })
 
 

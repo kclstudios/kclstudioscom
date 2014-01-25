@@ -318,9 +318,12 @@ $path = 'node/'. $id;
 $parent = menu_link_get_preferred($path);
 $mlid = $parent['mlid'];
 $tree = menu_tree_all_data($menu);
-$subtree = kcl_get_subtree($tree,$mlid);
-$numKeys = array_values($subtree);
-$children = $numKeys[0]['below'];
+
+//print_r(array_keys($tree['49956 Web Development 579']['link']['mlid'])); return;
+
+$subtree = kcl4_get_subtree($tree,$mlid);
+$num_keys = array_values($subtree);
+$children = $num_keys[0]['below'];
 //print_r($parent);
 if($children) :
   $count = 0;
@@ -342,7 +345,58 @@ endif;
 }//end function kcl4_child_menu
  
 
+/******************************************/
 
+function kcl4_siblings_menu($menu = 'main-menu', $id) {
+	$tree = menu_tree_all_data($menu);	
+	$path = 'node/'. $id;
+	$current = menu_link_get_preferred($path);
+	$mlid = $current['mlid'];
+	$tree = menu_tree_all_data($menu);
+	$branch = kcl4_get_branch($tree,$mlid);
+	$num_keys = array_values($branch);
+	$count = -1;
+	foreach($num_keys as $num_key) {
+		$count++;
+		if($num_keys[$count]['link']['mlid'] == $mlid) {			
+			$prev = $num_keys[$count - 1]; print '<a class="prev ajax" href="/' . drupal_get_path_alias($prev['link']['href']) . '">' . $prev['link']['title'] . '</a>';
+			$next = $num_keys[$count + 1]; print '<a class="next ajax" href="/' . drupal_get_path_alias($next['link']['href']) . '">' . $next['link']['title'] . '</a>';
+			//print_r($prev);
+			//print_r($next);
+			return;			
+		}				
+	}	
+}	
+
+
+function kcl4_get_branch($tree, $mlid, $level = -1) {
+	$level++;
+  // Check all top level entries
+  foreach ($tree as $key => $element) {
+ 
+    // Is this the entry we are looking for?
+    if ($mlid == $element['link']['mlid'])  {
+      // Yes, return while keeping the key
+      //return array($key => $element);
+      //return $level;
+      return $tree;
+    }
+    else {
+      // No, recurse to children, if any
+      if ($element['below']) {
+      	
+        $submatch = kcl4_get_branch($element['below'], $mlid, $level);
+        // Found wanted entry within the children?
+        if ($submatch) {
+          // Yes, return it and stop looking any further
+          return $submatch;
+        }
+      }
+    }
+  }
+  // No match at all
+  return NULL;
+}
 
 
 
@@ -357,7 +411,7 @@ endif;
  * @return array
  *   The found subtree, or NULL if no entry matched the mlid
  */
-function kcl_get_subtree($tree, $mlid) {
+function kcl4_get_subtree($tree, $mlid) {
   // Check all top level entries
   foreach ($tree as $key => $element) {
     // Is this the entry we are looking for?
@@ -368,7 +422,7 @@ function kcl_get_subtree($tree, $mlid) {
     else {
       // No, recurse to children, if any
       if ($element['below']) {
-        $submatch = kcl_get_subtree($element['below'], $mlid);
+        $submatch = kcl4_get_subtree($element['below'], $mlid);
         // Found wanted entry within the children?
         if ($submatch) {
           // Yes, return it and stop looking any further

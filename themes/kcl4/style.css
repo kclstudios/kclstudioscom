@@ -177,11 +177,13 @@ position: relative;
 width: 100%;
 }
 #scenesContainer {
-height: 88%;
+height: 100%;
 overflow: hidden;
 position: absolute;
-top: 6%;
 width: 100%;
+max-height: 2500px;
+max-width: 2500px;
+margin: 0 auto;
 }
 #scene{
 background:#000;
@@ -194,13 +196,16 @@ padding: 0;
 position: relative;
 width: 100%;	
 }
-.sceneLayer{
+div.scene-layer{
 position: absolute;
 top: 0px;
 bottom: 0px;
 height: 100%;
 width: 100%;
 overflow: hidden;   	
+}
+img.scene-layer {
+	position: absolute;
 }
 #matte {
 position: absolute;

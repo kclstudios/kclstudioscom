@@ -121,8 +121,9 @@ print render($block['content']);
   </div>
 <?php endif; ?>
 					 	       
-<?php kcl4_child_menu($menu = 'main-menu', $nid); ?>
-			   
+<?php kcl4_child_menu($menu = 'main-menu', $nid); ?>	
+<?php kcl4_siblings_menu($menu = 'main-menu', $nid); ?>
+
 		</div>
 
 <?php endif; /*end of full vs teaser check */ ?>
