@@ -1,0 +1,20 @@
+name = kcl4
+description = Custom, fixed-width theme for kclstudios.com.
+package = Core
+version = 1.0
+core = 7.x
+regions[left] = Left sidebar
+regions[right] = Right sidebar
+regions[content] = Content
+regions[header] = Header
+regions[footer] = Footer
+regions[tab1] = Tab1
+regions[tab2] = Tab2
+regions[tab3] = Tab3
+regions[navigation] = Navigation
+stylesheets[all][] = sass/css/screen.css
+stylesheets[all][] = style.css
+stylesheets[print][] = print.css
+
+
+
