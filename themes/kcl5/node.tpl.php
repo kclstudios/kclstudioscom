@@ -9,13 +9,13 @@
 
 		
 	<?php endif; ?>
-		<div class="node-sticky"> 
+		<div class="node node-sticky"> 
  
      		<?php print render($content['body']) ?>   
   	          
 		</div> 
 	<?php else : ?>
-		<div class="node-teaser"> 
+		<div class="node node-teaser"> 
  
     
      		<h3><a class="innerControl default" href="<?php print $node_url ?>"><?php print $title ?></a></h3>
@@ -26,7 +26,7 @@
 	<?php endif; ?>    
 <?php else: /*else its a full node view*/ ?>
 
-		<div class="node-full">     
+		<div class="node node-full">     
    				
       		
    			<?php if ($node->field_image[0]['view']) : ?>

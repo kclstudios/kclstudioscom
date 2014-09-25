@@ -1,12 +1,69 @@
 (function ($) { //keeping it drupal js friendly
 
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	$(document).ready(function(){ 	
 	
+	   
+	    
+var $element = $('#ajax_trigger');
+        var base = $element.attr('id');
+        var href = $element.attr('href');
+       var element_settings = {
+          url: href,
+          event: 'click',
+          progress: {
+            type: 'throbber'
+          }
+        };
+Drupal.ajax[base] = new Drupal.ajax(base, $element, element_settings);
+
+
+
+
+
+
+
+// AJAX command to update and display cart block
+Drupal.loadNodeScene = function(ajax, response, status) {
+   	console.log(response.data);
+ }
+
+
+// Add our commands to the Drupal commands collection.
+Drupal.ajax.prototype.commands.load_node_scene = Drupal.loadNodeScene;
+
+/**
+ * Add our commands to the Drupal commands collection.
+ */
+ 
+	    
+	    
 var layerTimers = new Array()
 var layerDelays = new Array()
 var animateOn = true
 var activeUrl
-var activePanel
+//var activePanel
 var activeIndex
 var activeContainer
 var activeDefault
@@ -15,14 +72,14 @@ var activeSceneId
 var dirLevels
 var loader
 var soundReady = false
-var panelActiveWidth = "44%" //((100/$('div.panel').length) * 200) + "%"
-var panelInactiveWidth = "14%" //(((100 - panelActiveWidth)/($('div.panel').length) - 2))) * 100) + "%"
 var myWidth // Calculated browser display width
 var myHeight //Calculated browser display height
 var hashReady = false
 var resizeTimer
 var contentTimer
 var introTimer
+
+
 
 /********************
 * Function
@@ -41,10 +98,17 @@ function hideAlert(msg){
 /********************
 * Function
 ********************/
+$.fn.writeHash = function(){						
+	location.hash = $(this).attr("href")	
+}
+
+/********************
+* Function
+* formats a hash value from a url
+********************/
 function formatHash(){
 	if (location.hash == undefined || location.hash == "" || location.hash == "#/"){
 		if(location.pathname == undefined || location.pathname == "" || location.pathname == "/"){
-			location.hash = $(".panel > a.main").attr('href')
 			hashReady = true
 		} else {	
 			if(location.pathname != "/user"){
@@ -57,62 +121,69 @@ function formatHash(){
 	}	
 }
 
+
 /********************
 * Function
+ * Parse hash and determine layout and scene displays
 ********************/
 var parseHash = function(){		
 	activeUrl = window.location.hash.replace(/#\//,"")
-	dirLevels = activeUrl.replace(/\?.*$/,"").split("\/") //remove the query and split the path
-	activePanel = $('a[href=/' + dirLevels[0] + ']').parent('div.panel')			
+	dirLevels = activeUrl.replace(/\?.*$/,"").split("\/") //remove any query and split the path
+	var activePanel = $('a[href=/' + dirLevels[0] + ']').parent('div.panel')		
+	console.log(activePanel)	
 	activeIndex = $(activePanel).index()
 	activeContainer = $('.container',activePanel)
 	activeContent = $('.panelContent',activePanel)
-	if (activeIndex === -1){
+	activeScene = 
+	console.log(dirLevels[0])
+	console.log(activeIndex)
+	if (dirLevels[0] != "" && activeIndex === -1){
 		showAlert("Sorry for the mix-up, but you have tried to access content which is restricted or does not exist.")
-	}else{
-		hideAlert()
-		$('#panelContainer').activatePanel()
-		_gaq.push(['_trackEvent', 'Urls', 'Display', activeUrl]) // Log event for Google analytics event tracking
+		return
 	}
+	hideAlert()
+	if(activeIndex === -1){
+		activeIndex = 1
+		//loadScene(activeIndex)		
+	} else {
+
+		$('#panelContainer').activatePanel(activePanel,activeIndex)
+	}
+	_gaq.push(['_trackEvent', 'Urls', 'Display', activeUrl]) // Log event for Google analytics event tracking	
 }
 
-/********************
-* Stop scene animation functions and clear timers
-********************/
-$.fn.writeHash = function(){						
-	location.hash = $(this).attr("href")	
+
+function getActiveIndex(id) {
+	return($('#' + id).index())
 }
 
 /********************
 * A main-interface panel has been clicked, so initiate some processes
 ********************/
-$.fn.activatePanel = function(front){
-	front = typeof front !== 'undefined' ? front : 'front'
-	//readOut("Activating panel " + activeIndex)	
-	hideScrollElem()
+$.fn.activatePanel = function(activePanel,index){	
 	$('.container').stop()//Stop any current function affecting a .container class 
-	$(activeContainer).fadeTo(0,0)//fadeOut even if no change made to activePanel
-	$('customScrollBox').removeClass('loading')	
-	if(!($(activePanel).hasClass("active"))) {	
-		//if(soundReady == true){soundManager.play('panelSound')}
-		$("#panelContainer .panel").addClass('inactive')
-		readOutPosition()
+	//$('customScrollBox').removeClass('loading')	
+	if(!($(activePanel).hasClass("active"))) {				
+		$("#panelContainer .panel").removeClass('active').addClass('inactive')
+		$(activePanel).removeClass('inactive').addClass('active')	
+			activateContent(activePanel)
+			soundReady = true		
+			
+		
+		if(soundReady == true){soundManager.play('panelSound')}
 		var mode = "start"
-		loadScene(activeIndex,mode)			
-		$("#panelContainer div.active").removeClass('active').animate({width:panelInactiveWidth},500,'easeOutExpo')
-		$(activePanel).removeClass('inactive').addClass('active').animate({width:panelActiveWidth},500,'easeOutExpo', function(){				
-			prepContent()
-			//soundReady = true						
-		})
+		console.log(activePanel.attr('id'))
+		//loadScene(index,mode)			
+		readOutPosition()
 	} else {		
-		prepContent()
+		activateContent(activePanel)		
 	}		
 }
 
 /********************
 * Stop scene animation functions and clear timers
 *********************/
-function resetScenes(){
+function resetScene(){
 	$("#scene .scene-layer").each(function(){
 		$(this).stop()
 		//readOut("Stopped layer" + $(this).attr("id"))
@@ -159,30 +230,30 @@ function matteDim() {
 /********************
 * Function
 ********************/ 
-		function calcScale(val,scale){	
-			var v = val				
-				//console.log(pattern)
-				//var p = pattern
-				var c = v.replace(/(px|%)/,'')	
-				var u = RegExp.$1
-				console.log(u)					
-					if (u == 'px') {
-						val = (c * scale) + 'px'
-					}	
-					console.log('Original value: ' + c + '     New value: ' + val)			
-			return val			
-		}	
+function calcScale(val,scale){	
+  var v = val				
+	//console.log(pattern)
+	//var p = pattern
+	var c = v.replace(/(px|%)/,'')	
+	var u = RegExp.$1
+	console.log(u)					
+	if (u == 'px') {
+	  val = (c * scale) + 'px'
+	}	
+	console.log('Original value: ' + c + '     New value: ' + val)			
+	return val			
+}	
 
 /********************
 * Function
 ********************/ 
-var loadScene = function(panel,mode){		
+var loadScene = function(panel,mode,sceneId){		
 
-	var sceneId = sceneData[panel][0]
+	var sceneId = sceneData[panel][0];
 	if(activeSceneId !== sceneId || (activeSceneId == sceneId && mode == "resume")){		
-		activeSceneId = sceneId		
-		$("#screen").stop().fadeIn(300, function(){
-			resetScenes()
+		activeSceneId = sceneId;
+		$("#screen").show(0, function(){
+			resetScene();
 		})
 		$("#sceneAssets").empty()	
 		$("#readOut").empty()
@@ -222,7 +293,8 @@ var loadScene = function(panel,mode){
 		}	
 		if(matteImg != ''){
 			$("#sceneAssets").append('<img src="' + matteImg + '" />')
-		}				
+		}		
+		
 		layers = sceneData[panel][2]			
 		if (layers != null) {			
 			var count = 0
@@ -256,7 +328,7 @@ var loadScene = function(panel,mode){
 					if(assetsLoaded == assetCount) {
 						readOut("Scene asset loading complete.")						
 						animateScene(panel,scale,mode)				
-						$("#screen").fadeOut(300)
+						$("#screen").delay(300).fadeOut(300)
 							
 					}
 			})
@@ -370,7 +442,9 @@ var readOutPosition = function(){
 
     	loopsiloop()
 }
-				
+			
+
+$
 /********************
 * Scene element animation handler
 ********************/
@@ -434,55 +508,90 @@ $.fn.animateBg =  function(count,sx,sy,ex,ey,d,l,int,delay){
 /********************
  Handle the content display, either default or dynamic
 ********************/
-var prepContent = function(){
+var activateContent = function(activePanel){
+	var activeContainer = $('.container', activePanel)
 	$('.content .dynamic').removeClass('loading')
-	$('.content .static',activeContainer).stop().css('opacity','0').hide(0)
+	$('.content .static', activeContainer).stop().css('opacity','0').hide(0)
 	$('.content .dynamic',activeContainer).stop().css('opacity','0').hide(0)
 	var loaded = false
 	var hasQuery = location.href.match(/\?.*$/)
-	var scrollBox = $('.customScrollBox',activePanel)
+	//var scrollBox = $('.customScrollBox', activePanel)
 		
 	if(dirLevels.length<2 && hasQuery == null){
-		$('.content .static',activeContainer).show(0).css('opacity','1')
-		displayContent('static')
+		$('.content .static', activeContainer).show(0).css('opacity','1')
+		activeContainer.displayContent('static')
 	}
 	else 
 	{		
 		clearTimeout(contentTimer)
 		contentTimer = setTimeout(function(){
-			$(scrollBox).addClass('loading')
+			//$(scrollBox).addClass('loading')
 		},500)
 		
-		loadUrl = window.location.hash.replace(/#/,"ajax")		
-		
+		loadUrl = window.location.hash.replace(/#/,"ajax")			
+		Drupal.ajax['ajax_trigger'].options.url = loadUrl;
+  	$('#ajax_trigger').trigger('click');			
+  		
+  
+
+/**
 		$('.content .dynamic',activeContainer).empty().load(loadUrl, function(response, status, xhr){
 			var int
-			if($(scrollBox).hasClass('loading')){int=1200}else{int=0}
+			//if($(scrollBox).hasClass('loading')){int=1200}else{int=0}
 			
 			setTimeout(function(){
 				clearTimeout(contentTimer)
-				$(scrollBox).removeClass('loading')	
+				//$(scrollBox).removeClass('loading')	
 			
 				if (status == "error") {
     				var msg = "Sorry but there seems to have been an error: "
     				showAlert(msg + xhr.status + " " + xhr.statusText);
   				}else{
   					$('.content .dynamic',activeContainer).show(0).css('opacity','1')
-					displayContent('dynamic')
+					activeContainer.displayContent('dynamic')
 				}
 
 			},int)
-		})								
+		})										
+*/
 	}//end if dirLevels
-}//end prepContent
+}//end activateContent
+
+
+function ajaxxx () {
+
+  var loadUrl = window.location.hash.replace(/#/,"ajax")
+  var $element = $('#ajax_trigger');
+  var base = $element.attr('id');  
+  var href = $element.attr('href');
+  var element_settings = {
+          url: href,
+          event: 'click',
+          progress: {
+            type: 'throbber'
+          }
+        };
+        
+  Drupal.ajax[base] = new Drupal.ajax(base, $element, element_settings);
+  
+ 
+
+  $element.unbind(Drupal.ajax[base].event);
+
+  $element.bind(Drupal.ajax[base].event, function (event) {
+      return Drupal.ajax[base].eventResponse($element, event);
+  });
+  
+}
 
 
 /**
  * Time to show the panel's default content or the newly loaded content.
  **/
-function displayContent(div){
-	scrollContentPadding()
-	prebuildSlideMenu()
+$.fn.displayContent = function(div){
+	var activeContainer = $(this)
+	//scrollContentPadding()
+	//prebuildSlideMenu()
 	editPagerLink()
 	Shadowbox.clearCache()//Re-initialize Shadowbox to include any newly loaded images
 	Shadowbox.setup()
@@ -508,21 +617,11 @@ function displayContent(div){
 	
 		})		
 
-		var scrollBuilder = setInterval(function(){			
-			if(imgLoaded == imgCount){
-				
-				
-					$(activePanel).mCustomScrollbar("vertical",400,"easeOutCirc",1.05,"fixed","yes","yes",20)	
-				
-				//readOut("Building slidemenu" + smId)
-				//readOut($(activeContainer).css('width'))		
-				clearInterval(scrollBuilder)
-			}
-		},250)
 
 
+$(activeContainer).fadeTo(1000,1)	 
 		
-	$(activeContainer).fadeTo(1000,1)	 
+
 }
 
 
@@ -533,7 +632,7 @@ function displayContent(div){
 $("a#loop-terminate").click(function(){
 	if(!($(this).hasClass("disabled"))) {
 		$(this).addClass("disabled").text("Enable")		
-		resetScenes()
+		resetScene()
 		animateOn = false
 	} else {
 		$(this).removeClass("disabled").text("Disable")	
@@ -587,64 +686,9 @@ $('a.tabControl').click(function(){
 	return false
 })
 
-/**
- *
- * Establish dimension for SlideMenu prior to build
- *
-*/ 
-function prebuildSlideMenu(){
-	
-	$('.slideMenuContainer').fadeTo(0,0)
-	$('ul.slidemenu',activeContainer).each(function(){
-
-		var smId = $(this).attr('id')
-		var smDiv = $(this).parents('div.slideMenuContainer')
-		var imgCount = $("#" + smId + " li img").size()
-		var imgLoaded = 0
-		
-		$("#" + smId + " li img").each(function(index,element){
-
-			if(element.complete){
-
-				imgLoaded ++
-				//readOut("Loaded image " + imgLoaded + " of " + imgCount)
-
-			} else {
-
-				$(element).bind('load',function(){
-					imgLoaded ++
-					//readOut("Loaded image " + imgLoaded + " of " + imgCount)
-					
-				})				
-
-			}
-	
-		})		
-
-		var smBuilder = setInterval(function(){			
-			if(imgLoaded == imgCount && !($('#panelContainer').hasClass('ghost'))){ //check to see if containing element hasLayout before rebuilding
-				
-				setTimeout(function(){
-					$(smDiv).fadeTo(1000,1)	
-				},500)
-				//readOut("Building slidemenu" + smId)
-				//readOut($(activeContainer).css('width'))		
-				slideMenu.build(smId,250,10,10)
-				clearInterval(smBuilder)
-			}
-		},250)
-		
-	})
-
-}
 
 
 
-function scrollContentPadding(){
-	var buffer = myHeight*0.10 + "px"
-	$(".node-full").css({paddingTop:buffer})
-	$(".tabContent").css({paddingTop:buffer})
-}
 
 /**
  *
@@ -680,13 +724,14 @@ myHeight = document.body.clientHeight;
 } 	
 	
 	if(myHeight > 770 && myWidth > 1024 ){
-		$("body").css({fontSize: "20px"})
+		//$("body").css({fontSize: "20px"})
 	} else {
-		$("body").css({fontSize: "12px"})
+		//$("body").css({fontSize: "12px"})
 	}
 
 //readOut(myWidth + " " + myHeight)
-scrollContentPadding()
+//scrollContentPadding()
+
 
 }
 
@@ -738,8 +783,8 @@ function intro(){
 				//$('#bottom').animate({height:"6%"},1200,'easeOutExpo',function(){
 
 					$('#panelMenu').fadeTo('3000',1)
-					$('#footerLeft').fadeTo('3000',1)
-					$('#footerRight').fadeTo('3000',1)
+					$('#bottom-inner-one').fadeTo('3000',1)
+					$('#bottom-inner-two').fadeTo('3000',1)
 
 				//})	
 
@@ -760,41 +805,23 @@ function intro(){
  *
 */ 
 
-formatHash()
 
-adjustResize()
+// Turn incoming, non-hash urls into hashes
+formatHash();
+
+adjustResize();
 
 $("a.ajax").live("click",function(){	
-	$(this).writeHash()
-	return false
+	$(this).writeHash();
+	return false;
 })
 
-$("a.panelControl").bind('mouseenter',function(){	
-	$(this).parent('.panel').addClass('hover')	
+$("#main-menu li a").live("click",function(event){	
+    event.preventDefault();
+    $(this).writeHash(); 
 })
 
-$("a.panelControl").mouseleave(function(){	
-	$(this).parent('.panel').removeClass('hover')	
-})
-
-/**
- *
- * Toggle between #outer classes to alter color scheme
- *
-*/ 
-$('#cssControl a').click(function() { 
-	$('#cssControl a').removeClass('on')
-	$(this).addClass('on')                            
-    document.getElementById('outer').className = $(this).attr('id')
-    return false
-});
-
-/**
- *
- * Default to #outer.css2 for initial setting
- *
-*/ 
-$('#cssControl a#css2').trigger('click');
+   
 
 
 /**
@@ -804,11 +831,13 @@ $('#cssControl a#css2').trigger('click');
 */ 
 window.onresize = function(){
 	if(resizeTimer != null) {
-		clearTimeout(resizeTimer)
+		clearTimeout(resizeTimer);
 	}
-	resizeTimer = setTimeout(function(){		
-		adjustResize()
-		prebuildSlideMenu()		
+	resizeTimer = setTimeout(function(){	
+	  resetScene();
+		adjustResize();
+		//prebuildSlideMenu();
+		$(window).trigger('hashchange');	
 	}, 500);
 }
 
@@ -831,7 +860,7 @@ if (hashReady == true){
 */ 
 $(window).load(function(){	
 	editPagerLink()
-	$('#panelContainer .panel').css({width: panelInactiveWidth})
+	//$('#panelContainer .panel').css({width: panelInactiveWidth})
 	$(window).bind('hashchange',parseHash)		
 	intro()
 })

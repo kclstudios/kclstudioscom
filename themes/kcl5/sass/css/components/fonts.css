@@ -1,12 +1,7 @@
 @font-face {
   font-family: 'fontello';
-  src: url("../../fonts/fontello/fontello.eot");
+  src: url("../../fonts/fontello/font/fontello.eot");
   /* IE9 Compat Modes */
-  src: url("../../fonts/fontello/fontello.eot?#iefix") format("embedded-opentype"), url("../../fonts/fontello/fontello.woff") format("woff"), url("../../fonts/fontello/fontello.ttf") format("truetype"), url("../../fonts/fontello/fontello.svg#svgFontName") format("svg");
+  src: url("../../fonts/fontello/font/fontello.eot?#iefix") format("embedded-opentype"), url("../../fonts/fontello/font/fontello.woff") format("woff"), url("../../fonts/fontello/font/fontello.ttf") format("truetype"), url("../../fonts/fontello/font/fontello.svg#svgFontName") format("svg");
   /* Legacy iOS */
-}
-
-/* line 10, ../../components/fonts.scss */
-.fontello {
-  font-family: "fontello";
 }

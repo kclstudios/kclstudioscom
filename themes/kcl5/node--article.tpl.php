@@ -13,7 +13,9 @@ $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;
 
 <?php  if ($teaser) : ?>
 
-		<div class="node-teaser node-type-<?php print $node->type;?> clearfix"> 
+		<div class="node-teaser node-type-<?php print $node->type;?> clearfix">		
+		  <div class="node-inner clearfix">
+		  
 <a class="ajax" href="<?php print $node_url ?>">
 <?php 
         
@@ -35,15 +37,17 @@ $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;
  ?>              
  </a>
      		<h3><a class="ajax" href="<?php print $node_url ?>"><?php print strip_tags($summary) ?></a></h3>
-        <div class="pubDate"><?php print $date ?></div>  
-        
+        <div class="pubDate"><?php print $date ?></div>
+        <?php print render($content['body']) ?>
+        </div>
   	          
 		</div>    		   
    
 <?php else: /*else its a full node view*/ ?>
 
-		<div class="node-full clearfix">     
-   				
+		<div class="node-full clearfix">
+		
+   	  <div class="node-inner clearfix">
  
  <?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())) ?>
 
@@ -116,7 +120,7 @@ endif;
 				<?php print render($content['field_drophead']) ?>
 				<?php print render($content['body']) ?>
 						 	       
-					   
+		</div>			   
 		</div>
 
 <?php endif; /*end of full vs teaser check */ ?>

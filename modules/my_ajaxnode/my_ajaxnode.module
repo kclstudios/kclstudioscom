@@ -8,6 +8,15 @@
 * behavior. The name will always be modulename_form_alter.
 */
 
+
+
+
+
+function my_ajaxnode_init() {
+ drupal_add_library('system', 'drupal.ajax');
+}
+
+
 function my_ajaxnode_menu() {
   $items['ajax/%foo_tail'] = array(
     'title' => 'AJAX Node Loader',
@@ -16,6 +25,7 @@ function my_ajaxnode_menu() {
     'page arguments' => array(1),
     'access' => TRUE,
     'access arguments' => array('access content'),
+    'delivery callback' => 'ajax_deliver',
     'type' => MENU_CALLBACK,
   );
 
@@ -32,6 +42,59 @@ function foo_tail_load($arg, $map, $index) {
 
 
 
+function ajax_node_loader($arg) {
+
+  
+  
+
+  
+  
+  // Load in Drupal core AJAX library.
+ 
+  if($arg == '') {
+  
+       $result = array(
+          '#type' => 'ajax',
+          '#commands' => array(
+            //array('command' => 'loadScene', 'data' => $node->nid),          
+            ajax_command_html('#panelContainer', '<p>poop</p>'),
+          ),
+        );
+        return $result;    
+  
+  }
+  
+  
+  global $my_alias, $my_system_path, $my_page_count;
+  $my_system_path = drupal_lookup_path("source", $arg);
+  $my_alias = $arg;
+  $node = menu_get_object("node", 1, $my_system_path);
+  $output =  node_view($node, $view_mode='full');
+ // $output .= '<script type="text/javascript">if(sceneData.indexOf(' . $node->nid . ') == -1){sceneData.push(' . $node->nid . ')};</script>';
+  //$output = '<p>Hello World.</p>';
+  //$commands[] = ajax_command_html(NULL,$output);
+  $commands[] = array(
+    'command' => 'load_scene',
+    'data' => $node->nid,
+    );
+	// theme the node and output the generated HTML
+
+	
+	$content = drupal_render($output);
+	//$content .= '<script type="text/javascript">if(sceneData.indexOf(' . $node->nid . ') == -1){sceneData.push(' . $node->nid . ')};</script>';
+	//print $content;
+
+        $result = array(
+          '#type' => 'ajax',
+          '#commands' => array(
+            array('command' => 'load_node_scene', 'data' => $node->nid),          
+            ajax_command_html('#panelContainer .active .dynamic', $content),
+          ),
+        );
+        return $result;  
+	
+}
+
 
 
 
@@ -41,20 +104,6 @@ $my_system_path = '';
 $parent_candidates = '';
 $my_print_path = '';
 $my_page_count = '';
-
-function ajax_node_loader($arg) {
-
-  global $my_alias, $my_system_path, $my_page_count;
-  $my_system_path = drupal_lookup_path("source", $arg);
-  $my_alias = $arg;
-  $node = menu_get_object("node", 1, $my_system_path);
-
-	// theme the node and output the generated HTML
-
-	$output =  node_view($node, $view_mode='full');
-	print drupal_render($output);
-
-}
 
 
 

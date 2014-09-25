@@ -1,0 +1,10 @@
+
+.icon-plus-squared:before { content: '\2b'; } /* '+' */
+.icon-minus-squared:before { content: '\2d'; } /* '-' */
+.icon-drupal:before { content: '\44'; } /* 'D' */
+.icon-spin5:before { content: '\4c'; } /* 'L' */
+.icon-down-dir:before { content: '\64'; } /* 'd' */
+.icon-left-dir:before { content: '\6c'; } /* 'l' */
+.icon-menu:before { content: '\6d'; } /* 'm' */
+.icon-right-dir:before { content: '\72'; } /* 'r' */
+.icon-up-dir:before { content: '\75'; } /* 'u' */

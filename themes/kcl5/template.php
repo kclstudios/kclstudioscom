@@ -1,20 +1,27 @@
 <?php
 // $Id: template.php,v 1.16.2.2 2009/08/10 11:32:54 goba Exp $
+
+
+//include 'inc/page.inc';
+//include 'inc/block.inc';
+//include 'inc/field.inc';
+//include 'inc/form.inc';
+include 'inc/menu.inc';
+//include 'inc/node.inc';
+
 /**
- * Sets the body-tag class attribute.
- *
- * Adds 'sidebar-left', 'sidebar-right' or 'sidebars' classes as needed.
+ * 
  */
 
 drupal_add_js('sites/all/themes/kcl5/js/jquery.ba-bbq.min.js'); 
 drupal_add_js('sites/all/themes/kcl5/js/jquery.backgroundpos.js');
-//drupal_add_js('sites/all/themes/kcl5/js/jquery.backgroundPosition.js');
-//drupal_add_js('sites/all/themes/kcl5/js/jquery.timers-1.1.2.js'); 
 drupal_add_js('sites/all/themes/kcl5/js/jquery-ui-1.8.17.custom.min.js');
-drupal_add_js('sites/all/themes/kcl5/js/jquery.mousewheel.min.js');
-drupal_add_js('sites/all/themes/kcl5/js/jquery.mCustomScrollbar.js'); 
+//drupal_add_js('sites/all/themes/kcl5/js/jquery.mousewheel.min.js');
+//drupal_add_js('sites/all/themes/kcl5/js/jquery.mCustomScrollbar.js');
+//drupal_add_js('sites/all/themes/kcl5/js/jquery.nicescroll/jquery.nicescroll.min.js'); 
 drupal_add_js('sites/all/themes/kcl5/js/frontpage.js'); 
-drupal_add_js('sites/all/themes/kcl5/js/slidemenu.js'); 
+//drupal_add_js('sites/all/themes/kcl5/js/shapes.js');
+drupal_add_js('sites/all/themes/kcl5/js/main-menu.js'); 
 drupal_add_js('sites/all/themes/kcl5/js/soundmanager/script/soundmanager2-nodebug-jsmin.js'); 
 drupal_add_js('sites/all/modules/webform/js/webform.js');
 drupal_add_js('misc/jquery.cookie.js');
@@ -31,7 +38,7 @@ drupal_add_js('misc/ajax.js');
 $element1 = array(
   '#tag' => 'link', // The #tag is the html tag - <link />
   '#attributes' => array( // Set up an array of attributes inside the tag
-    'href' => 'http://fonts.googleapis.com/css?family=Play:700', 
+    'href' => 'http://fonts.googleapis.com/css?family=Play:400,700', 
     'rel' => 'stylesheet',
     'type' => 'text/css',
   ),
@@ -77,8 +84,8 @@ drupal_add_html_head($element2, 'google_font_orbitron');
 function kcl5_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
   if (!empty($breadcrumb)) {
-    array_shift($breadcrumb); // Removes the first/home item
-    array_pop($breadcrumb);
+    //array_shift($breadcrumb); //Removes the first/home item
+    //array_pop($breadcrumb);
     $themed_breadcrumb = '<div class="breadcrumb">';
     $array_size = count($breadcrumb);
     $i = 0;
@@ -114,6 +121,21 @@ function kcl5_breadcrumb($variables) {
 }
 
 
+function kcl5_preprocess_node(&$vars) {  
+  if ($vars['nid'] == 20) {
+    //load the view by name
+    $view = 'blog';
+    //output the view  
+    $vars['content']['views'] = views_embed_view($view,'block');
+  }
+  if ($vars['nid'] == 24) {
+    //load the view by name
+    $view = 'projects';
+    //output the view  
+    $vars['content']['views'] = views_embed_view($view,'block');
+  }  
+}
+
 /**
  * Override or insert PHPTemplate variables into the templates.
  */
@@ -123,15 +145,6 @@ function kcl5_preprocess_page(&$vars) {
   // Hook into color.module
   if (module_exists('color')) {
     _color_page_alter($vars);
-  }
-}
-
-/**
- * Add a "Comments" heading above comments except on forum pages.
- */
-function kcl5_preprocess_comment_wrapper(&$vars) {
-  if ($vars['content'] && $vars['node']->type != 'forum') {
-    $vars['content'] = '<h2 class="comments">'. t('Comments') .'</h2>'.  $vars['content'];
   }
 }
 
@@ -162,21 +175,8 @@ function kcl5_node_submitted($node) {
 }
 
 /**
- * Generates IE CSS links for LTR and RTL languages.
+ * Instance of theme HOOK_menu_item
  */
-function kcl5_get_ie_styles() {
-  global $language;
-
-  $iecss = '<link type="text/css" rel="stylesheet" media="all" href="'. base_path() . path_to_theme() .'/fix-ie.css" />';
-  if ($language->direction == LANGUAGE_RTL) {
-    $iecss .= '<style type="text/css" media="all">@import "'. base_path() . path_to_theme() .'/fix-ie-rtl.css";</style>';
-  }
-
-  return $iecss;
-}
-
-
-
 function kcl5_menu_item($link, $has_children, $menu = '', $in_active_trail = FALSE, $extra_class = NULL) {
   $class = ($menu ? 'expanded' : ($has_children ? 'collapsed' : 'leaf'));
   if (!empty($extra_class)) {
@@ -311,45 +311,50 @@ function kcl5_links($links, $attributes = array('class' => 'links')) {
 
 
 
-#########################################################
+/*
+ * Custom function to display immediate menu children of current node 
+ */
+function kcl5_child_menu($id, $menu = 'main-menu') {
 
-function kcl5_child_menu($menu = 'main-menu', $id) {
+  $path = 'node/'. $id;
+  $parent = menu_link_get_preferred($path);
+  $mlid = $parent['mlid'];
+  $tree = menu_tree_all_data($menu);
 
-$path = 'node/'. $id;
-$parent = menu_link_get_preferred($path);
-$mlid = $parent['mlid'];
-$tree = menu_tree_all_data($menu);
+  //print_r(array_keys($tree['49956 Web Development 579']['link']['mlid'])); return;
 
-//print_r(array_keys($tree['49956 Web Development 579']['link']['mlid'])); return;
-
-$subtree = kcl5_get_subtree($tree,$mlid);
-$num_keys = array_values($subtree);
-$children = $num_keys[0]['below'];
-//print_r($parent);
-if($children) :
-  $count = 0;
-  foreach($children as $child){  
-    // print($child['link']['link_title']); 
-    $child_id = str_ireplace("node/",'',$child['link']['link_path']);
-    $child_node = node_load($child_id);
-    $child_view = node_view($child_node, $view_mode = 'teaser');
-    print render($child_view); 
-    //print $child_id;
-    //print $child['link']['link_path'];
-    //}
-    //print_r($subtree);
-    $count++; 
-    if($count % 3 == 0) print '<br clear="all" />';  
+  $subtree = kcl5_get_subtree($tree,$mlid);
+  $num_keys = array_values($subtree);
+  $children = $num_keys[0]['below'];
+  //print_r($parent);
+  if($children) {
+    $count = 0;
+    foreach($children as $child){  
+      // print($child['link']['link_title']); 
+      $child_id = str_ireplace("node/",'',$child['link']['link_path']);
+      $child_node = node_load($child_id);
+      $child_node->attributes_array['class'][] = 'poop';
+      $child_view = node_view($child_node, $view_mode = 'scrape');
+      $row = ($count % 2 == 0) ? 'even' : 'odd';    
+      print '<div class="row ' . $row . '">';
+      print render($child_view);
+      print '</div>';
+      //print $child_id;
+      //print $child['link']['link_path']; 
+      //print_r($subtree);
+      $count++; 
+      
+     
+    }
   }
-endif; 
-
 }//end function kcl5_child_menu
  
 
-/******************************************/
-
-function kcl5_siblings_menu($menu = 'main-menu', $id) {
-	$tree = menu_tree_all_data($menu);	
+/*
+ * Custom function to display menu siblings of current node 
+ */
+function kcl5_siblings_menu($id, $menu = 'main-menu') {
+	//$tree = menu_tree_all_data($menu);	
 	$path = 'node/'. $id;
 	$current = menu_link_get_preferred($path);
 	$mlid = $current['mlid'];
@@ -357,19 +362,27 @@ function kcl5_siblings_menu($menu = 'main-menu', $id) {
 	$branch = kcl5_get_branch($tree,$mlid);
 	$num_keys = array_values($branch);
 	$count = -1;
+	$out = '';	
 	foreach($num_keys as $num_key) {
-		$count++;
-		if($num_keys[$count]['link']['mlid'] == $mlid) {	
-			print '<div class="menu-custom-siblings-menu">';
-			$prev = $num_keys[$count - 1]; if (!empty($prev)) { print '<a class="prev ajax" href="/' . drupal_get_path_alias($prev['link']['href']) . '"><div class="icon">l</div><span>' . $prev['link']['title'] . '</span></a>'; }
-			$curr = $num_keys[$count]; if (!empty($curr)) { print '<div class="curr ajax"><span>' . $curr['link']['title'] . '</span></div>'; }
-			$next = $num_keys[$count + 1]; if (!empty($next)) { print '<a class="next ajax" href="/' . drupal_get_path_alias($next['link']['href']) . '"><div class="icon">r</div><span>' . $next['link']['title'] . '</span></a>'; }
-			print '</div>';
-			//print_r($prev);
-			//print_r($next);
-			return;			
-		}				
+		$classes = array();
+		$classes[] = 'ajax';
+		$count++;	
+		if($num_keys[$count]['link']['mlid'] == $mlid) {
+			$active = $count;
+			$classes[] = 'active';		
+		}
+		//$out .= '<div class="' . implode($classes, ' ') . '"><span>' . $curr['link']['title'] . '</span></div>';
+		$out .= '<a class="' . implode($classes, ' ') . '" href="/' . drupal_get_path_alias($num_keys[$count]['link']['href']) . '"><span>' . $num_keys[$count]['link']['title'] . '</span></a>';					
 	}	
+	print '<div class="menu-custom-siblings-menu">';
+	$prev = $num_keys[$active - 1]; 
+	//if (!empty($prev)) { print '<a class="prev ajax icon" href="/' . drupal_get_path_alias($prev['link']['href']) . '">l</a>'; }
+	print $out;
+	$next = $num_keys[$active + 1]; 
+	//if (!empty($next)) { print '<a class="next ajax icon" href="/' . drupal_get_path_alias($next['link']['href']) . '">r</a>'; }
+	print '</div>';
+	if (!empty($prev)) { print '<a class="prev-link ajax icon" href="/' . drupal_get_path_alias($prev['link']['href']) . '">l</a>'; }
+	if (!empty($next)) { print '<a class="next-link ajax icon" href="/' . drupal_get_path_alias($next['link']['href']) . '">r</a>'; }
 }	
 
 

@@ -23,9 +23,7 @@ foreach ($rows as $id => $row):
 ?>
 <div id="mcs_container_<?php print $nid ?>" class="panel">
   
-	<div class="trans"></div>
-
-	<div class="op customScrollBox">
+	
  
  		
 		<div class="container">
@@ -45,15 +43,12 @@ foreach ($rows as $id => $row):
  		</div><!--/end content -->   
       </div><!--/ end container -->   
       
-      <div class="dragger_container">
-        <div class="dragger"></div>
-      </div>   
-       <a href="#" title="scroll up" class="scrollUpBtn">u</a> <a href="#" class="scrollDownBtn">d</a>        
+ 
     
 
-  </div><!--// end op -->
+ 
   <a class="panelControl ajax<?php if($rows_num == $rows_count) : print " main"; endif; ?>" href="/<?php print $current_path ?>" title="<?php print $panel_display_name; ?>"><div><span><?php print $panel_display_name ?></span></div></a>
-  <div class="panelBorder"></div>
+  
 </div>
 
 

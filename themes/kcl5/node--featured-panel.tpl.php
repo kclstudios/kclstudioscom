@@ -1,4 +1,11 @@
-<?php  if ($teaser) : /*display node in teaser format*/?>
+<?php
+$horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align['und'][0]['value'] : 'center';
+?>
+
+<?php  
+
+  switch($view_mode) {
+    case "teaser" : /*display node in teaser format*/?>
 
 <?php
 
@@ -9,12 +16,11 @@ if (isset($node->field_scene['und'])) :
   
   $matteImg = isset($scene_node->field_matte_img['und'][0]) ? image_style_url('original', $scene_node->field_matte_img['und'][0]['uri']) : NULL; 
 
-  print 'sceneData.push(new Array("' . $node->field_scene['und'][0]['nid'] . '","' . $matteImg . '"';
+  print 'sceneData[' . $node->field_scene['und'][0]['nid'] . '] = { "matte" : "' . $matteImg . '", "layers" : [ ';
 
   $layers = isset($scene_node->field_layers['und']) ? $scene_node->field_layers['und'] : NULL;
 
-    if(count($layers)>0) :      
-      print ', new Array(';  
+    if(count($layers)>0) :   
       $count = 0; 
       foreach($layers as $layer): 
 
@@ -31,8 +37,8 @@ if (isset($node->field_scene['und'])) :
         $interval = isset($layer_node->field_bg_interval['und'][0]['value']) ? $layer_node->field_bg_interval['und'][0]['value'] : NULL;
         $delay = isset($layer_node->field_bg_delay['und'][0]['value']) ? $layer_node->field_bg_delay['und'][0]['value'] : NULL;
                               
-        if($count>0) : print ','; endif;
-        print 'new Array('; 
+        if($count>0) : print ', '; endif;
+        print ' ['; 
         print '"' . $bg . '"';        
         print ',"' . $x_start . '"';
         print ',"' . $x_end . '"';
@@ -43,31 +49,38 @@ if (isset($node->field_scene['und'])) :
         print ',"' . $loop . '"';
         print ',"' . $interval . '"'; 
         print ',"' . $delay . '"';                                       
-        print ')';     
+        print ']';     
         $count++;
 
-      endforeach; 
-    print ')';
+      endforeach;  
     endif;
 
-    print ')';
-    print ');';
+    print ']}';
+    print ';';
 
 endif;
+?>
 
-else: /*else its a full node view*/ ?>
+<?php
+      break;
+    default: /*else its a full node view*/ 
+?>
 
 
-<div class="node-full clearfix">
-
-
-
-          <div class="breadcrumb"><h2><?php print $title ?></h2></div>
+<div class="node node-full node-type-<?php print $node->type;?> node-align-<?php print $horiz_align;?> clearfix">
          
+  <?php kcl5_siblings_menu($nid); ?> 
+  
+  <div class="breadcrumb"><h2><?php print $title ?></h2></div>  
+  
+  <div class="node-section-field-headline">
+    <?php print render($content['field_headline']) ?>
+  </div>  
+  
+  <div class="node-section-content">
+  <div class="node-inner clearfix">         
           
-          <?php print render($content['field_headline']) ?>
-         
-<?php 
+     <?php 
 
       $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;   
         
@@ -101,28 +114,26 @@ else: /*else its a full node view*/ ?>
             
       endif; 
 
- ?>        
-        <?php print render($content['field_drophead']) ?>
-        <?php print render($content['body']) ?>          
-         
-          
+    ?>        
+    <?php print render($content['field_drophead']) ?>
+    <?php print render($content['body']) ?>   
+    <?php print render($content['views']) ?>    
 
+  </div> 
+  </div>
 
+		<div class="node-section-field-node-links">
+		  <?php print render($content['field_node_links']) ?>
+		</div>
 
-
-
-
-
-                   
- 
-
-<?php kcl5_child_menu($menu = 'main-menu', $nid); ?>
-
-
-
-
-
-</div>
-
-
-<?php endif; ?>
+		<div class="node-section-children">
+		  <?php kcl5_child_menu($nid); ?>	
+		</div>
+		
+	
+		
+</div>		
+<?php 
+    break;
+  }
+?>
