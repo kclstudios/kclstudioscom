@@ -1,8 +1,0 @@
-@font-face {
-	font-family: 'fontello';
-	src: url('../../fonts/fontello/fontello.eot'); /* IE9 Compat Modes */
-	src: url('../../fonts/fontello/fontello.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-	     url('../../fonts/fontello/fontello.woff') format('woff'), /* Modern Browsers */
-	     url('../../fonts/fontello/fontello.ttf')  format('truetype'), /* Safari, Android, iOS */
-	     url('../../fonts/fontello/fontello.svg#svgFontName') format('svg'); /* Legacy iOS */
-	}
