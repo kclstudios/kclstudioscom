@@ -4,7 +4,9 @@
 		<?php if($is_front) : ?><h1 id="sloganText"><?php print $site_slogan ?></h1><?php endif; ?>
 		<span><?php print $site_name ?></span>
 	</div>
+	<?php if(!$is_front) : ?>
 	<div id="pageContent"><?php print render($page['content']); ?></div>
+	<?php endif; ?>
 	<div id="scenesContainer">
 		<div id="scene">
 			<div id="matte"><img id="matteImg" src="" /></div>
@@ -16,14 +18,15 @@
 	<div id="readOut"></div>
 
 <?php if($is_front): ?>
-	<div id="panelContainer" class="clearfix">
+  <?php kcl5_main_menu_top(); ?>
+	
 <?php
 //load the view by name
-$view = 'featured_panels';
+//$view = 'featured_panels';
 //output the view
-print views_embed_view($view,'block');
+//print views_embed_view($view,'block');
 ?>
-	</div>
+
 <?php endif; ?>
 
   <div id="alertScreen"><div id="alertInner"></div></div>
@@ -87,7 +90,8 @@ print views_embed_view($view,'block');
 
   <div id="main-menu">
   <?php
-    print drupal_render(menu_tree_output(menu_tree_all_data('main-menu'))); 
+    $main_menu = menu_tree_output(menu_tree_all_data('main-menu'));
+    print drupal_render($main_menu); 
   ?>
   </div>
 

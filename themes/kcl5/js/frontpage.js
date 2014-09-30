@@ -1,31 +1,93 @@
+
+
 (function ($) { //keeping it drupal js friendly
 
+ 
     
+$(document).ready(function(){ 	    
+ 
+   
+    
+/**
+ * The animation control object
+ */	  
+Animator = {
+  
+  enabled: true,
+  
+  sceneId: '',
+  
+  state: 'playing', //playing,stopped,paused
+  
+  stop: function() {
+    stopScene();
+  },
+  
+  reset: function() {
+    resetScene();
+  },
+  
+  load: function(id) {    
+    loadScene(id); 
+  },
 
+  init: function() {    
+    initScene(); 
+  },
+  
+  clear: function() {    
+    $('#scene .scene-layer').remove();
+    $('#matte').css('background-image','none');
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-	$(document).ready(function(){ 	
+  },
+  
+  disable: function() {
+    this.enabled = false;
+  },
+  
+  enable: function() {
+    this.enabled = true;
+  }
+  
+}
 	
-	   
+
+
+	 
+/**
+ * Add our commands to the Drupal commands collection.
+ */	    
+Drupal.ajax.prototype.commands.kclDisplayContent = function(ajax, response, status)	{	    
 	    
+  $activeContainer = $('#panelContainer .active .container');  
+  $('.content .dynamic',activeContainer).show(0).css('opacity','1')
+  $('#panelContainer .active .container').displayContent('dynamic');
+  
+}  
+
+/**
+ * Add our commands to the Drupal commands collection.
+ */
+Drupal.ajax.prototype.commands.load_node_scene = function(ajax, response, status) {
+ 
+  if(response.sceneId == '') {
+    Animator.sceneId = '';
+    Animator.clear();
+    return;
+  }
+  
+  if(response.sceneId == activeSceneId) {
+    return;  
+  }
+  
+  Animator.sceneId = response.sceneId;
+  Animator.load(Animator.sceneId);
+  //$(window).loadScene(response.sceneId);
+}
+
+/**
+ * Create the trigger to utilize Drupal's AJAX framework
+ */
 var $element = $('#ajax_trigger');
         var base = $element.attr('id');
         var href = $element.attr('href');
@@ -35,7 +97,7 @@ var $element = $('#ajax_trigger');
           progress: {
             type: 'throbber'
           }
-        };
+        };        
 Drupal.ajax[base] = new Drupal.ajax(base, $element, element_settings);
 
 
@@ -44,15 +106,13 @@ Drupal.ajax[base] = new Drupal.ajax(base, $element, element_settings);
 
 
 
-// AJAX command to update and display cart block
-Drupal.loadNodeScene = function(ajax, response, status) {
-   	console.log(response.data);
- }
 
 
-// Add our commands to the Drupal commands collection.
-Drupal.ajax.prototype.commands.load_node_scene = Drupal.loadNodeScene;
 
+
+ 
+ 
+ 
 /**
  * Add our commands to the Drupal commands collection.
  */
@@ -61,9 +121,7 @@ Drupal.ajax.prototype.commands.load_node_scene = Drupal.loadNodeScene;
 	    
 var layerTimers = new Array()
 var layerDelays = new Array()
-var animateOn = true
 var activeUrl
-//var activePanel
 var activeIndex
 var activeContainer
 var activeDefault
@@ -104,12 +162,13 @@ $.fn.writeHash = function(){
 
 /********************
 * Function
-* formats a hash value from a url
+* Checks for and/or creates a hash value from a url
 ********************/
 function formatHash(){
 	if (location.hash == undefined || location.hash == "" || location.hash == "#/"){
 		if(location.pathname == undefined || location.pathname == "" || location.pathname == "/"){
-			hashReady = true
+		  location.href = "/#/";
+			hashReady = true;
 		} else {	
 			if(location.pathname != "/user"){
 				var hashfromPath = "/#" + location.pathname	
@@ -130,25 +189,19 @@ var parseHash = function(){
 	activeUrl = window.location.hash.replace(/#\//,"")
 	dirLevels = activeUrl.replace(/\?.*$/,"").split("\/") //remove any query and split the path
 	var activePanel = $('a[href=/' + dirLevels[0] + ']').parent('div.panel')		
-	console.log(activePanel)	
+	//console.log(activePanel)	
 	activeIndex = $(activePanel).index()
 	activeContainer = $('.container',activePanel)
 	activeContent = $('.panelContent',activePanel)
-	activeScene = 
-	console.log(dirLevels[0])
-	console.log(activeIndex)
+	//console.log(dirLevels[0])
+	//console.log(activeIndex)
 	if (dirLevels[0] != "" && activeIndex === -1){
-		showAlert("Sorry for the mix-up, but you have tried to access content which is restricted or does not exist.")
-		return
+		showAlert("Sorry for the mix-up, but you have tried to access content which is restricted or no longer exists.")
+		return;
 	}
-	hideAlert()
-	if(activeIndex === -1){
-		activeIndex = 1
-		//loadScene(activeIndex)		
-	} else {
-
-		$('#panelContainer').activatePanel(activePanel,activeIndex)
-	}
+	hideAlert();
+	$('#panelContainer').activatePanel(activePanel,activeIndex);
+	
 	_gaq.push(['_trackEvent', 'Urls', 'Display', activeUrl]) // Log event for Google analytics event tracking	
 }
 
@@ -179,6 +232,24 @@ $.fn.activatePanel = function(activePanel,index){
 		activateContent(activePanel)		
 	}		
 }
+
+
+/********************
+* Stop scene animation functions and clear timers
+*********************/
+function stopScene(){
+	$("#scene .scene-layer").each(function(){
+		$(this).stop()
+		//readOut("Stopped layer" + $(this).attr("id"))
+	})
+	for (var i = 0; i < layerTimers.length; i++)	{
+		clearTimeout(layerTimers[i])		    	
+	}
+	for (var i = 0; i < layerDelays.length; i++)	{
+		clearTimeout(layerDelays[i])		    	
+	}
+}
+
 
 /********************
 * Stop scene animation functions and clear timers
@@ -247,60 +318,38 @@ function calcScale(val,scale){
 /********************
 * Function
 ********************/ 
-var loadScene = function(panel,mode,sceneId){		
+function loadScene(sceneId){	
+	
+  var scene = sceneData[sceneId];
 
-	var sceneId = sceneData[panel][0];
-	if(activeSceneId !== sceneId || (activeSceneId == sceneId && mode == "resume")){		
+	if(activeSceneId !== sceneId){		
 		activeSceneId = sceneId;
 		$("#screen").show(0, function(){
 			resetScene();
 		})
 		$("#sceneAssets").empty()	
 		$("#readOut").empty()
-		$("#scene .scene-layer").remove()
-		var outer = document.getElementById('outer'); 
-		var outerWidth = outer.clientWidth; 
-		var outerHeight = outer.clientHeight; 
-		var boxSize 
-		var scale = 1
-		if (outerHeight > 2500 || outerWidth > 2500) {
-			boxSize = 2500
-		} else {
-			if (outerHeight < outerWidth) {
-				boxSize = outerWidth
-			} else {
-				boxSize = outerHeight
-			}
-			scale = outerWidth/2500
-		}
-		$('#scenesContainer').height(boxSize+'px')
-		$('#scenesContainer').width(boxSize+'px')
-		//console.log('Outer Height: ' + outerHeight + '  Width: ' + outerWidth)
-		//console.log('Scenes Height: ' + $('#scenesContainer').height() + '  Width: ' + $('#scenesContainer').width())
-		var hoffset = (outerWidth - boxSize)/2
-		var voffset = (outerHeight - boxSize)/2
-		//console.log(hoffset)
-		$('#scenesContainer').css({left:hoffset,top:voffset})		
-		//console.log(scale)		
+		$("#scene .scene-layer").remove();
 
-		matteImg = sceneData[panel][1] != '' ? sceneData[panel][1] : ''
+
+		matteImg = scene.matte != '' ? scene.matte : ''
 		//readOut(matteImg)
 		if(matteImg != ''){
+		  $("#sceneAssets").append('<img src="' + matteImg + '" />')
 			$("#matteImg").attr("src", matteImg)
 			$("#matte").css('display','block')
 		} else {
 			$("#matte").css('display','none')
 		}	
-		if(matteImg != ''){
-			$("#sceneAssets").append('<img src="' + matteImg + '" />')
-		}		
+
 		
-		layers = sceneData[panel][2]			
+		layers = scene.layers;			
 		if (layers != null) {			
 			var count = 0
 			layers.forEach(function(){	
 					
-				var imgSrc = layers[count][0]  != '' ? layers[count][0] : ''		
+				var imgSrc = layers[count][0]  != '' ? layers[count][0] : ''
+				//alert(layers[count][0]);
 				var bgRepeat = layers[count][5] != '' ? layers[count][5] : 'no-repeat'	
 							
 				if (imgSrc != '') {
@@ -326,10 +375,8 @@ var loadScene = function(panel,mode,sceneId){
 					assetsLoaded++		
 					readOut("Asset " + assetsLoaded + " of " + assetCount + " loaded.")	
 					if(assetsLoaded == assetCount) {
-						readOut("Scene asset loading complete.")						
-						animateScene(panel,scale,mode)				
-						$("#screen").delay(300).fadeOut(300)
-							
+						readOut("Scene asset loading complete.");						
+						Animator.init();							
 					}
 			})
 		}) // end each	
@@ -339,11 +386,57 @@ var loadScene = function(panel,mode,sceneId){
 }
 
 /********************
-* Function
+* Function to prepare a newly loaded scene to be displayed/animated
 ********************/ 
-function animateScene(panel,scale,mode){		
+function initScene(){	
 
-		layers = sceneData[panel][2]			
+    var scene = sceneData[Animator.sceneId];
+		var outer = document.getElementById('outer'); 
+		var outerWidth = outer.clientWidth; 
+		var outerHeight = outer.clientHeight; 
+		var boxSize 
+		var scale = 1
+		
+		if (outerHeight > 2500 || outerWidth > 2500) {
+			boxSize = 2500
+		} else {
+			if (outerHeight < outerWidth) {
+				boxSize = outerWidth
+			} else {
+				boxSize = outerHeight
+			}
+			scale = outerWidth/2500
+		}
+		$('#scenesContainer').height(boxSize+'px')
+		$('#scenesContainer').width(boxSize+'px')
+		//console.log('Outer Height: ' + outerHeight + '  Width: ' + outerWidth)
+		//console.log('Scenes Height: ' + $('#scenesContainer').height() + '  Width: ' + $('#scenesContainer').width())
+		var hoffset = (outerWidth - boxSize)/2
+		var voffset = (outerHeight - boxSize)/2
+		//console.log(hoffset)
+		$('#scenesContainer').css({left:hoffset,top:voffset})		
+		//console.log(scale)		
+
+
+		
+	
+		if(scene.matte !== ''){
+			$("#matteImg").attr("src", scene.matte)
+			$("#matte").css('display','block')
+		} else {
+			$("#matte").css('display','none')
+		}	
+
+
+
+
+
+
+
+
+	
+
+		layers = scene.layers;			
 		if (layers != null) {			
 			var count = 0
 			layers.forEach(function(){	
@@ -376,7 +469,9 @@ function animateScene(panel,scale,mode){
 						})	
 						$("#scene").append(elem)	
 						elem.height(elem.height()*scale)
-						elem.animateElement(count,startX,startY,endX,endY,duration,loop,interval,delay)			
+						if(Animator.enabled == true){
+						  elem.animateElement(count,startX,startY,endX,endY,duration,loop,interval,delay)
+						}
 					} else {			
 						layerImg = $('#sceneAssets img[src=' + imgSrc + ']')
 							imgHeight = layerImg.height();
@@ -390,36 +485,40 @@ function animateScene(panel,scale,mode){
 									'background-repeat' : bgRepeat,
 									'background-size' : 'auto ' + imgHeight + 'px'
 							})	
-							$("#scene").append(elem)	
-							$(elem).animateBg(count,startX,startY,endX,endY,duration,loop,interval,delay)	
+							$("#scene").append(elem)
+							if(Animator.enabled == true){
+							  $(elem).animateBg(count,startX,startY,endX,endY,duration,loop,interval,delay);
+							}
 					}
 				} // if imgSrc
 				count++		
 				})	// end forEach						
 			} // if layers				
 		
-	
+	$("#screen").fadeOut(300);
 }
 
 
-/********************
-* Write output to front end 
-********************/
+/** 
+ * Write output to front end 
+ */
 var readOut = function(output){	
 	$("#readOut").append("<div>" + output + "</div>")
 }
 
-/********************
-* Move readOut display away from active content panel
-********************/
+
+/** 
+ * Move readOut display away from active content panel
+ */
 var readOutPosition = function(){	
 	if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"}
 	$("#readOut").css('left',xPos)
 }
 
-/********************
-* Write strings one character at a time
-********************/
+
+/**
+ * Write strings one character at a time
+ */
  $.fn.writeText = function(content,callback) {
         var contentArray = content.split("")
         var current = 0
@@ -456,7 +555,7 @@ $.fn.animateElement =  function(count,sx,sy,ex,ey,d,l,int,delay){
 		self.css({left:sx,top:sy})	
 		readOut('EndX: ' + ex) 
 		//if (loopCounter == 0){var wait = delay}else{var wait=0}
-		if(animateOn == true){ //global var check
+		if(Animator.enabled == true){ //global var check
  			if(loop == true){
  				loopCounter++
  				readOut("animateBg instance:" + loopCounter) 
@@ -488,7 +587,7 @@ $.fn.animateBg =  function(count,sx,sy,ex,ey,d,l,int,delay){
 		self.css('background-position', startPos)		
 		//if (loopCounter == 0){var wait = delay}else{var wait=0}
 		var wait = delay 	 
-		if(animateOn == true){ //global var check
+		if(Animator.enabled == true){ //global var check
  			if(loop == true){
  				loopCounter++    	
  				readOut("animateBg instance:" + loopCounter)       
@@ -505,34 +604,38 @@ $.fn.animateBg =  function(count,sx,sy,ex,ey,d,l,int,delay){
    	
 }	
 
+
 /********************
  Handle the content display, either default or dynamic
 ********************/
 var activateContent = function(activePanel){
-	var activeContainer = $('.container', activePanel)
-	$('.content .dynamic').removeClass('loading')
-	$('.content .static', activeContainer).stop().css('opacity','0').hide(0)
-	$('.content .dynamic',activeContainer).stop().css('opacity','0').hide(0)
-	var loaded = false
-	var hasQuery = location.href.match(/\?.*$/)
+	var activeContainer = $('.container', activePanel);
+	$('.content .dynamic').removeClass('loading');
+	$('.content .static', activeContainer).stop().css('opacity','0').hide(0);
+	$('.content .dynamic',activeContainer).stop().css('opacity','0').hide(0);
+	var loaded = false;
+	var hasQuery = location.href.match(/\?.*$/);
 	//var scrollBox = $('.customScrollBox', activePanel)
 		
 	if(dirLevels.length<2 && hasQuery == null){
-		$('.content .static', activeContainer).show(0).css('opacity','1')
-		activeContainer.displayContent('static')
+		$('.content .static', activeContainer).show(0).css('opacity','1');
+		activeContainer.displayContent('static');
+		loadUrl = window.location.hash.replace(/#\//,"api-ajax-scene/");
+    // Dynamically change the url for the element that has already been bound to drupal AJAX    
+		Drupal.ajax['ajax_trigger'].options.url = loadUrl;
+  	$('#ajax_trigger').trigger('click');
+  	//alert(loadUrl);
 	}
 	else 
 	{		
-		clearTimeout(contentTimer)
+		clearTimeout(contentTimer);
 		contentTimer = setTimeout(function(){
 			//$(scrollBox).addClass('loading')
-		},500)
+		},500);
 		
-		loadUrl = window.location.hash.replace(/#/,"ajax")			
+		loadUrl = window.location.hash.replace(/#/,"ajax");			
 		Drupal.ajax['ajax_trigger'].options.url = loadUrl;
-  	$('#ajax_trigger').trigger('click');			
-  		
-  
+  	$('#ajax_trigger').trigger('click');  
 
 /**
 		$('.content .dynamic',activeContainer).empty().load(loadUrl, function(response, status, xhr){
@@ -554,74 +657,45 @@ var activateContent = function(activePanel){
 			},int)
 		})										
 */
-	}//end if dirLevels
-}//end activateContent
+
+	} //end if dirLevels
+} //end activateContent
 
 
-function ajaxxx () {
-
-  var loadUrl = window.location.hash.replace(/#/,"ajax")
-  var $element = $('#ajax_trigger');
-  var base = $element.attr('id');  
-  var href = $element.attr('href');
-  var element_settings = {
-          url: href,
-          event: 'click',
-          progress: {
-            type: 'throbber'
-          }
-        };
-        
-  Drupal.ajax[base] = new Drupal.ajax(base, $element, element_settings);
-  
- 
-
-  $element.unbind(Drupal.ajax[base].event);
-
-  $element.bind(Drupal.ajax[base].event, function (event) {
-      return Drupal.ajax[base].eventResponse($element, event);
-  });
-  
-}
 
 
 /**
- * Time to show the panel's default content or the newly loaded content.
+ * Show the panel's default content or the newly loaded content.
  **/
 $.fn.displayContent = function(div){
-	var activeContainer = $(this)
-	//scrollContentPadding()
-	//prebuildSlideMenu()
-	editPagerLink()
-	Shadowbox.clearCache()//Re-initialize Shadowbox to include any newly loaded images
-	Shadowbox.setup()
+	var activeContainer = $(this);
 
-		var imgLoaded = 0
-		var contentBox = $(activeContainer).find('.'+div)
-		var imgCount = $('img',contentBox).size()		
+	editPagerLink();
+	//Re-initialize Shadowbox to include any newly loaded images
+	Shadowbox.clearCache();
+	Shadowbox.setup();
+
+	var imgLoaded = 0;
+	var contentBox = $(activeContainer).find('.'+div);
+	var imgCount = $('img',contentBox).size();		
 		
-		
-		$('img',contentBox).each(function(index,element){
+	$('img',contentBox).each(function(index,element){
 
-			if(element.complete){
+	  if(element.complete){
 
-				imgLoaded ++
+				imgLoaded ++;
 
 			} else {
 
 				$(element).bind('load',function(){
-					imgLoaded ++										
+					imgLoaded ++;										
 				})				
 
 			}
 	
-		})		
+		});
 
-
-
-$(activeContainer).fadeTo(1000,1)	 
-		
-
+	$(activeContainer).fadeTo(1000,1);
 }
 
 
@@ -629,17 +703,17 @@ $(activeContainer).fadeTo(1000,1)
  * Stop all this looping animation and clear timeouts
  **/
  
-$("a#loop-terminate").click(function(){
+$("a#loop-terminate").click(function(e){
+  event.preventDefault();
 	if(!($(this).hasClass("disabled"))) {
-		$(this).addClass("disabled").text("Enable")		
-		resetScene()
-		animateOn = false
+		$(this).addClass("disabled").text("Enable");	
+		Animator.enabled = false;
+		Animator.reset();		
 	} else {
-		$(this).removeClass("disabled").text("Disable")	
-		animateOn = true
-		loadScene(activeIndex,"resume")
-	}
-	return false
+		$(this).removeClass("disabled").text("Disable");	
+		Animator.enabled = true;
+		Animator.load();
+	}	
 })
 
 
@@ -697,57 +771,30 @@ $('a.tabControl').click(function(){
 */ 
 
 function adjustResize(){
-
-if( typeof( window.innerWidth ) == 'number' ) { 
-
-//Non-IE 
-
-myWidth = window.innerWidth;
-myHeight = window.innerHeight; 
-
-} else if( document.documentElement && 
-
-( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) { 
-
-//IE 6+ in 'standards compliant mode' 
-
-myWidth = document.documentElement.clientWidth; 
-myHeight = document.documentElement.clientHeight; 
-
-} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) { 
-
-//IE 4 compatible 
-
-myWidth = document.body.clientWidth; 
-myHeight = document.body.clientHeight; 
-
-} 	
-	
-	if(myHeight > 770 && myWidth > 1024 ){
-		//$("body").css({fontSize: "20px"})
-	} else {
-		//$("body").css({fontSize: "12px"})
-	}
-
+  if( typeof( window.innerWidth ) == 'number' ) {
+    //Non-IE
+    myWidth = window.innerWidth;
+    myHeight = window.innerHeight;
+  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    //IE 6+ in 'standards compliant mode'
+    myWidth = document.documentElement.clientWidth; 
+    myHeight = document.documentElement.clientHeight;
+  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+    //IE 4 compatible
+    myWidth = document.body.clientWidth; 
+    myHeight = document.body.clientHeight;
+  } 
+  return {'height': myHeight,'width': myWidth};
 //readOut(myWidth + " " + myHeight)
-//scrollContentPadding()
-
-
 }
+
+
 
 /**
  *
- * Initial ghosting of scrollbar elements
+ * Alter any ajax-based views pagers
  *
 */ 
-
-function hideScrollElem(){
-	$('.dragger_container').hide(0)
-	$(".scrollUpBtn").hide(0)
-	$(".scrollDownBtn").hide(0)
-}
-
-
 
 function editPagerLink(){
 	$("ul.pager li a").each(function(){
@@ -809,7 +856,7 @@ function intro(){
 // Turn incoming, non-hash urls into hashes
 formatHash();
 
-adjustResize();
+//adjustResize();
 
 $("a.ajax").live("click",function(){	
 	$(this).writeHash();
@@ -827,19 +874,22 @@ $("#main-menu li a").live("click",function(event){
 /**
  *
  * Adjust layout dimensions when browser window is resized
- *
-*/ 
-window.onresize = function(){
+ */
+
+$(window).resize(function(){
+  console.log('resize event');
 	if(resizeTimer != null) {
 		clearTimeout(resizeTimer);
 	}
 	resizeTimer = setTimeout(function(){	
-	  resetScene();
-		adjustResize();
-		//prebuildSlideMenu();
-		$(window).trigger('hashchange');	
+	  
+	  Animator.stop();  
+	  Animator.clear();  
+	  Animator.init();	
+		//$(window).trigger('hashchange');	
 	}, 500);
-}
+})
+
 
 /**
  *
@@ -852,6 +902,7 @@ if (hashReady == true){
 		$('#status').addClass("loading")				
 	}, 500)			
 }
+
 
 /**
  *

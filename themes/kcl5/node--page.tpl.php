@@ -93,9 +93,11 @@ dpm($node);
 
 <div class="node node-full node-type-<?php print $node->type;?> node-align-<?php print $horiz_align;?> clearfix">  
  
-	<?php kcl5_siblings_menu($nid); ?>		 
+
 	
 	<?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
+	
+	<?php kcl5_siblings_menu($nid); ?>		 
    		
 	<div class="node-section-field-headline clearfix">
     <?php print render($content['field_headline']) ?>

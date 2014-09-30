@@ -66,22 +66,14 @@ endif;
     default: /*else its a full node view*/ 
 ?>
 
-
-<div class="node node-full node-type-<?php print $node->type;?> node-align-<?php print $horiz_align;?> clearfix">
-         
- 	<?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
-  <!--
-  <div class="breadcrumb"><h2><?php print $title ?></h2></div>  
-  -->
-  
-  <?php kcl5_siblings_menu($nid); ?> 
+<div class="node node-full node-type-<?php print $node->type;?> node-align-<?php print $horiz_align;?> clearfix"> 
   
   <div class="node-section-field-headline">
     <?php print render($content['field_headline']) ?>
   </div>  
   
   <div class="node-section-content">
-  <div class="node-inner clearfix">         
+    <div class="node-inner clearfix">         
           
      <?php 
 
@@ -119,21 +111,20 @@ endif;
 
     ?>        
     <?php print render($content['field_drophead']) ?>
-    <?php print render($content['body']) ?>   
-    <?php print render($content['views']) ?>    
+    <?php print render($content['body']) ?>
 
-  </div> 
+    </div> 
   </div>
 
-		<div class="node-section-field-node-links">
-		  <?php print render($content['field_node_links']) ?>
-		</div>
-
-		<div class="node-section-children">
-		  <?php kcl5_child_menu($nid); ?>	
-		</div>
-		
-	
+	<div class="node-section-field-node-links">
+	  <?php print render($content['field_node_links']) ?>
+	</div>
+	<div class="node-section-views">
+    <?php print render($content['views']) ?>    
+	</div>
+	<div class="node-section-children">
+	  <?php kcl5_child_menu($nid); ?>	
+	</div>	
 		
 </div>		
 <?php 

@@ -74,6 +74,45 @@ drupal_add_html_head($element2, 'google_font_orbitron');
  
 
 /**
+ *
+ * Return markup for our menu-based ajax framework 
+ * 
+ */
+function kcl5_main_menu_top() {
+ $branch = menu_tree_all_data('main-menu',NULL,1);
+ if (!empty($branch)) {
+   $out = '<div id="panelContainer" class="clearfix">';
+   foreach($branch as $item){    
+     
+     //print "<pre>" . print_r($node, TRUE) . "</pre>";
+     //print "<pre>" . print_r($branch, TRUE) . "</pre>";  
+     $node =  $item['link']['link_path'] !== '<front>' ? menu_get_object('node', 1, $item['link']['link_path']) : node_load(98);     
+     $panel_display_name = !empty($node->field_panel_name) ? $node->field_panel_name['und'][0]['safe_value'] : 'Panel Name';
+     $current_path = drupal_lookup_path('alias',"node/". $node->nid);
+     
+     
+ 
+     $out .= '<div id="mcs_container_' . $node->nid . '" class="panel">'; 		
+     $out .= '  <div class="container">';
+     $out .= '    <div class="content">';
+     $out .= '      <div class="static">'; 
+     $out .= drupal_render(node_view($node));
+     $out .= '      </div>';
+     $out .= '      <div class="dynamic"></div>';
+ 		 $out .= '    </div>';  
+     $out .= '</div>';   
+     $out .= '<a class="panelControl ajax" href="/' . $current_path . '" title="' . $panel_display_name . '"><div><span>' . $panel_display_name . '</span></div></a>';
+     $out .= '</div>';
+  
+
+ 
+ }
+ $out .= '</div>';
+ print $out;
+ }
+}
+
+/**
  * Return a themed breadcrumb trail.
  *
  * @param $breadcrumb

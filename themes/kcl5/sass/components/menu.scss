@@ -28,8 +28,16 @@
   position: relative;
   width: 100%;
   
-  li {
+  > li.first {
+    display: none;  
+  }
+  
+  > li.last {
     border-right: 1px solid #88bbdd;
+  }
+  
+  li {
+    border-left: 1px solid #88bbdd;
     display: block;
     height: 100%;
     list-style: none;

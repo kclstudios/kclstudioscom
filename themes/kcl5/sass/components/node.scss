@@ -1,0 +1,387 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "components/base";
+@import "compass/css3/box-sizing";
+@import "zen";
+@import "zen/background";
+
+
+//
+// Fields
+//
+
+
+.node-full .field-name-field-headline {
+  font-size: 50px;
+  line-height: 1;
+}
+
+.field-name-field-drophead {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+
+//
+// Nodes
+//
+
+
+$zen-column-count: 12; // Set the total number of columns in the grid.
+$zen-gutter-width: 0; 
+
+.node-inner {  
+  background-color: rgba(255,255,255,0.9);
+  color: #282833;    
+  padding: 1.5em;  
+  @include border-radius(5px);
+}  
+  
+.node-full {
+  clear: both;
+  margin: 0 auto;  
+  position: relative;
+  width: 100%;
+  //@include box-sizing(border-box); 
+  @include zen-grid-container();
+  //@include zen-grid-background();
+
+  > .node-section-breadcrumb {   
+    @include zen-grid-item-base();
+    @include zen-grid-item(6,4);
+    @include zen-clear(both);
+  }      
+
+  > .node-section-field-headline {
+    //background: #222;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    @include zen-grid-item-base();
+    @include zen-grid-item(6,4); 
+    @include zen-clear(both);    
+    @media (max-width: 1280px) {
+      @include zen-grid-item(8,2);      
+    }
+  } 
+  
+  > .node-section-content {  
+    margin-top: 20px;
+    @include zen-grid-item-base();
+    @include zen-grid-item(6,4);
+    @include zen-clear(both);
+    @media (max-width: 1280px) {
+      @include zen-grid-item(10,2);      
+    }    
+  } 
+ 
+  .field-name-field-drophead p:first-child {
+    margin-top: 0;
+  }
+
+  
+  > .node-section-children {
+    //background: #444;
+    @include zen-grid-item-base();
+    @include zen-grid-item(6,4);
+    @include zen-nested-container();
+    @include zen-clear(both);   
+    
+    .row {
+      float: left;
+      margin-top: 20px; 
+      text-align: center;
+      width: 33%;   
+      @include box-sizing(border-box);
+      
+      &.even {
+        
+      }
+      
+      &.odd {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+      
+      @media (max-width: 1280px) {
+        float: none;
+        width: auto;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }     
+  }
+    
+  > .node-section-field-node-links {
+    @include zen-grid-item(6,4);  
+    @include zen-nested-container(); 
+    @include zen-clear();
+    
+    .row {
+      float: left;
+      margin-top: 20px; 
+      text-align: center;
+      width: 33%;      
+      
+      &.even {
+        
+      }
+      
+      &.odd {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+      
+      @media (max-width: 1280px) {
+        float: none;
+        width: auto;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }      
+    }     
+  }      
+
+  &.node-align-left { 
+
+    > .node-section-field-headline {
+      @include zen-grid-item(6,2);
+    } 
+  
+    > .node-section-content { 
+      @include zen-grid-item(6,2);
+    }
+    
+    > .node-section-children {      
+      @include zen-grid-item(6,2);
+      @include zen-nested-container();
+    }
+    
+    > .node-section-field-node-links {      
+      @include zen-grid-item(6,2);
+      @include zen-nested-container();
+      
+    }    
+	}
+	
+	&.node-align-right {
+
+    > .node-section-field-headline {
+      @include zen-grid-item(6,6); 
+    } 
+	
+	  > .node-section-content {
+      @include zen-grid-item(6,6);
+    }
+
+   > .node-section-children {      
+      @include zen-grid-item(6,6);
+      @include zen-nested-container();
+    }
+    
+    > .node-section-field-node-links {      
+      @include zen-grid-item(6,6);
+      @include zen-nested-container();      
+    }        
+  }
+}
+
+
+//
+// Node Teaser
+//
+
+
+.node-teaser {
+  margin: 1em 0;
+  @include box-sizing(border-box);
+  
+  h3 {
+    font-size: 1.75em;
+  }
+  
+  p {
+    margin:0 0 1.5em;
+  }
+  
+  img {
+    float: left;
+    margin: 0 1em 0 0;
+    width: 20%;  
+  }
+
+  .node-inner {
+    background-color: rgba(255,255,255,0.9);
+  } 
+}
+
+//
+// Node Scrape
+//
+
+.node-scrape {
+  @include box-sizing(border-box);
+
+  
+  p {
+    margin:0 0 1.5em;
+  }
+  
+  img {
+    -webkit-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow:    -2px 2px 4px rgba(0, 0, 0, 0.9);
+    box-shadow:         -2px 2px 4px rgba(0, 0, 0, 0.9);
+    float: left;
+    margin: 0 1em 0 0;
+    width: 20%;  
+  }
+
+  .node-inner {
+    background-color: rgba(255,255,255,0.9);  
+    @include border-radius(3px);
+  } 
+}
+
+
+//
+// Icons
+// 
+
+
+.node-teaser .icon {
+	font-size: 2em;
+	text-align: center;	
+}
+
+.node-scrape {
+  color: #FFF;
+  
+  .icon {
+    font-size: 30px;
+  }
+}
+
+
+//
+// Node - Article
+//
+
+
+.node-teaser.node-type-article {
+  border-bottom: 1px solid #fff;	
+  clear: both;
+  float: none;
+}
+
+
+//
+// Siblings Menu
+//
+
+
+.menu-custom-siblings-menu {
+  @include zen-clear();
+  @include zen-grid-item(10,2);
+	
+	a {
+		display: inline-block;
+		height: 1em;
+		width: 1em;
+		border: 1px solid #fff;	
+		margin: 0 2px 2px;
+		position: relative;
+	}
+	
+	a:hover {
+		background: none #6699CC;
+		border-color: #FFF;
+	}
+	
+	span {
+		display: none;
+	}
+	
+	a:hover span {
+		background: none rgba(255,255,255,0.9);
+		display: block;
+		left: -1px;
+		position: absolute;
+		top: 22px;
+		padding: 0.5em;
+		//white-space: nowrap;
+		width: 33%;
+		//max-width: 20%;
+	}		
+	
+	.prev {
+		background: none transparent;
+		border: 0 none;
+		left: 0;
+		position: absolute;
+	}	
+	
+	.next {
+		background: none transparent;
+		border: 0 none;
+		position: absolute;	
+		right: 0;
+	}
+	
+	.active, .active:hover {
+		background: none #FFF;
+		border-color: #FFF;
+	}	
+	
+	.active:hover span {
+	  display: none;
+	}
+}
+
+
+
+
+
+.prev-link {
+  font-size: 100px;
+  left: 10px;
+  position: absolute;
+  top: 240px;
+}
+
+.next-link {
+  font-size: 100px;
+  position: absolute;
+  right: 10px;
+  top: 240px;
+}
+
+
+//
+// Field: Headline
+//
+
+
+.field-name-field-headline { 
+   color: $white;
+//   text-shadow:
+//       3px 3px 0 #000,
+//     -1px -1px 0 #000,  
+//      1px -1px 0 #000,
+//      -1px 1px 0 #000,
+//       1px 1px 0 #000;
+}
+
+.dark-on-light .field-name-field-headline { 
+   color: $blue-dark-2;
+//   text-shadow:
+//       3px 3px 0 #fff,
+//     -1px -1px 0 #fff,  
+//      1px -1px 0 #fff,
+//      -1px 1px 0 #fff,
+//       1px 1px 0 #fff;
+}
+
+.node-scrape .icon {
+  color: #ddd;
+}

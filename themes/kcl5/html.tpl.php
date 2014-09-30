@@ -50,20 +50,14 @@
   <script type="text/javascript">
 <!-- //
 var siteLogo = new Image(); siteLogo.src = "/sites/all/themes/kcl5/img/kcl-logo.png";
-var loadingImg = new Image(); loadingImg.src = "/sites/all/themes/kcl5/img/loading.gif";
-var topBottomBack = new Image(); topBottomBack.src = "/sites/all/themes/kcl5/img/top-bottom-back.png";
 var sceneData = {};
-
 <?php
 //load the view by name
-$view = 'layers';
+$view = 'scenes';
 //output the view
-print views_embed_view($view,'block');
+print views_embed_view($view,'block_scene_data');
 ?>
-//-->
-
-
-	    
+//-->	    
   </script> 
   <?php print $styles; ?>
   <?php print $scripts; ?>

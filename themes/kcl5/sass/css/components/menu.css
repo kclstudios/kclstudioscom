@@ -103,8 +103,16 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   width: 100%;
 }
 /* line 31, ../../components/menu.scss */
-#main-menu > ul li {
+#main-menu > ul > li.first {
+  display: none;
+}
+/* line 35, ../../components/menu.scss */
+#main-menu > ul > li.last {
   border-right: 1px solid #88bbdd;
+}
+/* line 39, ../../components/menu.scss */
+#main-menu > ul li {
+  border-left: 1px solid #88bbdd;
   display: block;
   height: 100%;
   list-style: none;
@@ -119,46 +127,46 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
 }
 @media (max-width: 960px) {
-  /* line 31, ../../components/menu.scss */
+  /* line 39, ../../components/menu.scss */
   #main-menu > ul li {
     float: none;
     width: auto;
   }
 }
-/* line 49, ../../components/menu.scss */
+/* line 57, ../../components/menu.scss */
 #main-menu > ul li:hover {
   background-color: #6699cc;
 }
-/* line 57, ../../components/menu.scss */
+/* line 65, ../../components/menu.scss */
 #main-menu > ul li:hover a:hover {
   background-color: #6699CC;
   color: #D8E5F2;
 }
-/* line 67, ../../components/menu.scss */
+/* line 75, ../../components/menu.scss */
 #main-menu > ul li.on > ul {
   display: block;
   left: 0;
   opacity: 1;
 }
-/* line 74, ../../components/menu.scss */
+/* line 82, ../../components/menu.scss */
 #main-menu > ul li.on li {
   background-color: #ddeeff;
 }
-/* line 78, ../../components/menu.scss */
+/* line 86, ../../components/menu.scss */
 #main-menu > ul li.on a {
   background-color: #ddeeff;
   color: #6699cc;
 }
-/* line 84, ../../components/menu.scss */
+/* line 92, ../../components/menu.scss */
 #main-menu > ul li.on .li-expand {
   color: #336699;
   opacity: 1;
 }
-/* line 88, ../../components/menu.scss */
+/* line 96, ../../components/menu.scss */
 #main-menu > ul li.on .li-expand:hover {
   color: #336699;
 }
-/* line 95, ../../components/menu.scss */
+/* line 103, ../../components/menu.scss */
 #main-menu > ul li > a {
   background-color: #6699cc;
   border: 1px solid transparent;
@@ -173,16 +181,16 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
 }
 @media (max-width: 1280px) {
-  /* line 95, ../../components/menu.scss */
+  /* line 103, ../../components/menu.scss */
   #main-menu > ul li > a {
     padding: 10px 0 0 1em;
   }
 }
-/* line 110, ../../components/menu.scss */
+/* line 118, ../../components/menu.scss */
 #main-menu > ul li > a:hover {
   color: #336699;
 }
-/* line 118, ../../components/menu.scss */
+/* line 126, ../../components/menu.scss */
 #main-menu > ul li.expanded .li-expand {
   color: #ddeeff;
   cursor: pointer;
@@ -205,18 +213,18 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   border-radius: 3px;
 }
 @media (max-width: 1280px) {
-  /* line 118, ../../components/menu.scss */
+  /* line 126, ../../components/menu.scss */
   #main-menu > ul li.expanded .li-expand {
     height: 20px;
     padding: 0 6px;
   }
 }
-/* line 140, ../../components/menu.scss */
+/* line 148, ../../components/menu.scss */
 #main-menu > ul li.expanded .li-expand:hover {
   color: #ddeeff;
   opacity: 1;
 }
-/* line 148, ../../components/menu.scss */
+/* line 156, ../../components/menu.scss */
 #main-menu > ul li ul {
   max-height: 0;
   opacity: 0;
@@ -224,29 +232,29 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   left: -20000px;
   transition: opacity 0.2s;
 }
-/* line 156, ../../components/menu.scss */
+/* line 164, ../../components/menu.scss */
 #main-menu > ul li li {
   border: 0 none;
   float: none;
   text-transform: none;
   width: 100%;
 }
-/* line 163, ../../components/menu.scss */
+/* line 171, ../../components/menu.scss */
 #main-menu > ul li li a {
   font-weight: 400;
   padding: 1em;
 }
 
-/* line 176, ../../components/menu.scss */
+/* line 184, ../../components/menu.scss */
 .li-expand .close {
   display: none;
 }
 
-/* line 183, ../../components/menu.scss */
+/* line 191, ../../components/menu.scss */
 li.on > .li-expand .close {
   display: block;
 }
-/* line 187, ../../components/menu.scss */
+/* line 195, ../../components/menu.scss */
 li.on > .li-expand .open {
   display: none;
 }
