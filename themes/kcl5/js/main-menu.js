@@ -84,6 +84,12 @@
 	$("#main-menu li.on").removeClass('on'); 
 	});		
 
+	  
+	  // Mobile
+	  
+	  	$("#main-menu-mobile-toggle").click(function() {
+	  	    $(this).parent().toggleClass('mobile'); 
+	  	});		
 		
 	});  	
 

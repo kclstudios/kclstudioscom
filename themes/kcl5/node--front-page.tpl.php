@@ -72,6 +72,7 @@ endif;
     <?php print render($content['field_headline']) ?>
   </div>  
   
+  <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?>
   <div class="node-section-content">
     <div class="node-inner clearfix">         
           
@@ -115,7 +116,8 @@ endif;
 
     </div> 
   </div>
-
+  <?php endif; ?>
+  
 	<div class="node-section-field-node-links">
 	  <?php print render($content['field_node_links']) ?>
 	</div>

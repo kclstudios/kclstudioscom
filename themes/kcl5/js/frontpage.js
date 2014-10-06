@@ -35,10 +35,11 @@ Animator = {
     initScene(); 
   },
   
-  clear: function() {    
+  clear: function() { 
+    $("#sceneAssets").empty();	
+		$("#readOut").empty();
     $('#scene .scene-layer').remove();
-    $('#matte').css('background-image','none');
-    
+    $('#matteImg').attr('src','');    
   },
   
   disable: function() {
@@ -57,10 +58,8 @@ Animator = {
 /**
  * Add our commands to the Drupal commands collection.
  */	    
-Drupal.ajax.prototype.commands.kclDisplayContent = function(ajax, response, status)	{	    
-	    
-  $activeContainer = $('#panelContainer .active .container');  
-  $('.content .dynamic',activeContainer).show(0).css('opacity','1')
+Drupal.ajax.prototype.commands.kcl_display_content = function(ajax, response, status)	{	    
+ 
   $('#panelContainer .active .container').displayContent('dynamic');
   
 }  
@@ -71,18 +70,24 @@ Drupal.ajax.prototype.commands.kclDisplayContent = function(ajax, response, stat
 Drupal.ajax.prototype.commands.load_node_scene = function(ajax, response, status) {
  
   if(response.sceneId == '') {
+    console.log('No incoming scene id.');
     Animator.sceneId = '';
+    Animator.stop();
     Animator.clear();
     return;
   }
   
-  if(response.sceneId == activeSceneId) {
-    return;  
+  if(response.sceneId == Animator.sceneId) {
+    console.log('Incoming scene id matches current scene id.');
+    //Animator.sceneId = '';
+    //Animator.stop();
+    //Animator.clear();
+    return;
   }
   
-  Animator.sceneId = response.sceneId;
-  Animator.load(Animator.sceneId);
-  //$(window).loadScene(response.sceneId);
+  //Animator.sceneId = response.sceneId;
+  Animator.load(response.sceneId);
+  
 }
 
 /**
@@ -130,8 +135,6 @@ var activeSceneId
 var dirLevels
 var loader
 var soundReady = false
-var myWidth // Calculated browser display width
-var myHeight //Calculated browser display height
 var hashReady = false
 var resizeTimer
 var contentTimer
@@ -200,6 +203,7 @@ var parseHash = function(){
 		return;
 	}
 	hideAlert();
+
 	$('#panelContainer').activatePanel(activePanel,activeIndex);
 	
 	_gaq.push(['_trackEvent', 'Urls', 'Display', activeUrl]) // Log event for Google analytics event tracking	
@@ -239,14 +243,14 @@ $.fn.activatePanel = function(activePanel,index){
 *********************/
 function stopScene(){
 	$("#scene .scene-layer").each(function(){
-		$(this).stop()
+		$(this).stop();
 		//readOut("Stopped layer" + $(this).attr("id"))
 	})
 	for (var i = 0; i < layerTimers.length; i++)	{
-		clearTimeout(layerTimers[i])		    	
+		clearTimeout(layerTimers[i]);	    	
 	}
 	for (var i = 0; i < layerDelays.length; i++)	{
-		clearTimeout(layerDelays[i])		    	
+		clearTimeout(layerDelays[i]);	    	
 	}
 }
 
@@ -256,14 +260,14 @@ function stopScene(){
 *********************/
 function resetScene(){
 	$("#scene .scene-layer").each(function(){
-		$(this).stop()
+		$(this).stop();
 		//readOut("Stopped layer" + $(this).attr("id"))
 	})
 	for (var i = 0; i < layerTimers.length; i++)	{
-		clearTimeout(layerTimers[i])		    	
+		clearTimeout(layerTimers[i]);		    	
 	}
 	for (var i = 0; i < layerDelays.length; i++)	{
-		clearTimeout(layerDelays[i])		    	
+		clearTimeout(layerDelays[i]);		    	
 	}
 }
 
@@ -322,14 +326,14 @@ function loadScene(sceneId){
 	
   var scene = sceneData[sceneId];
 
-	if(activeSceneId !== sceneId){		
-		activeSceneId = sceneId;
-		$("#screen").show(0, function(){
-			resetScene();
-		})
-		$("#sceneAssets").empty()	
-		$("#readOut").empty()
-		$("#scene .scene-layer").remove();
+	if(Animator.sceneId !== sceneId){	
+	  console.log('Animator scene id not match with scene id arg');
+	  console.log('Current scene id:' + Animator.scene);
+	  console.log('Incoming scene id:' + sceneId);
+	  Animator.sceneId = sceneId;
+		Animator.stop();
+		Animator.clear();
+	
 
 
 		matteImg = scene.matte != '' ? scene.matte : ''
@@ -391,50 +395,44 @@ function loadScene(sceneId){
 function initScene(){	
 
     var scene = sceneData[Animator.sceneId];
+    console.log(scene);
 		var outer = document.getElementById('outer'); 
 		var outerWidth = outer.clientWidth; 
 		var outerHeight = outer.clientHeight; 
-		var boxSize 
-		var scale = 1
+		var boxSize; 
+		var scale = 1;
 		
 		if (outerHeight > 2500 || outerWidth > 2500) {
-			boxSize = 2500
+			boxSize = 2500;
 		} else {
 			if (outerHeight < outerWidth) {
-				boxSize = outerWidth
+				boxSize = outerWidth;
 			} else {
-				boxSize = outerHeight
+				boxSize = outerHeight;
 			}
-			scale = outerWidth/2500
+			scale = outerWidth/2500;
 		}
-		$('#scenesContainer').height(boxSize+'px')
-		$('#scenesContainer').width(boxSize+'px')
+		$('#scenesContainer').height(boxSize+'px');
+		$('#scenesContainer').width(boxSize+'px');
 		//console.log('Outer Height: ' + outerHeight + '  Width: ' + outerWidth)
 		//console.log('Scenes Height: ' + $('#scenesContainer').height() + '  Width: ' + $('#scenesContainer').width())
-		var hoffset = (outerWidth - boxSize)/2
-		var voffset = (outerHeight - boxSize)/2
+		var hoffset = (outerWidth - boxSize)/2;
+		var voffset = (outerHeight - boxSize)/2;
 		//console.log(hoffset)
-		$('#scenesContainer').css({left:hoffset,top:voffset})		
+		$('#scenesContainer').css({left:hoffset,top:voffset});		
 		//console.log(scale)		
 
 
+		// Scene Matte
 		
-	
-		if(scene.matte !== ''){
+		if(scene.matte != null){
 			$("#matteImg").attr("src", scene.matte)
 			$("#matte").css('display','block')
 		} else {
 			$("#matte").css('display','none')
 		}	
 
-
-
-
-
-
-
-
-	
+	 // Scene Elements
 
 		layers = scene.layers;			
 		if (layers != null) {			
@@ -495,7 +493,7 @@ function initScene(){
 				})	// end forEach						
 			} // if layers				
 		
-	$("#screen").fadeOut(300);
+	//$("#scene-screen").fadeOut(300);
 }
 
 
@@ -610,54 +608,32 @@ $.fn.animateBg =  function(count,sx,sy,ex,ey,d,l,int,delay){
 ********************/
 var activateContent = function(activePanel){
 	var activeContainer = $('.container', activePanel);
-	$('.content .dynamic').removeClass('loading');
-	$('.content .static', activeContainer).stop().css('opacity','0').hide(0);
-	$('.content .dynamic',activeContainer).stop().css('opacity','0').hide(0);
+	//$('.content .dynamic').removeClass('loading');
+	$('#panelContainer .static').removeClass('active');
+	$('#panelContainer .dynamic').removeClass('active');
+	//$('.content .static', activeContainer).stop().css('opacity','0').hide(0);
+	//$('.content .dynamic',activeContainer).stop().css('opacity','0').hide(0);
 	var loaded = false;
 	var hasQuery = location.href.match(/\?.*$/);
 	//var scrollBox = $('.customScrollBox', activePanel)
 		
 	if(dirLevels.length<2 && hasQuery == null){
-		$('.content .static', activeContainer).show(0).css('opacity','1');
+		//$('.content .static', activeContainer).show(0).css('opacity','1');
 		activeContainer.displayContent('static');
+		// Content is already loaded, so let's display it and make an AJAX call to get it's scene
 		loadUrl = window.location.hash.replace(/#\//,"api-ajax-scene/");
     // Dynamically change the url for the element that has already been bound to drupal AJAX    
 		Drupal.ajax['ajax_trigger'].options.url = loadUrl;
   	$('#ajax_trigger').trigger('click');
   	//alert(loadUrl);
-	}
-	else 
-	{		
+	}	else {		
 		clearTimeout(contentTimer);
-		contentTimer = setTimeout(function(){
-			//$(scrollBox).addClass('loading')
-		},500);
-		
+		//contentTimer = setTimeout(function(){
+			$('#panelContainer').addClass('loading');
+		//},50);		
 		loadUrl = window.location.hash.replace(/#/,"ajax");			
 		Drupal.ajax['ajax_trigger'].options.url = loadUrl;
-  	$('#ajax_trigger').trigger('click');  
-
-/**
-		$('.content .dynamic',activeContainer).empty().load(loadUrl, function(response, status, xhr){
-			var int
-			//if($(scrollBox).hasClass('loading')){int=1200}else{int=0}
-			
-			setTimeout(function(){
-				clearTimeout(contentTimer)
-				//$(scrollBox).removeClass('loading')	
-			
-				if (status == "error") {
-    				var msg = "Sorry but there seems to have been an error: "
-    				showAlert(msg + xhr.status + " " + xhr.statusText);
-  				}else{
-  					$('.content .dynamic',activeContainer).show(0).css('opacity','1')
-					activeContainer.displayContent('dynamic')
-				}
-
-			},int)
-		})										
-*/
-
+  	$('#ajax_trigger').trigger('click');
 	} //end if dirLevels
 } //end activateContent
 
@@ -676,10 +652,10 @@ $.fn.displayContent = function(div){
 	Shadowbox.setup();
 
 	var imgLoaded = 0;
-	var contentBox = $(activeContainer).find('.'+div);
-	var imgCount = $('img',contentBox).size();		
+	var $contentBox = $(activeContainer).find('.'+div);
+	var imgCount = $('img',$contentBox).size();		
 		
-	$('img',contentBox).each(function(index,element){
+	$('img',$contentBox).each(function(index,element){
 
 	  if(element.complete){
 
@@ -695,7 +671,7 @@ $.fn.displayContent = function(div){
 	
 		});
 
-	$(activeContainer).fadeTo(1000,1);
+	$contentBox.addClass('active');
 }
 
 
@@ -881,8 +857,7 @@ $(window).resize(function(){
 	if(resizeTimer != null) {
 		clearTimeout(resizeTimer);
 	}
-	resizeTimer = setTimeout(function(){	
-	  
+	resizeTimer = setTimeout(function(){	  
 	  Animator.stop();  
 	  Animator.clear();  
 	  Animator.init();	

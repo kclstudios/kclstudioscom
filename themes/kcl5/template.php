@@ -81,7 +81,7 @@ drupal_add_html_head($element2, 'google_font_orbitron');
 function kcl5_main_menu_top() {
  $branch = menu_tree_all_data('main-menu',NULL,1);
  if (!empty($branch)) {
-   $out = '<div id="panelContainer" class="clearfix">';
+   $out = '<div id="panelContainer">';
    foreach($branch as $item){    
      
      //print "<pre>" . print_r($node, TRUE) . "</pre>";
@@ -94,12 +94,12 @@ function kcl5_main_menu_top() {
  
      $out .= '<div id="mcs_container_' . $node->nid . '" class="panel">'; 		
      $out .= '  <div class="container">';
-     $out .= '    <div class="content">';
+     //$out .= '    <div class="content">';
      $out .= '      <div class="static">'; 
      $out .= drupal_render(node_view($node));
      $out .= '      </div>';
      $out .= '      <div class="dynamic"></div>';
- 		 $out .= '    </div>';  
+ 		// $out .= '    </div>';  
      $out .= '</div>';   
      $out .= '<a class="panelControl ajax" href="/' . $current_path . '" title="' . $panel_display_name . '"><div><span>' . $panel_display_name . '</span></div></a>';
      $out .= '</div>';
@@ -107,7 +107,7 @@ function kcl5_main_menu_top() {
 
  
  }
- $out .= '</div>';
+ $out .= '<div class="loading-icon icon">L</div></div>';
  print $out;
  }
 }

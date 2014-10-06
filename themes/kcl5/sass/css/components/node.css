@@ -79,14 +79,20 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   font-size: 50px;
   line-height: 1;
 }
+@media (max-width: 1280px) {
+  /* line 17, ../../components/node.scss */
+  .node-full .field-name-field-headline {
+    font-size: 36px;
+  }
+}
 
-/* line 22, ../../components/node.scss */
+/* line 26, ../../components/node.scss */
 .field-name-field-drophead {
   font-size: 25px;
   font-weight: 800;
 }
 
-/* line 36, ../../components/node.scss */
+/* line 40, ../../components/node.scss */
 .node-inner {
   background-color: rgba(255, 255, 255, 0.9);
   color: #282833;
@@ -96,7 +102,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   border-radius: 5px;
 }
 
-/* line 43, ../../components/node.scss */
+/* line 47, ../../components/node.scss */
 .node-full {
   clear: both;
   margin: 0 auto;
@@ -112,7 +118,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .node-full:after {
   clear: both;
 }
-/* line 52, ../../components/node.scss */
+/* line 56, ../../components/node.scss */
 .node-full > .node-section-breadcrumb {
   padding-left: 0;
   padding-right: 0;
@@ -134,7 +140,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   word-wrap: break-word;
   clear: both;
 }
-/* line 58, ../../components/node.scss */
+/* line 62, ../../components/node.scss */
 .node-full > .node-section-field-headline {
   margin-bottom: 20px;
   margin-top: 20px;
@@ -159,7 +165,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   clear: both;
 }
 @media (max-width: 1280px) {
-  /* line 58, ../../components/node.scss */
+  /* line 62, ../../components/node.scss */
   .node-full > .node-section-field-headline {
     float: left;
     width: 66.66667%;
@@ -174,7 +180,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     word-wrap: break-word;
   }
 }
-/* line 70, ../../components/node.scss */
+/* line 74, ../../components/node.scss */
 .node-full > .node-section-content {
   margin-top: 20px;
   padding-left: 0;
@@ -198,7 +204,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   clear: both;
 }
 @media (max-width: 1280px) {
-  /* line 70, ../../components/node.scss */
+  /* line 74, ../../components/node.scss */
   .node-full > .node-section-content {
     float: left;
     width: 83.33333%;
@@ -213,12 +219,13 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     word-wrap: break-word;
   }
 }
-/* line 80, ../../components/node.scss */
+/* line 84, ../../components/node.scss */
 .node-full .field-name-field-drophead p:first-child {
   margin-top: 0;
 }
-/* line 85, ../../components/node.scss */
+/* line 89, ../../components/node.scss */
 .node-full > .node-section-children {
+  background: #444;
   padding-left: 0;
   padding-right: 0;
   -moz-box-sizing: border-box;
@@ -241,7 +248,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding-right: 0;
   clear: both;
 }
-/* line 92, ../../components/node.scss */
+/* line 96, ../../components/node.scss */
 .node-full > .node-section-children .row {
   float: left;
   margin-top: 20px;
@@ -252,12 +259,15 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
 }
 /* line 103, ../../components/node.scss */
+.node-full > .node-section-children .row.even {
+  padding: 0 10px;
+}
+/* line 107, ../../components/node.scss */
 .node-full > .node-section-children .row.odd {
-  padding-right: 20px;
-  padding-left: 20px;
+  padding: 0 10px;
 }
 @media (max-width: 1280px) {
-  /* line 92, ../../components/node.scss */
+  /* line 96, ../../components/node.scss */
   .node-full > .node-section-children .row {
     float: none;
     width: auto;
@@ -265,7 +275,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     padding-right: 0 !important;
   }
 }
-/* line 117, ../../components/node.scss */
+/* line 120, ../../components/node.scss */
 .node-full > .node-section-field-node-links {
   float: left;
   width: 50%;
@@ -282,20 +292,24 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding-right: 0;
   clear: left;
 }
-/* line 122, ../../components/node.scss */
+/* line 125, ../../components/node.scss */
 .node-full > .node-section-field-node-links .row {
   float: left;
   margin-top: 20px;
   text-align: center;
   width: 33%;
 }
-/* line 132, ../../components/node.scss */
+/* line 131, ../../components/node.scss */
+.node-full > .node-section-field-node-links .row.even {
+  margin: 20px 0;
+}
+/* line 135, ../../components/node.scss */
 .node-full > .node-section-field-node-links .row.odd {
   padding-right: 20px;
   padding-left: 20px;
 }
 @media (max-width: 1280px) {
-  /* line 122, ../../components/node.scss */
+  /* line 125, ../../components/node.scss */
   .node-full > .node-section-field-node-links .row {
     float: none;
     width: auto;
@@ -303,12 +317,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     padding-right: 0 !important;
   }
 }
-/* line 148, ../../components/node.scss */
+/* line 151, ../../components/node.scss */
 .node-full.node-align-left > .node-section-field-headline {
   float: left;
-  width: 50%;
+  width: 58.33333%;
   margin-left: 8.33333%;
-  margin-right: -58.33333%;
+  margin-right: -66.66667%;
   padding-left: 0;
   padding-right: 0;
   -moz-box-sizing: border-box;
@@ -317,12 +331,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
   word-wrap: break-word;
 }
-/* line 152, ../../components/node.scss */
+/* line 155, ../../components/node.scss */
 .node-full.node-align-left > .node-section-content {
   float: left;
-  width: 50%;
+  width: 58.33333%;
   margin-left: 8.33333%;
-  margin-right: -58.33333%;
+  margin-right: -66.66667%;
   padding-left: 0;
   padding-right: 0;
   -moz-box-sizing: border-box;
@@ -331,12 +345,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
   word-wrap: break-word;
 }
-/* line 156, ../../components/node.scss */
+/* line 159, ../../components/node.scss */
 .node-full.node-align-left > .node-section-children {
   float: left;
-  width: 50%;
+  width: 58.33333%;
   margin-left: 8.33333%;
-  margin-right: -58.33333%;
+  margin-right: -66.66667%;
   padding-left: 0;
   padding-right: 0;
   -moz-box-sizing: border-box;
@@ -347,12 +361,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding-left: 0;
   padding-right: 0;
 }
-/* line 161, ../../components/node.scss */
+/* line 164, ../../components/node.scss */
 .node-full.node-align-left > .node-section-field-node-links {
   float: left;
-  width: 50%;
+  width: 58.33333%;
   margin-left: 8.33333%;
-  margin-right: -58.33333%;
+  margin-right: -66.66667%;
   padding-left: 0;
   padding-right: 0;
   -moz-box-sizing: border-box;
@@ -363,11 +377,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding-left: 0;
   padding-right: 0;
 }
-/* line 170, ../../components/node.scss */
+/* line 173, ../../components/node.scss */
 .node-full.node-align-right > .node-section-field-headline {
   float: left;
-  width: 50%;
-  margin-left: 41.66667%;
+  width: 58.33333%;
+  margin-left: 33.33333%;
   margin-right: -91.66667%;
   padding-left: 0;
   padding-right: 0;
@@ -377,11 +391,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
   word-wrap: break-word;
 }
-/* line 174, ../../components/node.scss */
+/* line 177, ../../components/node.scss */
 .node-full.node-align-right > .node-section-content {
   float: left;
-  width: 50%;
-  margin-left: 41.66667%;
+  width: 58.33333%;
+  margin-left: 33.33333%;
   margin-right: -91.66667%;
   padding-left: 0;
   padding-right: 0;
@@ -391,11 +405,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
   word-wrap: break-word;
 }
-/* line 178, ../../components/node.scss */
+/* line 181, ../../components/node.scss */
 .node-full.node-align-right > .node-section-children {
   float: left;
-  width: 50%;
-  margin-left: 41.66667%;
+  width: 58.33333%;
+  margin-left: 33.33333%;
   margin-right: -91.66667%;
   padding-left: 0;
   padding-right: 0;
@@ -407,11 +421,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding-left: 0;
   padding-right: 0;
 }
-/* line 183, ../../components/node.scss */
+/* line 186, ../../components/node.scss */
 .node-full.node-align-right > .node-section-field-node-links {
   float: left;
-  width: 50%;
-  margin-left: 41.66667%;
+  width: 58.33333%;
+  margin-left: 33.33333%;
   margin-right: -91.66667%;
   padding-left: 0;
   padding-right: 0;
@@ -424,43 +438,43 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding-right: 0;
 }
 
-/* line 196, ../../components/node.scss */
+/* line 199, ../../components/node.scss */
 .node-teaser {
   margin: 1em 0;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 200, ../../components/node.scss */
+/* line 203, ../../components/node.scss */
 .node-teaser h3 {
   font-size: 1.75em;
 }
-/* line 204, ../../components/node.scss */
+/* line 207, ../../components/node.scss */
 .node-teaser p {
   margin: 0 0 1.5em;
 }
-/* line 208, ../../components/node.scss */
+/* line 211, ../../components/node.scss */
 .node-teaser img {
   float: left;
   margin: 0 1em 0 0;
   width: 20%;
 }
-/* line 214, ../../components/node.scss */
+/* line 217, ../../components/node.scss */
 .node-teaser .node-inner {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* line 223, ../../components/node.scss */
+/* line 226, ../../components/node.scss */
 .node-scrape {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 227, ../../components/node.scss */
+/* line 230, ../../components/node.scss */
 .node-scrape p {
   margin: 0 0 1.5em;
 }
-/* line 231, ../../components/node.scss */
+/* line 234, ../../components/node.scss */
 .node-scrape img {
   -webkit-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.9);
   -moz-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.9);
@@ -469,7 +483,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   margin: 0 1em 0 0;
   width: 20%;
 }
-/* line 240, ../../components/node.scss */
+/* line 243, ../../components/node.scss */
 .node-scrape .node-inner {
   background-color: rgba(255, 255, 255, 0.9);
   -moz-border-radius: 3px;
@@ -477,29 +491,27 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   border-radius: 3px;
 }
 
-/* line 252, ../../components/node.scss */
+/* line 255, ../../components/node.scss */
 .node-teaser .icon {
   font-size: 2em;
   text-align: center;
 }
 
-/* line 257, ../../components/node.scss */
-.node-scrape {
-  color: #FFF;
-}
-/* line 260, ../../components/node.scss */
+/* line 262, ../../components/node.scss */
 .node-scrape .icon {
-  font-size: 30px;
+  color: #696969;
+  font-size: 40px;
+  margin-top: -20px;
 }
 
-/* line 271, ../../components/node.scss */
+/* line 275, ../../components/node.scss */
 .node-teaser.node-type-article {
   border-bottom: 1px solid #fff;
   clear: both;
   float: none;
 }
 
-/* line 283, ../../components/node.scss */
+/* line 287, ../../components/node.scss */
 .menu-custom-siblings-menu {
   clear: left;
   float: left;
@@ -514,7 +526,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   box-sizing: border-box;
   word-wrap: break-word;
 }
-/* line 287, ../../components/node.scss */
+/* line 291, ../../components/node.scss */
 .menu-custom-siblings-menu a {
   display: inline-block;
   height: 1em;
@@ -523,16 +535,16 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   margin: 0 2px 2px;
   position: relative;
 }
-/* line 296, ../../components/node.scss */
+/* line 300, ../../components/node.scss */
 .menu-custom-siblings-menu a:hover {
   background: none #6699CC;
   border-color: #FFF;
 }
-/* line 301, ../../components/node.scss */
+/* line 305, ../../components/node.scss */
 .menu-custom-siblings-menu span {
   display: none;
 }
-/* line 305, ../../components/node.scss */
+/* line 309, ../../components/node.scss */
 .menu-custom-siblings-menu a:hover span {
   background: none rgba(255, 255, 255, 0.9);
   display: block;
@@ -542,31 +554,31 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   padding: 0.5em;
   width: 33%;
 }
-/* line 317, ../../components/node.scss */
+/* line 321, ../../components/node.scss */
 .menu-custom-siblings-menu .prev {
   background: none transparent;
   border: 0 none;
   left: 0;
   position: absolute;
 }
-/* line 324, ../../components/node.scss */
+/* line 328, ../../components/node.scss */
 .menu-custom-siblings-menu .next {
   background: none transparent;
   border: 0 none;
   position: absolute;
   right: 0;
 }
-/* line 331, ../../components/node.scss */
+/* line 335, ../../components/node.scss */
 .menu-custom-siblings-menu .active, .menu-custom-siblings-menu .active:hover {
   background: none #FFF;
   border-color: #FFF;
 }
-/* line 336, ../../components/node.scss */
+/* line 340, ../../components/node.scss */
 .menu-custom-siblings-menu .active:hover span {
   display: none;
 }
 
-/* line 345, ../../components/node.scss */
+/* line 349, ../../components/node.scss */
 .prev-link {
   font-size: 100px;
   left: 10px;
@@ -574,7 +586,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   top: 240px;
 }
 
-/* line 352, ../../components/node.scss */
+/* line 356, ../../components/node.scss */
 .next-link {
   font-size: 100px;
   position: absolute;
@@ -582,17 +594,18 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   top: 240px;
 }
 
-/* line 365, ../../components/node.scss */
+/* line 369, ../../components/node.scss */
 .field-name-field-headline {
   color: white;
 }
-
-/* line 375, ../../components/node.scss */
-.dark-on-light .field-name-field-headline {
-  color: #282833;
+@media (max-width: 1280px) {
+  /* line 369, ../../components/node.scss */
+  .field-name-field-headline {
+    font-size: 30px;
+  }
 }
 
-/* line 385, ../../components/node.scss */
-.node-scrape .icon {
-  color: #ddd;
+/* line 383, ../../components/node.scss */
+.dark-on-light .field-name-field-headline {
+  color: #282833;
 }

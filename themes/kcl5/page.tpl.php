@@ -13,7 +13,7 @@
 		</div><!-- /#scene -->
 	</div><!-- /#scenesContainer -->
 
-	<div id="screen"></div>
+	<!--<div id="screen"></div>-->
 
 	<div id="readOut"></div>
 
@@ -29,7 +29,7 @@
 
 <?php endif; ?>
 
-  <div id="alertScreen"><div id="alertInner"></div></div>
+  <div id="alertScreen"></div>
 
   <div id="contactTab" class="tab">
 	  <div class="inner">
@@ -40,9 +40,8 @@
 	<?php print render($page['tab1']); ?>
 				</div>
 				<div class="right clearfix">
-<p>For general questions, project inquiries or proposal requests, feel free to contact KCL Studios using this form or via the following methods:</p>
-<p><h3>Email:</h3> <a href="mailto:kcl@kclstudios.com">kcl@kclstudios.com</a></p>
-<p><h3>Skype:</h3> kclstudios</p>				
+<p>For general questions, project inquiries or proposal requests, feel free to contact KCL Studios using this form.</p>
+
 				</div>
 				</div><!-- /tabContent -->
 	  </div>			
@@ -88,14 +87,18 @@
 
 <div id="top">
 
+	<a id="site-logo" class="ajax" href="<?php print $front_page; ?>" ><img src="/sites/all/themes/kcl5/img/kcl-logo.png" /></a>
+
   <div id="main-menu">
-  <?php
-    $main_menu = menu_tree_output(menu_tree_all_data('main-menu'));
-    print drupal_render($main_menu); 
-  ?>
+    <a id="main-menu-mobile-toggle"><div class="icon">m</div><span>Menu</span></a>
+    <?php
+      $main_menu = menu_tree_output(menu_tree_all_data('main-menu'));
+      print drupal_render($main_menu); 
+    ?>
+   
   </div>
 
-	<a id="site-logo" class="ajax" href="<?php print $front_page; ?>" ><img src="/sites/all/themes/kcl5/img/kcl-logo.png" /></a>
+
 	<div id="status"><noscript><div id="noscript">Please enable Javascript to access KCLStudios.com.</div></noscript></div>		
 	<ul id="panelMenu">
 	  <li><a class="tabControl" href="#contactTab">Contact +</a></li>

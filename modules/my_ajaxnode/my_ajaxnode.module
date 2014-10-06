@@ -54,7 +54,7 @@ function foo_tail_load($arg, $map, $index) {
  * Load node via AJAX
  */
 function ajax_node_load($arg) {  
-  
+  sleep(0);
   // Load in Drupal core AJAX library. 
   if($arg == '') {  
        $result = array(
@@ -81,8 +81,9 @@ function ajax_node_load($arg) {
 	$scene_id = !empty($node->field_scene) ? $node->field_scene[LANGUAGE_NONE][0]['nid'] : '';
 
   $commands = array();
-  $commands[] = ajax_command_html('#panelContainer .active .dynamic', $content);
-  $commands[] = array('command' => 'kclDisplayContent', 'nodeId' => $node->nid); 
+  $commands[] = ajax_command_invoke('#panelContainer .active .dynamic', 'html', array($content));
+  $commands[] = array('command' => 'kcl_display_content', 'nodeId' => $node->nid); 
+  $commands[] = ajax_command_invoke('#panelContainer','removeClass', array('loading'));
   $commands[] = array('command' => 'load_node_scene', 'sceneId' => $scene_id);
   return array('#type' => 'ajax', '#commands' => $commands);	
 }
