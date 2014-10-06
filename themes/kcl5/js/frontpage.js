@@ -127,7 +127,6 @@ Drupal.ajax[base] = new Drupal.ajax(base, $element, element_settings);
 var layerTimers = new Array()
 var layerDelays = new Array()
 var activeUrl
-var activeIndex
 var activeContainer
 var activeDefault
 var activeInner
@@ -193,19 +192,15 @@ var parseHash = function(){
 	dirLevels = activeUrl.replace(/\?.*$/,"").split("\/") //remove any query and split the path
 	var activePanel = $('a[href=/' + dirLevels[0] + ']').parent('div.panel')		
 	//console.log(activePanel)	
-	activeIndex = $(activePanel).index()
 	activeContainer = $('.container',activePanel)
 	activeContent = $('.panelContent',activePanel)
 	//console.log(dirLevels[0])
-	//console.log(activeIndex)
-	if (dirLevels[0] != "" && activeIndex === -1){
+	if (dirLevels[0] != "" && activePanel === -1){
 		showAlert("Sorry for the mix-up, but you have tried to access content which is restricted or no longer exists.")
 		return;
 	}
 	hideAlert();
-
-	$('#panelContainer').activatePanel(activePanel,activeIndex);
-	
+	$('#panelContainer').activatePanel(activePanel);	
 	_gaq.push(['_trackEvent', 'Urls', 'Display', activeUrl]) // Log event for Google analytics event tracking	
 }
 
@@ -221,19 +216,18 @@ $.fn.activatePanel = function(activePanel,index){
 	$('.container').stop()//Stop any current function affecting a .container class 
 	//$('customScrollBox').removeClass('loading')	
 	if(!($(activePanel).hasClass("active"))) {				
-		$("#panelContainer .panel").removeClass('active').addClass('inactive')
-		$(activePanel).removeClass('inactive').addClass('active')	
-			activateContent(activePanel)
-			soundReady = true		
-			
+		$("#panelContainer .panel").removeClass('active');
+		$(activePanel).addClass('active');	
+			activateContent(activePanel);
+			soundReady = true;				
 		
 		if(soundReady == true){soundManager.play('panelSound')}
-		var mode = "start"
-		console.log(activePanel.attr('id'))
+		var mode = "start";
+		//console.log(activePanel.attr('id'));
 		//loadScene(index,mode)			
-		readOutPosition()
+		readOutPosition();
 	} else {		
-		activateContent(activePanel)		
+		activateContent(activePanel);		
 	}		
 }
 
@@ -509,8 +503,8 @@ var readOut = function(output){
  * Move readOut display away from active content panel
  */
 var readOutPosition = function(){	
-	if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"}
-	$("#readOut").css('left',xPos)
+	if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"};
+	$("#readOut").css('left',xPos);
 }
 
 
@@ -551,12 +545,12 @@ $.fn.animateElement =  function(count,sx,sy,ex,ey,d,l,int,delay){
 		var looper = null
 		var loopCounter = 0		
 		self.css({left:sx,top:sy})	
-		readOut('EndX: ' + ex) 
+		//readOut('EndX: ' + ex) 
 		//if (loopCounter == 0){var wait = delay}else{var wait=0}
 		if(Animator.enabled == true){ //global var check
  			if(loop == true){
  				loopCounter++
- 				readOut("animateBg instance:" + loopCounter) 
+ 				//readOut("animateBg instance:" + loopCounter) 
 				looper =  function(){
 					layerTimers[count] = setTimeout(function(){
 						self.animateElement(count,sx,sy,ex,ey,d,l,int,delay)
@@ -588,7 +582,7 @@ $.fn.animateBg =  function(count,sx,sy,ex,ey,d,l,int,delay){
 		if(Animator.enabled == true){ //global var check
  			if(loop == true){
  				loopCounter++    	
- 				readOut("animateBg instance:" + loopCounter)       
+ 				//readOut("animateBg instance:" + loopCounter)       
 				looper =  function(){
 					layerTimers[count] = setTimeout(function(){
 						self.animateBg(count,sx,sy,ex,ey,d,l,int,delay)
@@ -859,7 +853,7 @@ $(window).resize(function(){
 	}
 	resizeTimer = setTimeout(function(){	  
 	  Animator.stop();  
-	  Animator.clear();  
+	  //Animator.clear();  
 	  Animator.init();	
 		//$(window).trigger('hashchange');	
 	}, 500);

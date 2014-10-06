@@ -528,8 +528,7 @@ width:100%;
   left: -100%;
   min-height: 100%;
   margin: 0;
-  position: absolute;
-  
+  position: absolute;  
   
   > .container {
    width: 100%;
