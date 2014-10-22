@@ -14,6 +14,17 @@ $white: #FFF;
 @import "fonts.scss";
 
 
+a:link,
+a:visited {
+  cursor: pointer;
+  color: #336699;
+  outline: medium none;
+  text-decoration: none;
+  font-weight: 700;
+  transition: color 0.3s;
+}
+
+
 
 
 

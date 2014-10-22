@@ -6,6 +6,8 @@
   height: 60px;
   padding-left: 380px;
   padding-right: 180px;
+  position: fixed;
+  top: 0;
   width: 100%;
   z-index: 1000;
   @include box-sizing(border-box);
@@ -14,10 +16,17 @@
     height: 40px;
     padding-left: 0;
     padding-right: 0;
+    top: 60px;
   }
+
+  @media (max-width: 960px) {
+    position: absolute;
+    top: 60px;
+  }  
 }
 
 #main-menu > ul {
+  background-color: #6699cc;
   height: 100%;
   list-style: none;
   margin: 0;
@@ -36,37 +45,35 @@
   }
   
   > li.last {
-    border-right: 1px solid #88bbdd;
+
   }
   
   li {
-    border-left: 1px solid #88bbdd;
     display: block;
     height: 100%;
     list-style: none;
     float: left;
     margin: 0;
-    padding: 0 0 0 0;
+    padding: 2px 1px 2px 0;
     position: relative;
     text-transform: uppercase;
     width: 20%;
     @include box-sizing(border-box);
     
     @media (max-width: 960px) {
-      float:none;
+      float: none;
+      padding: 0;
       width: auto;
     }
     
-    &:hover {
-      background-color: #6699cc;
+    &:hover {      
     
       a {
-        //background-color: #D8E5f2;
-       
-        //color: #D8E5f2;
-        
+ 
+      
         &:hover {
-          background-color: #6699CC;
+          background-color: #336699;
+          border: 2px solid #6699CC;
           color: #D8E5F2;
           
         }    
@@ -77,44 +84,46 @@
     
       > ul {
         display: block;
-        left: 0;
-        //max-height: 2000px;
+        left: 0; 
         opacity: 1;
+        position: relative;
       }
       
       li {
-        background-color: #ddeeff;
+        float: none;
       }
       
-      a {
-        background-color: #ddeeff;
-        color: #6699cc;          
+      a { 
+        background: #6699cc;
+        color: #336699;          
       }
         
       .li-expand {
-      color: #336699;
+        color: #336699;
         opacity: 1;
         
         &:hover {
           color: #336699;
         }
-      }
-      
+      }      
     }
     
+   a {
+    border: 2px solid transparent;
+    @include box-sizing(border-box);
+   }
+    
    > a {
-      background-color: #6699cc;
-      border: 1px solid transparent;
-      color: #D8E5f2;
-      //color:#336699;
+      background-color: #7ca7d3;
+      color:#336699;
       display: block;
       height: 100%;
-      padding: 19px 0 0 1em;
+      padding: 18px 0 0 1em;
       transition: background-color 0.2s;
       @include box-sizing(border-box);      
 
       @media (max-width: 1280px) {
-        padding: 10px 0 0 1em;        
+        padding: 7px 0 0 1em;        
       }
       
       &:hover {
@@ -156,7 +165,7 @@
   }
   
   li ul {    
-    max-height: 0;
+ 
     opacity: 0;
     position: absolute;
     left: -20000px;
@@ -165,14 +174,19 @@
   
   li li {
     border: 0 none;
-    float: none;
+    float: none !important;
     text-transform: none;
+    padding: 0;
     width: 100%;
   }
   
   li li a{
     font-weight: 400;
-    padding: 1em;  
+    padding: 1em; 
+    
+    &:hover {
+      background-color: #4488CC;
+    }
   }
 }  
 
@@ -198,15 +212,48 @@ li.on > .li-expand {
   }
 }
 
+
 //
 // Mobile
 //
 
+
+
+
+//
+// Activated main-menu in mobile
+//
+
+#main-menu.on {
+
+  @media (max-width: 960px) {
+    top: 60px;
+    
+    ul {
+      display: block;
+      height: auto;
+    } 
+    
+    li {
+      float: none;
+    }
+  } 
+}  
+
+
+//
+// Mobile toggler
+//
+
 #main-menu-mobile-toggle {
+  top: 15px;
   cursor: pointer;
   display: none;
-  font-size: 10px;
-  text-align: center;
+  font-size: 11px;
+  left: 20px;
+  position: absolute; 
+  width: 200px;
+  z-index: 2000;
   
   @media (max-width: 960px) {
     display: block;
@@ -218,11 +265,43 @@ li.on > .li-expand {
   }
 }
 
-#main-menu {
-  &.mobile > ul{    
+#main-menu-mobile-toggle {
+  color: #fff;
+  padding: 0 3em 0 0;
+
+  &:hover {
+    color: #336699;
+  }  
   
-    @media (max-width: 960px) {
-      display: block;
-    }  
+  span.icon {
+    display: inline-block;
+    font-size: 40px; 
   }
-}  
+  
+  span.text {
+    display: inline-block;
+    font-size: 14px;
+    left: 4px;
+    position: relative;
+    top: -10px;
+  }
+  
+  span.action-hide {
+    display: none; 
+  }
+  
+  span.action-show {
+    display: inline-block;
+  }  
+}
+
+#main-menu-mobile-toggle.on {
+
+  span.action-hide {
+    display: inline-block;
+  } 
+  
+  span.action-show {
+    display: none;
+  } 
+}

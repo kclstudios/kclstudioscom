@@ -67,14 +67,14 @@
 			$("ul").delegate("li.on","mouseleave", function() {
 			    
 					//console.log('Mouseleave li.on');
-			    clearTimeout(mainMenuTimer);
-			    mainMenuTimer = null;	
-			    $(this).addClass('timer');		  		
-			     mainMenuTimer = setTimeout(function(){	
+			   // clearTimeout(mainMenuTimer);
+			   // mainMenuTimer = null;	
+			  //  $(this).addClass('timer');		  		
+			  //   mainMenuTimer = setTimeout(function(){	
 			         //console.log('mainMenuTimer set on mouseleave menu-li.on.');
-			         $("#main-menu ul.menu li.on").removeClass('on timer');
-			         $("#main-menu").removeClass('has-li-on');
-				   }, 1000);			   	
+			  //       $("#main-menu ul.menu li.on").removeClass('on timer');
+			  //       $("#main-menu").removeClass('has-li-on');
+				//   }, 1000);			   	
 			    
 			});  			
 
@@ -85,11 +85,13 @@
 	});		
 
 	  
-	  // Mobile
+	  // Mobile Toggle
 	  
-	  	$("#main-menu-mobile-toggle").click(function() {
-	  	    $(this).parent().toggleClass('mobile'); 
-	  	});		
+	  	$("#main-menu-mobile-toggle").click(function(e) {
+	  	    e.preventDefault();
+	  	    $(this).toggleClass('on');
+	  	    $("#main-menu").toggleClass('on');   
+	  	  }); 	
 		
 	});  	
 

@@ -49,39 +49,5 @@
 
 
 
-//
-// panelContainer content
-//
-
-#panelContainer .static,
-#panelContainer .dynamic {
-  position: absolute;
-  left: -100%;
-  width: 100%;
-  padding-top: 300px;
-  opacity: 0;
-  -webkit-transition: padding-top 1.3s linear, opacity 1s;
-  transition: padding-top 1.3s linear, opacity 1s;
-}
-
-#panelContainer .static {
-
-  &.active {
-    left: 0;
-    opacity: 1;
-    padding-top: 0;
-  }
-}
-
-
-#panelContainer .dynamic {
-  
-  &.active {
-    left: 0;
-    opacity: 1;
-    //padding-top: 0;
-  }
-}
-
 
 

@@ -7,7 +7,7 @@
 	<?php if(!$is_front) : ?>
 	<div id="pageContent"><?php print render($page['content']); ?></div>
 	<?php endif; ?>
-	<div id="scenesContainer">
+	<div id="scene-container">
 		<div id="scene">
 			<div id="matte"><img id="matteImg" src="" /></div>
 		</div><!-- /#scene -->
@@ -17,33 +17,20 @@
 
 	<div id="readOut"></div>
 
-<?php if($is_front): ?>
-  <?php kcl5_main_menu_top(); ?>
-	
-<?php
-//load the view by name
-//$view = 'featured_panels';
-//output the view
-//print views_embed_view($view,'block');
-?>
+<?php if($is_front) { kcl5_main_menu_as_panels(); } ?>
 
-<?php endif; ?>
+  <div id="alert-screen"></div>
 
-  <div id="alertScreen"></div>
-
-  <div id="contactTab" class="tab">
+  <div id="contact-tab" class="tab">
 	  <div class="inner">
 			<div class="tabContent content clearfix">
 				
-			<a class="tabClose" href="/">[close]</a>
-				<div class="left clearfix">
-	<?php print render($page['tab1']); ?>
-				</div>
-				<div class="right clearfix">
-<p>For general questions, project inquiries or proposal requests, feel free to contact KCL Studios using this form.</p>
+			<a class="tab-close" href="/">[close]</a>
 
-				</div>
-				</div><!-- /tabContent -->
+	<?php print render($page['tab1']); ?>
+			
+
+			</div><!-- /tabContent -->
 	  </div>			
 	</div>
 
@@ -67,18 +54,13 @@
 
 
 <div id="bottom">
-	<div id="bottom-inner-one">	
-			
-		<!-- <div id="cssControl"><span class="label">Screen Display:</span><a id="def" href="/">Dark</a> | <a id="css2" href="/">Light</a></div> -->			
+	<div id="bottom-inner-one">					
 		<div id="animateControl"><span class="label">Animation:</span><a href="/" id="loop-terminate">Disable</a></div>			
 		<!-- <div id="audioControl"><span class="label">Audio:</span><ul class="graphic"><li><a href="/kclstudioscom/sites/all/themes/kcl4/audio/kclstudios.mp3" class="sm2_button">Mime Type</a></li></ul></div> -->
-
-	</div><!-- /footerLeft -->	
-	<div id="bottom-inner-two">	
-	
-		<div id="copyText"><span>&copy; KCL Studios <?php print(date("Y")); ?> &nbsp; - &nbsp; Powered by <a href="http://www.drupal.org" target="_blank">Drupal</a></span></div>
-		
-	</div><!-- /footerRight -->		
+	</div>
+	<div id="bottom-inner-two">		
+		<div id="copyText"><span>&copy; KCL Studios <?php print(date("Y")); ?> &nbsp; - &nbsp; Powered by <a href="http://www.drupal.org" target="_blank">Drupal</a></span></div>		
+	</div>
 </div><!-- /bottom -->
 
 
@@ -89,26 +71,28 @@
 
 	<a id="site-logo" class="ajax" href="<?php print $front_page; ?>" ><img src="/sites/all/themes/kcl5/img/kcl-logo.png" /></a>
 
-  <div id="main-menu">
-    <a id="main-menu-mobile-toggle"><div class="icon">m</div><span>Menu</span></a>
-    <?php
-      $main_menu = menu_tree_output(menu_tree_all_data('main-menu'));
-      print drupal_render($main_menu); 
-    ?>
-   
-  </div>
 
 
-	<div id="status"><noscript><div id="noscript">Please enable Javascript to access KCLStudios.com.</div></noscript></div>		
-	<ul id="panelMenu">
-	  <li><a class="tabControl" href="#contactTab">Contact +</a></li>
+  <a id="main-menu-mobile-toggle"><span class="icon action-show">m</span><span class="icon action-hide">-</span><span class="text">Menu</span></a>
+
+	<ul id="tab-menu">
+	  <li><a class="tab-control" href="#contact-tab"><span class="text">Contact</span><span class="icon action-show">c</span><span class="icon action-hide">-</span></a></li>
 	</ul>
 	
 </div><!-- end top -->
 
 
 
+  <div id="main-menu">  
+    <?php
+      $main_menu = menu_tree_output(menu_tree_all_data('main-menu'));
+      print drupal_render($main_menu); 
+    ?>   
+  </div>
 
+
+
+	<div id="status"><noscript><div id="noscript">Please enable Javascript to access KCLStudios.com.</div></noscript></div>		
 
 
 </div><!-- /outer -->
@@ -118,9 +102,9 @@
 
 <div id="sceneAssets"></div><!-- /sceneAssets -->
 
-<!-- configure SM2 for your use -->
-<script type="text/javascript">
 
+<script type="text/javascript">
+<!-- configure Soundmanager2 -->
 soundManager.debugMode = true; // disable or enable debug output
 soundManager.preferFlash = true; // use HTML5 audio for MP3/MP4, if available
 soundManager.useFlashBlock = false;

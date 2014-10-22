@@ -5,7 +5,7 @@
   
   $matteImg = isset($node->field_matte_img['und'][0]) ? image_style_url('original', $node->field_matte_img['und'][0]['uri']) : NULL; 
 
-  print 'sceneData[' . $node->nid . '] = { "matte" : "' . $matteImg . '", "layers" : [ ';
+  print 'sceneData[' . $node->nid . '] = { "title" : "' . $node->title . '", "matte" : "' . $matteImg . '", "layers" : [ ';
 
   $layers = isset($node->field_layers['und']) ? $node->field_layers['und'] : NULL;
 

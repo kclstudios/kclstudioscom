@@ -60,7 +60,7 @@ Animator = {
  */	    
 Drupal.ajax.prototype.commands.kcl_display_content = function(ajax, response, status)	{	    
  
-  $('#panelContainer .active .container').displayContent('dynamic');
+  $('#panelContainer .active .container').displayContent('content-dynamic');
   
 }  
 
@@ -285,14 +285,14 @@ function matteDim() {
 		}
 		scale = outerWidth/2500
 	}
-	//$('#scenesContainer').height(boxSize+'px')
-	//$('#scenesContainer').width(boxSize+'px')
+	//$('#scene-container').height(boxSize+'px')
+	//$('#scene-container').width(boxSize+'px')
 	//console.log('Outer Height: ' + outerHeight + '  Width: ' + outerWidth)
-	//console.log('Scenes Height: ' + $('#scenesContainer').height() + '  Width: ' + $('#scenesContainer').width())
+	//console.log('Scenes Height: ' + $('#scene-container').height() + '  Width: ' + $('#scene-container').width())
 	var hoffset = (outerWidth - boxSize)/2
 	var voffset = (outerHeight - boxSize)/2
 	//console.log(hoffset)
-	$('#scenesContainer').css({left:hoffset,top:voffset})
+	$('#scene-container').css({left:hoffset,top:voffset})
 	return(scale)	
 }
 
@@ -324,6 +324,7 @@ function loadScene(sceneId){
 	  console.log('Animator scene id not match with scene id arg');
 	  console.log('Current scene id:' + Animator.scene);
 	  console.log('Incoming scene id:' + sceneId);
+	  $('#scene-container').addClass('loading');
 	  Animator.sceneId = sceneId;
 		Animator.stop();
 		Animator.clear();
@@ -364,7 +365,7 @@ function loadScene(sceneId){
 			
 			
 		var assetsLoaded = 0
-		//readOut("Intializing scene: " + sceneTitle)
+		readOut("Intializing scene: " + scene.title)
 		//readOut("Loading " + assetCount + " assets for '" + sceneTitle + "'' scene" )		
 		var assetCount = $("#sceneAssets > img").size()
 		$("#sceneAssets > img").each(function(){			
@@ -373,7 +374,8 @@ function loadScene(sceneId){
 					assetsLoaded++		
 					readOut("Asset " + assetsLoaded + " of " + assetCount + " loaded.")	
 					if(assetsLoaded == assetCount) {
-						readOut("Scene asset loading complete.");						
+						readOut("Scene loaded.");		
+						$('#scene-container').removeClass('loading');
 						Animator.init();							
 					}
 			})
@@ -406,14 +408,14 @@ function initScene(){
 			}
 			scale = outerWidth/2500;
 		}
-		$('#scenesContainer').height(boxSize+'px');
-		$('#scenesContainer').width(boxSize+'px');
+		$('#scene-container').height(boxSize+'px');
+		$('#scene-container').width(boxSize+'px');
 		//console.log('Outer Height: ' + outerHeight + '  Width: ' + outerWidth)
-		//console.log('Scenes Height: ' + $('#scenesContainer').height() + '  Width: ' + $('#scenesContainer').width())
+		//console.log('Scenes Height: ' + $('#scene-container').height() + '  Width: ' + $('#scene-container').width())
 		var hoffset = (outerWidth - boxSize)/2;
 		var voffset = (outerHeight - boxSize)/2;
 		//console.log(hoffset)
-		$('#scenesContainer').css({left:hoffset,top:voffset});		
+		$('#scene-container').css({left:hoffset,top:voffset});		
 		//console.log(scale)		
 
 
@@ -462,7 +464,7 @@ function initScene(){
 						$("#scene").append(elem)	
 						elem.height(elem.height()*scale)
 						if(Animator.enabled == true){
-						  elem.animateElement(count,startX,startY,endX,endY,duration,loop,interval,delay)
+						 // elem.animateElement(count,startX,startY,endX,endY,duration,loop,interval,delay)
 						}
 					} else {			
 						layerImg = $('#sceneAssets img[src=' + imgSrc + ']')
@@ -479,7 +481,7 @@ function initScene(){
 							})	
 							$("#scene").append(elem)
 							if(Animator.enabled == true){
-							  $(elem).animateBg(count,startX,startY,endX,endY,duration,loop,interval,delay);
+							//  $(elem).animateBg(count,startX,startY,endX,endY,duration,loop,interval,delay);
 							}
 					}
 				} // if imgSrc
@@ -487,7 +489,8 @@ function initScene(){
 				})	// end forEach						
 			} // if layers				
 		
-	//$("#scene-screen").fadeOut(300);
+			
+	$("#scene-container").delay(300).fadeIn(1000);
 }
 
 
@@ -503,7 +506,8 @@ var readOut = function(output){
  * Move readOut display away from active content panel
  */
 var readOutPosition = function(){	
-	if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"};
+	//if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"};
+	var xPos = '10px';
 	$("#readOut").css('left',xPos);
 }
 
@@ -602,18 +606,15 @@ $.fn.animateBg =  function(count,sx,sy,ex,ey,d,l,int,delay){
 ********************/
 var activateContent = function(activePanel){
 	var activeContainer = $('.container', activePanel);
-	//$('.content .dynamic').removeClass('loading');
-	$('#panelContainer .static').removeClass('active');
-	$('#panelContainer .dynamic').removeClass('active');
-	//$('.content .static', activeContainer).stop().css('opacity','0').hide(0);
-	//$('.content .dynamic',activeContainer).stop().css('opacity','0').hide(0);
+	$('#panelContainer .content-static').removeClass('active');
+	$('#panelContainer .content-dynamic').removeClass('active');
 	var loaded = false;
 	var hasQuery = location.href.match(/\?.*$/);
 	//var scrollBox = $('.customScrollBox', activePanel)
 		
 	if(dirLevels.length<2 && hasQuery == null){
-		//$('.content .static', activeContainer).show(0).css('opacity','1');
-		activeContainer.displayContent('static');
+		//$('.content .content-static', activeContainer).show(0).css('opacity','1');
+		activeContainer.displayContent('content-static');
 		// Content is already loaded, so let's display it and make an AJAX call to get it's scene
 		loadUrl = window.location.hash.replace(/#\//,"api-ajax-scene/");
     // Dynamically change the url for the element that has already been bound to drupal AJAX    
@@ -693,11 +694,10 @@ $("a#loop-terminate").click(function(e){
  *
 */ 
 
-$("a.tabClose").click(function(){	
-	var tabId = $(this).parents('.tab').attr('id')
-	$('a.tabControl[href^=#'+tabId+']').trigger('click')
-	//alert(tabId)
-	return false
+$("a.tab-close").click(function(){	
+	var tabId = $(this).parents('.tab').attr('id');
+	$('a.tab-control[href^=#'+tabId+']').trigger('click');
+	return false;
 })
 
 /**
@@ -706,28 +706,24 @@ $("a.tabClose").click(function(){
  *
 */ 
 
-$('a.tabControl').click(function(){	
-	$('#panelContainer').removeClass('ghost')
+$('a.tab-control').click(function(e){	
+    e.preventDefault();
+	$('#panelContainer').removeClass('ghost');
 	if($(this).hasClass('on')){			
-		$(this).removeClass('on')
+		$(this).removeClass('on');
 	} else {
-		$('a.tabControl').removeClass('on')			
-		$(this).addClass('on')
-		$('#panelContainer').addClass('ghost')
+		$('a.tab-control').removeClass('on');		
+		$(this).addClass('on');
+		$('#panelContainer').addClass('ghost');
 	}	
-	$('a.tabControl').each(function() {
+	$('a.tab-control').each(function() {
 		var tabId = $(this).attr('href')
-		var offText = $(this).text().replace(/.$/,"+")
-		var onText = $(this).text().replace(/.$/,"-")
-		if($(this).hasClass('on')){
-			$(tabId).fadeIn('1500').addClass('show')
-			$(this).text(onText)
-		}else{
-			$(tabId).fadeOut(0).removeClass('show')
-			$(this).text(offText)
+		if($(this).hasClass('on')) {
+			$(tabId).fadeIn('1500').addClass('show');		
+		} else {
+			$(tabId).fadeOut(0).removeClass('show');			
 		}		
 	})
-	return false
 })
 
 
@@ -828,18 +824,25 @@ formatHash();
 
 //adjustResize();
 
-$("a.ajax").live("click",function(){	
+$("a.ajax").live("click",function(e){	
 	$(this).writeHash();
 	return false;
 })
 
-$("#main-menu li a").live("click",function(event){	
-    event.preventDefault();
+$("#main-menu li a").live("click",function(e){	
+    e.preventDefault();
     $(this).writeHash(); 
 })
 
-   
+$(document).delegate(".menu-custom-siblings-menu a","mouseenter",function(e){	
+    console.log('Mouse entered siblings menu');
+	$(".breadcrumb > span.last").hide(0);	
+})   
 
+$(document).delegate(".menu-custom-siblings-menu a","mouseleave",function(e){	
+    console.log('Mouse left siblings menu');
+	$(".breadcrumb > span.last").show(0);	
+})   
 
 /**
  *

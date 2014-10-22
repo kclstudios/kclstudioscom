@@ -15,8 +15,9 @@
 
 
 .node-full .field-name-field-headline {
-  font-size: 50px;
+  font-size: 44px;
   line-height: 1;
+  padding: 130px 30px 30px;
   
   @media (max-width: 1280px) {
     font-size: 36px;
@@ -25,7 +26,6 @@
 
 .field-name-field-drophead {
   font-size: 25px;
-  font-weight: 800;
 }
 
 
@@ -34,64 +34,66 @@
 //
 
 
-$zen-column-count: 12; // Set the total number of columns in the grid.
+$zen-column-count: 24; // Set the total number of columns in the grid.
 $zen-gutter-width: 0; 
 
 .node-inner {  
-  background-color: rgba(255,255,255,0.9);
-  color: #282833;    
+  //background-color: rgba(255,255,255,0.9);
+  //color: #282833;    
   padding: 1.5em;  
-  @include border-radius(5px);
+  //@include border-radius(5px);
 }  
   
 .node-full {
+
   clear: both;
-  margin: 0 auto;  
+  margin: 0 auto;
+  min-height: 100%; 
   position: relative;
   width: 100%;
-  //@include box-sizing(border-box); 
-  @include zen-grid-container();
-  //@include zen-grid-background();
-
-  > .node-section-breadcrumb {   
+  @include box-sizing(border-box); 
+  
+.node-breadcrumb {
+  position: absolute;
+  top: 60px;
+}
+.node-back { 
+  background: rgba(0,0,0,0.75);
+  @include zen-grid-item-base();
+  @include zen-grid-item(13,6); 
+  @include zen-clear(both);    
+  @media (max-width: 1280px) {
+    @include zen-grid-item(8,2);      
+  } 
+  position: fixed;
+  top: 0;
+  bottom: 0; 
+  height: 100%;
+ }  
+ 
+.node-content {
     @include zen-grid-item-base();
-    @include zen-grid-item(6,4);
-    @include zen-clear(both);
-  }      
-
-  > .node-section-field-headline {
-    //background: #222;
-    margin-bottom: 20px;
-    margin-top: 20px;
-    @include zen-grid-item-base();
-    @include zen-grid-item(6,4); 
+    @include zen-grid-item(13,6); 
     @include zen-clear(both);    
     @media (max-width: 1280px) {
       @include zen-grid-item(8,2);      
-    }
-  } 
-  
-  > .node-section-content {  
-    margin-top: 20px;
-    @include zen-grid-item-base();
-    @include zen-grid-item(6,4);
-    @include zen-clear(both);
-    @media (max-width: 1280px) {
-      @include zen-grid-item(10,2);      
-    }    
-  } 
+    } 
+    position: absolute;
+   
  
   .field-name-field-drophead p:first-child {
     margin-top: 0;
   }
-
+  
+  > .node-section-content {
+    background: rgba(0,0,0,0.6);
+  }
   
   > .node-section-children {
-    background: #444;
-    @include zen-grid-item-base();
-    @include zen-grid-item(6,4);
+    //background: #444;
     @include zen-nested-container();
-    @include zen-clear(both);   
+    @include zen-clear(both); 
+    padding: 0 10px;
     
     .row {
       float: left;
@@ -116,7 +118,36 @@ $zen-gutter-width: 0;
       }
     }     
   }
+
+  > .node-section-views {
+    background: rgba(0,0,0,0.6);
+    @include zen-clear(both);   
     
+    .row {
+      float: left;
+      margin-top: 20px; 
+      text-align: center;
+      width: 33%;   
+      @include box-sizing(border-box);
+      
+      &.even {
+        padding: 0 10px;        
+      }
+      
+      &.odd {
+        padding: 0 10px;
+      }
+      
+      @media (max-width: 1280px) {
+        float: none;
+        width: auto;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+    }
+  }  
+  
   > .node-section-field-node-links {
     @include zen-grid-item(6,4);  
     @include zen-nested-container(); 
@@ -146,47 +177,20 @@ $zen-gutter-width: 0;
     }     
   }      
 
-  &.node-align-left { 
-
-    > .node-section-field-headline {
-      @include zen-grid-item(7,2);
-    } 
-  
-    > .node-section-content { 
-      @include zen-grid-item(7,2);
-    }
-    
-    > .node-section-children {      
-      @include zen-grid-item(7,2);
-      @include zen-nested-container();
-    }
-    
-    > .node-section-field-node-links {      
-      @include zen-grid-item(7,2);
-      @include zen-nested-container();
-      
-    }    
+  &.node-align-left .node-content,  { 
+      @include zen-grid-item(13,2);
 	}
 	
-	&.node-align-right {
-
-    > .node-section-field-headline {
-      @include zen-grid-item(7,5); 
-    } 
+  &.node-align-left .node-back,  { 
+      @include zen-grid-item(13,2);
+	}	
 	
-	  > .node-section-content {
-      @include zen-grid-item(7,5);
-    }
-
-   > .node-section-children {      
-      @include zen-grid-item(7,5);
-      @include zen-nested-container();
-    }
-    
-    > .node-section-field-node-links {      
-      @include zen-grid-item(7,5);
-      @include zen-nested-container();      
-    }        
+	&.node-align-right .node-content {
+	     @include zen-grid-item(13,11); 
+  }
+  
+  &.node-align-right .node-back {
+	     @include zen-grid-item(13,11); 
   }
 }
 
@@ -201,11 +205,11 @@ $zen-gutter-width: 0;
   @include box-sizing(border-box);
   
   h3 {
-    font-size: 1.75em;
+    font-size: 1.5em;
   }
   
   p {
-    margin:0 0 1.5em;
+    margin: 0 0 1.5em;
   }
   
   img {
@@ -215,7 +219,7 @@ $zen-gutter-width: 0;
   }
 
   .node-inner {
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(0,0,0,0.8);
   } 
 }
 
@@ -241,8 +245,8 @@ $zen-gutter-width: 0;
   }
 
   .node-inner {
-    background-color: rgba(255,255,255,0.9);  
-    @include border-radius(3px);
+    background-color: rgba(0,0,0,0.8);  
+    //@include border-radius(3px);
   } 
 }
 
@@ -332,7 +336,8 @@ $zen-gutter-width: 0;
 		right: 0;
 	}
 	
-	.active, .active:hover {
+	.active,
+	.active:hover {
 		background: none #FFF;
 		border-color: #FFF;
 	}	
@@ -343,21 +348,27 @@ $zen-gutter-width: 0;
 }
 
 
-
+//
+// Prev/Next links
+//
 
 
 .prev-link {
+  color: $white;
   font-size: 100px;
   left: 10px;
-  position: absolute;
-  top: 240px;
+  position: fixed;
+  top: 50%;
+  z-index: 2000;
 }
 
 .next-link {
+  color: $white;
   font-size: 100px;
-  position: absolute;
+  position: fixed;
   right: 10px;
-  top: 240px;
+  top: 50%;
+  z-index: 2000;
 }
 
 
@@ -366,7 +377,9 @@ $zen-gutter-width: 0;
 //
 
 
-.field-name-field-headline { 
+
+.node-section-field-headline { 
+  
    color: $white;
 //   text-shadow:
 //       3px 3px 0 #000,
@@ -388,6 +401,41 @@ $zen-gutter-width: 0;
 //      1px -1px 0 #fff,
 //      -1px 1px 0 #fff,
 //       1px 1px 0 #fff;
+}
+
+
+//
+// panelContainer content
+//
+
+
+#panelContainer .content-static,
+#panelContainer .content-dynamic {
+  position: absolute;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  -webkit-transition: opacity 0.6s;
+  transition: opacity 0.6s;
+  //@include zen-grid-container();
+}
+
+#panelContainer .content-static {
+
+  &.active { 
+    left: 0;
+    opacity: 1;
+  }
+}
+
+
+#panelContainer .content-dynamic {
+  
+  &.active { 
+    left: 0;
+    opacity: 1;
+  }
 }
 
 

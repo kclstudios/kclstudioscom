@@ -1,7 +1,7 @@
 # Require any additional compass plugins here.
 
 # Set this to the root of your project when deployed:
-http_path = "/sites/all/themes/kcl4"
+http_path = "/sites/all/themes/kcl5"
 css_dir = "css"
 sass_dir = "."
 images_dir = "../img"
@@ -15,7 +15,7 @@ require 'zen-grids'
 # relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
-# line_comments = false
+line_comments = true
 
 
 # If you prefer the indented syntax, you might want to regenerate this

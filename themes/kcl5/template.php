@@ -78,7 +78,7 @@ drupal_add_html_head($element2, 'google_font_orbitron');
  * Return markup for our menu-based ajax framework 
  * 
  */
-function kcl5_main_menu_top() {
+function kcl5_main_menu_as_panels() {
  $branch = menu_tree_all_data('main-menu',NULL,1);
  if (!empty($branch)) {
    $out = '<div id="panelContainer">';
@@ -95,10 +95,10 @@ function kcl5_main_menu_top() {
      $out .= '<div id="mcs_container_' . $node->nid . '" class="panel">'; 		
      $out .= '  <div class="container">';
      //$out .= '    <div class="content">';
-     $out .= '      <div class="static">'; 
+     $out .= '      <div class="content-static">'; 
      $out .= drupal_render(node_view($node));
      $out .= '      </div>';
-     $out .= '      <div class="dynamic"></div>';
+     $out .= '      <div class="content-dynamic"></div>';
  		// $out .= '    </div>';  
      $out .= '</div>';   
      $out .= '<a class="panelControl ajax" href="/' . $current_path . '" title="' . $panel_display_name . '"><div><span>' . $panel_display_name . '</span></div></a>';
@@ -129,16 +129,16 @@ function kcl5_breadcrumb($variables) {
     $array_size = count($breadcrumb);
     $i = 0;
     while ( $i < $array_size ) {
-
       if ( $i + 1 != $array_size ){
         $class = '';
-        $seperator =  ' <span class="sep">&raquo</span> ';
+        $separator =  ' <span class="separator">/</span> ';
         $tag = 'span';
-      }else{
+      } else {
         $class = ' last';
-        $seperator =  '';
-        $tag = 'h1';
+        $separator =  '';
+        $tag = 'span';
         $breadcrumb[$i] = strip_tags($breadcrumb[$i]);
+        watchdog('breadcrumb',$breadcrumb[$i]);
       }
       $themed_breadcrumb .= '<';
       $themed_breadcrumb .= $tag;
@@ -148,7 +148,7 @@ function kcl5_breadcrumb($variables) {
       $themed_breadcrumb .= '">' . $breadcrumb[$i] . '</';
       $themed_breadcrumb .= $tag;
       $themed_breadcrumb .= '>';
-      $themed_breadcrumb .= $seperator;
+      $themed_breadcrumb .= $separator;
       $i++;
     }
     $themed_breadcrumb .= '</div>';
@@ -393,12 +393,13 @@ function kcl5_child_menu($id, $menu = 'main-menu') {
  * Custom function to display menu siblings of current node 
  */
 function kcl5_siblings_menu($id, $menu = 'main-menu') {
-	//$tree = menu_tree_all_data($menu);	
+  // System path
 	$path = 'node/'. $id;
-	$current = menu_link_get_preferred($path);
-	$mlid = $current['mlid'];
+	// Get alias for system path, if exists
+	$menu_link = menu_link_get_preferred($path);
+	$mlid = $menu_link['mlid'];
 	$tree = menu_tree_all_data($menu);
-	$branch = kcl5_get_branch($tree,$mlid);
+	$branch = kcl5_get_branch($tree,$mlid);	
 	$num_keys = array_values($branch);
 	$count = -1;
 	$out = '';	
@@ -408,39 +409,39 @@ function kcl5_siblings_menu($id, $menu = 'main-menu') {
 		$count++;	
 		if($num_keys[$count]['link']['mlid'] == $mlid) {
 			$active = $count;
-			$classes[] = 'active';		
+			$classes[] = 'active';	
+			//print "<pre>" . print_r($num_keys[$count], TRUE) . "</pre>";
+			//print "<pre>" . print_r($num_keys[$count]['link']['plid'], TRUE) . "</pre>";
+			//kcl5_get_menu_item_parents($tree,$num_keys[$count]['link']['plid']);
 		}
-		//$out .= '<div class="' . implode($classes, ' ') . '"><span>' . $curr['link']['title'] . '</span></div>';
 		$out .= '<a class="' . implode($classes, ' ') . '" href="/' . drupal_get_path_alias($num_keys[$count]['link']['href']) . '"><span>' . $num_keys[$count]['link']['title'] . '</span></a>';					
 	}	
 	print '<div class="menu-custom-siblings-menu">';
 	$prev = $num_keys[$active - 1]; 
-	//if (!empty($prev)) { print '<a class="prev ajax icon" href="/' . drupal_get_path_alias($prev['link']['href']) . '">l</a>'; }
 	print $out;
-	$next = $num_keys[$active + 1]; 
-	//if (!empty($next)) { print '<a class="next ajax icon" href="/' . drupal_get_path_alias($next['link']['href']) . '">r</a>'; }
+	$next = $num_keys[$active + 1]; 	
 	print '</div>';
 	if (!empty($prev)) { print '<a class="prev-link ajax icon" href="/' . drupal_get_path_alias($prev['link']['href']) . '">l</a>'; }
 	if (!empty($next)) { print '<a class="next-link ajax icon" href="/' . drupal_get_path_alias($next['link']['href']) . '">r</a>'; }
 }	
 
 
+/*
+ * Custom function to return a branch (all menu items belonging to the same parent at a certain level) from a menu tree
+ */
 function kcl5_get_branch($tree, $mlid, $level = -1) {
 	$level++;
   // Check all top level entries
-  foreach ($tree as $key => $element) {
- 
+  foreach ($tree as $key => $element) { 
     // Is this the entry we are looking for?
     if ($mlid == $element['link']['mlid'])  {
       // Yes, return while keeping the key
       //return array($key => $element);
       //return $level;
       return $tree;
-    }
-    else {
+    } else {
       // No, recurse to children, if any
-      if ($element['below']) {
-      	
+      if ($element['below']) {      	
         $submatch = kcl5_get_branch($element['below'], $mlid, $level);
         // Found wanted entry within the children?
         if ($submatch) {
@@ -453,6 +454,10 @@ function kcl5_get_branch($tree, $mlid, $level = -1) {
   // No match at all
   return NULL;
 }
+
+
+
+
 
 
 

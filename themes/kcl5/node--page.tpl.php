@@ -91,18 +91,22 @@ dpm($node);
     
 ?>
 
+
 <div class="node node-full node-type-<?php print $node->type;?> node-align-<?php print $horiz_align;?> clearfix">  
  
+<div class="node-back"></div>
+
 
 	
-	<?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
+	<div class="node-content">
+   
 	
-	<?php kcl5_siblings_menu($nid); ?>		 
-   		
 	<div class="node-section-field-headline clearfix">
     <?php print render($content['field_headline']) ?>
   </div>  
 	
+ <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?>
+ 
   <div class="node-section-content clearfix">
   
 	<div class="node-inner clearfix">
@@ -183,10 +187,18 @@ print render($block['content']);
 
   </div>
 	</div>
+	<?php endif; ?>
+
 	
 	<div class="node-section-children">
 	  <?php kcl5_child_menu($nid); ?>	
 	</div>		
+		</div>
+		
+			<div class="node-breadcrumb">
+	<?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
+	<?php kcl5_siblings_menu($nid); ?>		
+	</div>
 		
 </div>		
 <?php

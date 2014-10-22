@@ -3,6 +3,7 @@
 .icon-minus-squared:before { content: '\2d'; } /* '-' */
 .icon-drupal:before { content: '\44'; } /* 'D' */
 .icon-spin5:before { content: '\4c'; } /* 'L' */
+.icon-keyboard:before { content: '\63'; } /* 'c' */
 .icon-down-dir:before { content: '\64'; } /* 'd' */
 .icon-left-dir:before { content: '\6c'; } /* 'l' */
 .icon-menu:before { content: '\6d'; } /* 'm' */
