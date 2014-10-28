@@ -15,7 +15,7 @@
 
 	<!--<div id="screen"></div>-->
 
-	<div id="readOut"></div>
+	<div id="readOut"><div class="inner"></div></div>
 
 <?php if($is_front) { kcl5_main_menu_as_panels(); } ?>
 
@@ -71,12 +71,10 @@
 
 	<a id="site-logo" class="ajax" href="<?php print $front_page; ?>" ><img src="/sites/all/themes/kcl5/img/kcl-logo.png" /></a>
 
-
-
   <a id="main-menu-mobile-toggle"><span class="icon action-show">m</span><span class="icon action-hide">-</span><span class="text">Menu</span></a>
 
 	<ul id="tab-menu">
-	  <li><a class="tab-control" href="#contact-tab"><span class="text">Contact</span><span class="icon action-show">c</span><span class="icon action-hide">-</span></a></li>
+	  <li><a class="tab-control" href="#contact-tab"><span class="text">Contact</span><span class="icon action-show">q</span><span class="icon action-hide">-</span></a></li>
 	</ul>
 	
 </div><!-- end top -->

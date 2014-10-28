@@ -113,7 +113,8 @@ function kcl5_main_menu_as_panels() {
 }
 
 /**
- * Return a themed breadcrumb trail.
+ * Instance off HOOK_breadcrumb
+ * Return a themed breadcrumb trail
  *
  * @param $breadcrumb
  *   An array containing the breadcrumb links.
@@ -123,8 +124,7 @@ function kcl5_main_menu_as_panels() {
 function kcl5_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
   if (!empty($breadcrumb)) {
-    //array_shift($breadcrumb); //Removes the first/home item
-    //array_pop($breadcrumb);
+    //print "<pre>" . print_r($variables, TRUE) . "</pre>";
     $themed_breadcrumb = '<div class="breadcrumb">';
     $array_size = count($breadcrumb);
     $i = 0;
@@ -138,7 +138,10 @@ function kcl5_breadcrumb($variables) {
         $separator =  '';
         $tag = 'span';
         $breadcrumb[$i] = strip_tags($breadcrumb[$i]);
-        watchdog('breadcrumb',$breadcrumb[$i]);
+        //watchdog('breadcrumb', "<pre>" . print_r($variables, TRUE) . "</pre>");
+      }
+      if($i == 0) {
+        $breadcrumb[$i] = '<a href="/#/">#</a>';      
       }
       $themed_breadcrumb .= '<';
       $themed_breadcrumb .= $tag;
@@ -161,18 +164,33 @@ function kcl5_breadcrumb($variables) {
 
 
 function kcl5_preprocess_node(&$vars) {  
+  
+ // Set shortcut variables. Hooray for less typing!
+  $type = $vars['type'];
+  $mode = $vars['view_mode'];
+  $language = $vars['language'];
+  $classes = &$vars['classes_array'];
+  $title_classes = &$vars['title_attributes_array']['class'];
+  $content_classes = &$vars['content_attributes_array']['class'];
+  $vars['content']['child_menu'] = kcl5_child_menu($vars['nid']);
+  
   if ($vars['nid'] == 20) {
-    //load the view by name
-    $view = 'blog';
-    //output the view  
-    $vars['content']['views'] = views_embed_view($view,'block');
+    //load and output the view by name
+    $vars['content']['views'] = views_embed_view('blog','block');
+    unset($vars['content']['child_menu']);
   }
   if ($vars['nid'] == 24) {
-    //load the view by name
-    $view = 'projects';
-    //output the view  
-    $vars['content']['views'] = views_embed_view($view,'block');
+    //load and output the view by name 
+    $vars['content']['views'] = views_embed_view('projects','block');  
   }  
+  
+  $classes[] = !empty($vars['field_horiz_align']) ? 'node-align-' . $vars['field_horiz_align'][0]['value'] : 'node-align-center';
+  $classes[] = !empty($vars['field_teaser_img']) ? 'has-field-teaser-img' : NULL;  
+  $classes[] = !empty($vars['field_image']) ? 'has-field-image' : NULL;   
+  $classes[] = !empty($vars['field_display_img']) ? 'has-field-display-img' : NULL;
+  $classes[] = 'node-' . $mode;
+  dpm($vars);
+ 
 }
 
 /**
@@ -353,9 +371,9 @@ function kcl5_links($links, $attributes = array('class' => 'links')) {
 /*
  * Custom function to display immediate menu children of current node 
  */
-function kcl5_child_menu($id, $menu = 'main-menu') {
+function kcl5_child_menu($nid, $menu = 'main-menu') {
 
-  $path = 'node/'. $id;
+  $path = 'node/'. $nid;
   $parent = menu_link_get_preferred($path);
   $mlid = $parent['mlid'];
   $tree = menu_tree_all_data($menu);
@@ -367,6 +385,7 @@ function kcl5_child_menu($id, $menu = 'main-menu') {
   $children = $num_keys[0]['below'];
   //print_r($parent);
   if($children) {
+    $out = '';
     $count = 0;
     foreach($children as $child){  
       // print($child['link']['link_title']); 
@@ -375,9 +394,9 @@ function kcl5_child_menu($id, $menu = 'main-menu') {
       $child_node->attributes_array['class'][] = 'poop';
       $child_view = node_view($child_node, $view_mode = 'scrape');
       $row = ($count % 2 == 0) ? 'even' : 'odd';    
-      print '<div class="row ' . $row . '">';
-      print render($child_view);
-      print '</div>';
+      $out .= '<div class="row ' . $row . '">';
+      $out .= render($child_view);
+      $out .= '</div>';
       //print $child_id;
       //print $child['link']['link_path']; 
       //print_r($subtree);
@@ -385,6 +404,7 @@ function kcl5_child_menu($id, $menu = 'main-menu') {
       
      
     }
+    return $out;
   }
 }//end function kcl5_child_menu
  

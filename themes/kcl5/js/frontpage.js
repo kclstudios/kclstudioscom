@@ -225,7 +225,7 @@ $.fn.activatePanel = function(activePanel,index){
 		var mode = "start";
 		//console.log(activePanel.attr('id'));
 		//loadScene(index,mode)			
-		readOutPosition();
+		//readOutPosition();
 	} else {		
 		activateContent(activePanel);		
 	}		
@@ -324,21 +324,17 @@ function loadScene(sceneId){
 	  console.log('Animator scene id not match with scene id arg');
 	  console.log('Current scene id:' + Animator.scene);
 	  console.log('Incoming scene id:' + sceneId);
-	  $('#scene-container').addClass('loading');
+	  $('#scene-container').addClass('loading').delay(300);
 	  Animator.sceneId = sceneId;
 		Animator.stop();
 		Animator.clear();
 	
 
 
-		matteImg = scene.matte != '' ? scene.matte : ''
+	
 		//readOut(matteImg)
-		if(matteImg != ''){
-		  $("#sceneAssets").append('<img src="' + matteImg + '" />')
-			$("#matteImg").attr("src", matteImg)
-			$("#matte").css('display','block')
-		} else {
-			$("#matte").css('display','none')
+		if(scene.matte != null){
+		  $("#sceneAssets").append('<img src="' + scene.matte + '" />')
 		}	
 
 		
@@ -418,7 +414,8 @@ function initScene(){
 		$('#scene-container').css({left:hoffset,top:voffset});		
 		//console.log(scale)		
 
-
+		$('#scene-container #scene .scene-layer').remove();
+		
 		// Scene Matte
 		
 		if(scene.matte != null){
@@ -464,7 +461,7 @@ function initScene(){
 						$("#scene").append(elem)	
 						elem.height(elem.height()*scale)
 						if(Animator.enabled == true){
-						 // elem.animateElement(count,startX,startY,endX,endY,duration,loop,interval,delay)
+						  elem.animateElement(count,startX,startY,endX,endY,duration,loop,interval,delay)
 						}
 					} else {			
 						layerImg = $('#sceneAssets img[src=' + imgSrc + ']')
@@ -481,7 +478,7 @@ function initScene(){
 							})	
 							$("#scene").append(elem)
 							if(Animator.enabled == true){
-							//  $(elem).animateBg(count,startX,startY,endX,endY,duration,loop,interval,delay);
+							  $(elem).animateBg(count,startX,startY,endX,endY,duration,loop,interval,delay);
 							}
 					}
 				} // if imgSrc
@@ -490,7 +487,7 @@ function initScene(){
 			} // if layers				
 		
 			
-	$("#scene-container").delay(300).fadeIn(1000);
+	$("#scene-container").removeClass('loading');
 }
 
 
@@ -498,19 +495,19 @@ function initScene(){
  * Write output to front end 
  */
 var readOut = function(output){	
-	$("#readOut").append("<div>" + output + "</div>")
+	$("#readOut").empty().append("<div>" + output + "</div>")
 }
 
 
 /** 
  * Move readOut display away from active content panel
- */
+
 var readOutPosition = function(){	
-	//if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"};
+	if(activeIndex > 0){ var xPos = (14 * (activeIndex - 1)) + "%" } else {var xPos = (100 - 14) + "%"};
 	var xPos = '10px';
 	$("#readOut").css('left',xPos);
 }
-
+ */
 
 /**
  * Write strings one character at a time
@@ -535,11 +532,11 @@ var readOutPosition = function(){
         	
     	}
 
-    	loopsiloop()
+    	loopsiloop();
 }
 			
 
-$
+
 /********************
 * Scene element animation handler
 ********************/
@@ -675,7 +672,7 @@ $.fn.displayContent = function(div){
  **/
  
 $("a#loop-terminate").click(function(e){
-  event.preventDefault();
+  e.preventDefault();
 	if(!($(this).hasClass("disabled"))) {
 		$(this).addClass("disabled").text("Enable");	
 		Animator.enabled = false;
@@ -683,7 +680,8 @@ $("a#loop-terminate").click(function(e){
 	} else {
 		$(this).removeClass("disabled").text("Disable");	
 		Animator.enabled = true;
-		Animator.load();
+		console.log(Animator.sceneId);
+		Animator.init();
 	}	
 })
 
@@ -882,10 +880,10 @@ if (hashReady == true){
  *
 */ 
 $(window).load(function(){	
-	editPagerLink()
+	editPagerLink();
 	//$('#panelContainer .panel').css({width: panelInactiveWidth})
-	$(window).bind('hashchange',parseHash)		
-	intro()
+	$(window).bind('hashchange',parseHash);		
+	intro();
 })
 
 

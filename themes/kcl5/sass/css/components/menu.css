@@ -75,6 +75,7 @@ a:link,
 a:visited {
   cursor: pointer;
   color: #336699;
+  color: #6699CC;
   outline: medium none;
   text-decoration: none;
   font-weight: 700;
@@ -138,7 +139,7 @@ a:visited {
   list-style: none;
   float: left;
   margin: 0;
-  padding: 2px 1px 2px 0;
+  padding: 0 1px 2px 0;
   position: relative;
   text-transform: uppercase;
   width: 20%;

@@ -1,14 +1,16 @@
 <?php
 // $Id: node--page.tpl.php,v 1.5 2012/1/23 12:00:00 goba Exp $
-
-$headline = isset($node->field_headline['und']) ? $node->field_headline['und'][0]['safe_value'] : $title;
-$summary = isset($node->body['und']) ? $node->body['und'][0]['safe_summary'] : NULL;
+$summary = isset($node->body['und']) ? $node->body['und'][0]['safe_summary'] : $node->nid;
+$horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align['und'][0]['value'] : 'center';
 $teaser_img = isset($node->field_teaser_img['und']) ? $node->field_teaser_img['und'] : NULL;  
 $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;   
 $display_img = isset($node->field_display_img['und']) ? $node->field_display_img['und'] : NULL; 
 
-?>
 
+
+//dpm($node);
+
+?>
 
 <?php  
 
@@ -18,47 +20,37 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 ?>
 
 		<div class="<?php print $classes; ?> clearfix"> 
+		  <div class="node-back"></div>
+      <div class="node-content node-teaser-content clearfix">
 
-      <div class="node-content clearfix">
-
-        <div class="node-back"></div>
-        <div class="node-section-content">
-          
-          <div class="node-field-title">
-            <h3 class="node-title"><a class="ajax" href="<?php print $node_url ?>"><?php print $title ?></a></h3>
-          </div> 
-          <?php print render($content['body']); ?>
-     		</div>
-           			  	
-    
-   
-  	   </div>  
-  	   		  <div class="node-teaser-img">
-		    <div class="field-name-teaser-img">
-		  <?php 
-
-      $teaser_img = isset($node->field_teaser_img['und']) ? $node->field_teaser_img['und'] : NULL;  
-      $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;     
+<?php   
         
-     
       if ($teaser_img) :        
           
           $thumb_path = image_style_url('thumbnail', $node->field_teaser_img['und'][0]['uri']);
 
-          print '<img src="'. $thumb_path . '" >';
+          print '<div class="field-name-teaser-img"><img class="thumbImg" src="'. $thumb_path . '" ></div>';
  
       elseif ($images) :
  
                 
           $thumb_path = image_style_url('thumbnail', $node->field_image['und'][0]['uri']);
 
-          print '<img src="'. $thumb_path . '" >'; 
+          print '<div class="field-name-image"><img class="thumbImg" src="'. $thumb_path . '" ></div>'; 
         
       endif; 
 
- ?>     
-        </div>   
-      </div>
+ ?>       
+ 
+  	     <div class="node-section-field-title clearfix">
+  	      <h3 class="node-title"><a class="ajax" href="<?php print $node_url ?>"><?php print $title; ?></a></h3>
+  	     </div> 
+ 
+  	     <div class="node-section-content">
+  	       <p><?php print strip_tags($summary) ?></p>
+  	     </div>
+  	     
+      </div>   	          
 		</div>    
 
 <?php 
@@ -72,7 +64,6 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 		  <!--<div class="node-back"></div>-->
 		  
 		  <div class="node-teaser-img">
-		    <!--<div class="node-back"></div>-->
 		    <div class="field-name-teaser-img">
 		  <?php 
 
@@ -100,17 +91,18 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
       </div>
       <div class="node-content node-scrape-content clearfix">
 
+
         <div class="node-section-content">
           <div class="node-back"></div>
           <div class="node-field-title">
             <h3 class="node-title"><a class="ajax" href="<?php print $node_url ?>"><?php print $title ?></a></h3>
-          </div>
-           <?php print render($content['body']); ?>
+          </div> 
      		</div>
            			  	
-      </div>    	          
+      </div>  	  	
+  	          
 		</div>    
-		
+
 <?php 
 
       break;    
@@ -134,7 +126,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 	
 	<div class="node-section-field-headline clearfix">
 	  <div class="node-back"></div>
-    <?php print render($content['field_headline']); ?>
+    <?php print render($content['field_headline']) ?>
   </div>  
 	
  
@@ -147,23 +139,16 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 	  
 
 	    if($display_img) {  
-	      print '<div class="node-section-field-display-img">';
-	      print '<div class="node-back"></div>';
-	      print '<div class="field-name-field-display-img">';
-	      print '<img class="displayImg" src="'. image_style_url('original', $node->field_display_img['und'][0]['uri']) . '" >';
-	      print '</div>';
-	      print '</div>';
+	      print '<div class="node-section-field-display-img"><div class="node-back"></div><img class="displayImg" src="'. image_style_url('original', $node->field_display_img['und'][0]['uri']) . '" ></div>';
 	    } 
 
 	  ?> 
 	  
-	  <?php 
-
-    
+		  <?php     
         
       if (count($images)>0) : 
 
-        print '<div class="node-section-field-image imageContainer">';
+        print '<div class="node-section-field-image imageContainer"><div class="node-back"></div>';
 
 		    $count = 0;
 
@@ -202,7 +187,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
             
       endif; 
 
-    ?>  	  
+    ?>    
 	  
 	  
 	  
@@ -221,7 +206,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 <?php
 $block = module_invoke('aggregator', 'block_view', 'feed-1'); 
 print render($block['content']); 
-?>
+?></h3>
 
     </div>
   
@@ -244,7 +229,9 @@ print render($block['content']);
 
 
 	
-
+	<div class="node-section-children">
+	  <?php kcl5_child_menu($nid); ?>	
+	</div>		
 		</div>	
 </div>		
 <?php

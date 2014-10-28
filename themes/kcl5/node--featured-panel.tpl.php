@@ -69,19 +69,27 @@ endif;
 
  
 
-<div class="node node-full node-type-<?php print $node->type;?> node-align-<?php print $horiz_align;?> clearfix">
+<div class="<?php print $classes; ?> clearfix">
          
-	<div class="node-back"></div>
+	<!--<div class="node-back"></div>-->
+	
+		<div class="node-breadcrumb">
+    <div class="breadcrumb"><span class="breadcrumb-0"><a href="/#/">#</a></span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div>
+    <?php kcl5_siblings_menu($nid); ?> 
+  </div>  
 
-  <div class="node-content">
+  <div class="node-content node-full-content">
+
   <div class="node-section-field-headline">
+     <div class="node-back"></div>
     <?php print render($content['field_headline']) ?>
   </div>  
   
   <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?> 
 
   <div class="node-section-content">
-  <div class="node-inner clearfix">         
+    <div class="node-back"></div>
+  <div class="clearfix">         
           
      <?php 
 
@@ -121,6 +129,7 @@ endif;
     <?php print render($content['field_drophead']) ?>
     <?php print render($content['body']) ?>
   </div> 
+
   </div>
   <?php endif; ?>  
   
@@ -132,18 +141,16 @@ endif;
 	  <?php print render($content['field_node_links']) ?>
 	</div>
 
-	<?php if (!($node->nid == 24)) : ?>
+	<?php if($content['child_menu']) : ?>
 		<div class="node-section-children">
-		  <?php kcl5_child_menu($nid); ?>	
+		 <div class="node-back"></div>
+		 <?php print render($content['child_menu']); ?>
 		</div>
 <?php endif; ?>		
 	
 		</div>
 		
-	<div class="node-breadcrumb">
-    <div class="breadcrumb"><span class="breadcrumb-0">Home</span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div>
-    <?php kcl5_siblings_menu($nid); ?> 
-  </div>
+
 </div>		
 <?php 
     break;

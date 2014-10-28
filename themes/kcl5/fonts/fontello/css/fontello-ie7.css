@@ -10,13 +10,14 @@
   /* font-size: 120%; */
 }
  
-.icon-plus-squared { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x2b;&nbsp;'); }
-.icon-minus-squared { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x2d;&nbsp;'); }
+.icon-plus { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x2b;&nbsp;'); }
+.icon-minus { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x2d;&nbsp;'); }
 .icon-drupal { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x44;&nbsp;'); }
 .icon-spin5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x4c;&nbsp;'); }
-.icon-keyboard { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x63;&nbsp;'); }
 .icon-down-dir { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x64;&nbsp;'); }
+.icon-kclstudios-logo { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x6b;&nbsp;'); }
 .icon-left-dir { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x6c;&nbsp;'); }
 .icon-menu { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x6d;&nbsp;'); }
+.icon-comment { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x71;&nbsp;'); }
 .icon-right-dir { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x72;&nbsp;'); }
 .icon-up-dir { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#x75;&nbsp;'); }

@@ -1,9 +1,7 @@
-<?php
-$horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align['und'][0]['value'] : 'center';
-?>
+
 
 <?php  
-
+dpm($node);
   switch($view_mode) {
     case "teaser" : /*display node in teaser format*/?>
 
@@ -63,18 +61,33 @@ endif;
 
 <?php
       break;
-    default: /*else its a full node view*/ 
+   default: /*else its a full node view*/ 
 ?>
 
-<div class="node node-full node-type-<?php print $node->type;?> node-align-<?php print $horiz_align;?> clearfix"> 
-  
+
+ 
+
+<div class="<?php print $classes; ?> clearfix">
+         
+	<!--<div class="node-back"></div>-->
+	
+		<div class="node-breadcrumb">
+    <div class="breadcrumb"><span class="breadcrumb-0"><a href="/#/">#</a></span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div>
+    <?php kcl5_siblings_menu($nid); ?> 
+  </div>  
+
+  <div class="node-content">
+
   <div class="node-section-field-headline">
+     <div class="node-back"></div>
     <?php print render($content['field_headline']) ?>
   </div>  
   
-  <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?>
+  <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?> 
+
   <div class="node-section-content">
-    <div class="node-inner clearfix">         
+    <div class="node-back"></div>
+  <div class="clearfix">         
           
      <?php 
 
@@ -113,21 +126,28 @@ endif;
     ?>        
     <?php print render($content['field_drophead']) ?>
     <?php print render($content['body']) ?>
+  </div> 
 
-    </div> 
   </div>
-  <?php endif; ?>
+  <?php endif; ?>  
+  
+	<div class="node-section-views"> 
+    <?php print render($content['views']) ?>    
+	</div>
   
 	<div class="node-section-field-node-links">
 	  <?php print render($content['field_node_links']) ?>
 	</div>
-	<div class="node-section-views">
-    <?php print render($content['views']) ?>    
-	</div>
-	<div class="node-section-children">
-	  <?php kcl5_child_menu($nid); ?>	
-	</div>	
+
+	<?php if (!($node->nid == 24)) : ?>
+		<div class="node-section-children">
+		  <?php kcl5_child_menu($nid); ?>	
+		</div>
+<?php endif; ?>		
+	
+		</div>
 		
+
 </div>		
 <?php 
     break;

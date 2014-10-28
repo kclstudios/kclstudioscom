@@ -9,23 +9,72 @@
 @import "zen/background";
 
 
+   .node-back { 
+    background: rgba(0,0,0,0.75);
+    @include zen-grid-item-base();
+    @include zen-grid-item(24,1); 
+    @include zen-clear(both);    
+    @media (max-width: 1280px) {
+      @include zen-grid-item(22,2);      
+    } 
+    //position: fixed;
+    position: absolute;
+    top: 0;
+    bottom: 0; 
+    height: 100%;
+  }  
+
 //
 // Fields
 //
 
+.node-title {
+  position: relative;
+}  
 
-.node-full .field-name-field-headline {
-  font-size: 44px;
-  line-height: 1;
-  padding: 130px 30px 30px;
-  
-  @media (max-width: 1280px) {
-    font-size: 36px;
-  }
-}
+
 
 .field-name-field-drophead {
   font-size: 25px;
+  padding: 15px 30px 0;
+  position: relative;
+}
+
+.field-name-body { 
+  padding: 0 30px;
+  position: relative;  
+}
+
+.field-name-field-display-img {
+  position: relative;  
+  
+  img {
+    display: block;
+  }  
+}
+
+.field-name-field-image {
+  position: relative;  
+  
+  img {
+    display: block;
+  }  
+}
+
+
+
+  .node-section-field-headline {
+    overflow: hidden;
+    position: relative;
+  }
+
+
+//
+// 
+//
+
+.node-section-field-display-img {
+  position: relative;
 }
 
 
@@ -33,16 +82,13 @@
 // Nodes
 //
 
-
 $zen-column-count: 24; // Set the total number of columns in the grid.
 $zen-gutter-width: 0; 
 
-.node-inner {  
-  //background-color: rgba(255,255,255,0.9);
-  //color: #282833;    
-  padding: 1.5em;  
-  //@include border-radius(5px);
-}  
+
+//
+// Full Display
+//
   
 .node-full {
 
@@ -53,52 +99,91 @@ $zen-gutter-width: 0;
   width: 100%;
   @include box-sizing(border-box); 
   
-.node-breadcrumb {
-  position: absolute;
-  top: 60px;
-}
-.node-back { 
-  background: rgba(0,0,0,0.75);
-  @include zen-grid-item-base();
-  @include zen-grid-item(13,6); 
-  @include zen-clear(both);    
-  @media (max-width: 1280px) {
-    @include zen-grid-item(8,2);      
-  } 
-  position: fixed;
-  top: 0;
-  bottom: 0; 
-  height: 100%;
- }  
+  .node-breadcrumb {
+    @include zen-grid-item-base();
+    @include zen-grid-item(22,2); 
+    @include zen-clear(both);    
+    @media (max-width: 1280px) {
+      @include zen-grid-item(22,2);      
+    } 
+  }
+  
+  .node-section-field-headline {
+    margin-top: 60px;
+    overflow: hidden;
+    position: relative;
+    
+    .field-name-field-headline {
+      font-size: 44px;
+      line-height: 1;
+      padding: 30px 30px 15px;
+      position: relative;  
+  
+      @media (max-width: 1280px) {
+      font-size: 36px;
+      }
+    }    
+  }
+
+  > .node-section-field-display-img {
+    position: relative;
+  }
+  
+  > .node-section-content {
+    position: relative;
+    overflow: hidden;
+    
+    
+  }  
+  
+
  
-.node-content {
+  .node-content {
     @include zen-grid-item-base();
     @include zen-grid-item(13,6); 
     @include zen-clear(both);    
     @media (max-width: 1280px) {
-      @include zen-grid-item(8,2);      
+      @include zen-grid-item(24,1);      
     } 
-    position: absolute;
+    position: relative;
+    overflow: hidden;
    
  
   .field-name-field-drophead p:first-child {
     margin-top: 0;
   }
+
+ > .node-content {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
   
   > .node-section-content {
-    background: rgba(0,0,0,0.6);
+   //background: rgba(0,0,0,0.6);
+    position: relative;
+  }
+
+  > .node-section-field-image {
+   //background: rgba(0,0,0,0.6);
+    position: relative;
+    width: 45%;
+    position: relative;
+    float: right;
   }
   
   > .node-section-children {
-    //background: #444;
+    //background: rgba(0,0,0,0.6);
     @include zen-nested-container();
     @include zen-clear(both); 
-    padding: 0 10px;
+    //padding: 0 10px;
+    position: relative;
+    left: 5px;
     
     .row {
       float: left;
-      margin-top: 20px; 
-      text-align: center;
+      margin-top: 20px;  
       width: 33%;   
       @include box-sizing(border-box);
       
@@ -120,13 +205,12 @@ $zen-gutter-width: 0;
   }
 
   > .node-section-views {
-    background: rgba(0,0,0,0.6);
+    //background: rgba(0,0,0,0.6);
     @include zen-clear(both);   
     
-    .row {
+    .views-row {
       float: left;
       margin-top: 20px; 
-      text-align: center;
       width: 33%;   
       @include box-sizing(border-box);
       
@@ -149,8 +233,7 @@ $zen-gutter-width: 0;
   }  
   
   > .node-section-field-node-links {
-    @include zen-grid-item(6,4);  
-    @include zen-nested-container(); 
+
     @include zen-clear();
     
     .row {
@@ -175,23 +258,65 @@ $zen-gutter-width: 0;
         padding-right: 0 !important;
       }      
     }     
-  }      
+  }    
 
-  &.node-align-left .node-content,  { 
+  
+//
+// Node Left Align
+//
+
+  &.node-align-left {
+  
+    .node-content { 
       @include zen-grid-item(13,2);
+      	    @media (max-width: 960px){
+	      @include zen-grid-item(22,2);
+	       }
+	       .node-content {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+	   
+    } 
+	
+    //.node-back { 
+    //  @include zen-grid-item(13,2);
+    //  @media (max-width: 960px){
+	   //   @include zen-grid-item(22,2);
+	   // }
+    //}	
 	}
 	
-  &.node-align-left .node-back,  { 
-      @include zen-grid-item(13,2);
-	}	
+
+//
+// Node Right Align
+//
+
+	&.node-align-right {
 	
-	&.node-align-right .node-content {
-	     @include zen-grid-item(13,11); 
-  }
-  
-  &.node-align-right .node-back {
-	     @include zen-grid-item(13,11); 
-  }
+	  .node-content {
+	    @include zen-grid-item(13,11);
+	    
+	    @media (max-width: 960px){
+	      @include zen-grid-item(22,2);
+	    }
+	     .node-content {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+	  }
+	  
+    //.node-back {
+	  //  @include zen-grid-item(13,11);	    
+	  //  @media (max-width: 960px){
+	  //    @include zen-grid-item(22,2);
+	  //  }
+	 // }
+	} 
 }
 
 
@@ -201,26 +326,83 @@ $zen-gutter-width: 0;
 
 
 .node-teaser {
+  position: relative; 
   margin: 1em 0;
   @include box-sizing(border-box);
   
-  h3 {
+  
+  .node-teaser-img {
+   background: rgba(0,0,0,0.75);
+   float: left;
+   width: 20%;
+   top: 0;
+   left: 0;
+   padding: 10px;
+ 
+   @include box-sizing(border-box);  
+  }
+
+  .node-content {
+    clear: initial;
+    //padding-left: 300px;
+    width: 80% !important;
+    margin: 0;
+  }
+  
+  .node-field-title {
+    padding: 20px 30px 0;
+    
+   &:before {
+    display: block;
+    position: absolute;
+    top: 0;
+	width: 0; 
+	height: 0; 
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;	
+	border-top: 20px solid #f00;
+    }    
+  }  
+ 
+  .field-name-teaser-img {
+    position: relative;
+    width: 100%;
+    border: 3px solid #fff;
+    @include box-sizing(border-box);  
+  }    
+
+  .field-name-body {
+    padding: 0 10px;
+    position: relative;
+  }      
+
+  
+  .node-section-field-headline {
+    //margin-left: 20%;
+  }
+  
+  .node-section-content {
+    //margin-left: 20%;
+  }  
+  
+  .node-title {
     font-size: 1.5em;
   }
   
   p {
     margin: 0 0 1.5em;
   }
+
+
   
   img {
-    float: left;
-    margin: 0 1em 0 0;
-    width: 20%;  
+    display: block;
+    margin: 0;
+    width: 100%;  
   }
 
-  .node-inner {
-    background-color: rgba(0,0,0,0.8);
-  } 
+  
+
 }
 
 //
@@ -228,26 +410,94 @@ $zen-gutter-width: 0;
 //
 
 .node-scrape {
+  overflow: hidden;
+  position: relative;  
   @include box-sizing(border-box);
-
   
-  p {
-    margin:0 0 1.5em;
+  .node-teaser-img {
+   background: rgba(0,0,0,0.75);
+   padding: 10px; 
+   @include box-sizing(border-box);  
   }
   
-  img {
-    -webkit-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.9);
-    -moz-box-shadow:    -2px 2px 4px rgba(0, 0, 0, 0.9);
-    box-shadow:         -2px 2px 4px rgba(0, 0, 0, 0.9);
+  .node-field-title {
+    position: relative;
+    padding: 0 15px 15px;
+  
+    &:before {
+    display: block;
+    position: absolute;
+    top: 0;
+	width: 0; 
+	height: 0; 
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;	
+	border-top: 20px solid #f00;
+    }
+  }
+  
+.field-name-body { 
+  padding: 0 15px 1px;
+}
+  
+  .node-scrape-content {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+ 
+  .field-name-teaser-img {
+    box-sizing: border-box;
+    border: 3px solid #fff;
+    
+  
+    img {
+    position: relative;
     float: left;
+    width: 300px;
+  
+    display: block;
+    float: none;
+    margin: 0;
+    width: 100%; 
+    
+ @media (max-width: 960px) {
+   float: left;
     margin: 0 1em 0 0;
     width: 20%;  
+ 
+
+}     }
   }
 
-  .node-inner {
-    background-color: rgba(0,0,0,0.8);  
-    //@include border-radius(3px);
-  } 
+ 
+  
+  .field-name-field-headline {
+ @media (max-width: 960px) {
+   text-align: center;
+ 
+
+}       
+  }
+
+}
+
+
+//
+// Node with field Image
+//
+
+.node.has-field-image {
+  .node-section-field-headline {
+    
+  }
+  .node-section-content {
+   // padding-right: 50%;
+  }
+  .node-section-field-image {
+    //
+  }
 }
 
 
@@ -264,7 +514,6 @@ $zen-gutter-width: 0;
 .node-scrape { 
   
   .icon {
-    color: #696969;
     font-size: 40px;
     margin-top: -20px;
   }
@@ -276,8 +525,8 @@ $zen-gutter-width: 0;
 //
 
 
-.node-teaser.node-type-article {
-  border-bottom: 1px solid #fff;	
+.node-teaser.node-article {
+ 
   clear: both;
   float: none;
 }
@@ -288,22 +537,22 @@ $zen-gutter-width: 0;
 //
 
 
-.menu-custom-siblings-menu {
-  @include zen-clear();
-  @include zen-grid-item(10,2);
-	
+.menu-custom-siblings-menu { 
+  //padding: 0 30px;
+  
 	a {
+	  background: none #fff;
 		display: inline-block;
 		height: 1em;
 		width: 1em;
 		border: 1px solid #fff;	
-		margin: 0 2px 2px;
+		margin: 5px 5px 0 0;
 		position: relative;
 	}
 	
 	a:hover {
-		background: none #6699CC;
-		border-color: #FFF;
+		background: none #99ccff;
+		border-color: #99ccff;
 	}
 	
 	span {
@@ -376,38 +625,30 @@ $zen-gutter-width: 0;
 // Field: Headline
 //
 
-
-
 .node-section-field-headline { 
-  
-   color: $white;
-//   text-shadow:
-//       3px 3px 0 #000,
-//     -1px -1px 0 #000,  
-//      1px -1px 0 #000,
-//      -1px 1px 0 #000,
-//       1px 1px 0 #000;
-
+  //background: rgba(0,0,0,0.8);
 	@media (max-width: 1280px) {
 	  font-size: 30px;
   }
 }
 
-.dark-on-light .field-name-field-headline { 
-   color: $blue-dark-2;
-//   text-shadow:
-//       3px 3px 0 #fff,
-//     -1px -1px 0 #fff,  
-//      1px -1px 0 #fff,
-//      -1px 1px 0 #fff,
-//       1px 1px 0 #fff;
+
+//
+// Node Layout Colors
+//
+
+.node.node-light-on-dark {
+
+  color: $white;
+  .node-back {
+    background: rgba(0,0,0,0.8);
+  }
 }
 
 
 //
 // panelContainer content
 //
-
 
 #panelContainer .content-static,
 #panelContainer .content-dynamic {
@@ -438,4 +679,14 @@ $zen-gutter-width: 0;
   }
 }
 
+.node-article.node-full {
+
+  .node-back {
+    display: none;
+  }  
+
+  .field-name-field-display-img {
+    padding: 15px 30px;
+  }
+}
 

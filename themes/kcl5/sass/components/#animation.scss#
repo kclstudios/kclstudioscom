@@ -62,7 +62,7 @@
 // Node Trans Backs
 //
 
-.panel .node-align-left .node-back {
+.content-static.active .node-align-left .node-back {
   left:-2500px;
   transition: left 1s;
 }

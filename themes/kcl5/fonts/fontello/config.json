@@ -7,16 +7,24 @@
   "ascent": 850,
   "glyphs": [
     {
+      "uid": "a6aae978ff97bfce0e2dfd42bf1fbcd4",
+      "css": "kclstudios-logo",
+      "code": 107,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M1233 0H1456.4V1000H1233V0ZM223.4 1000V0H0V1000H223.4ZM1202.1 648.9H606.4V351.1H1202.1V191.5H446.8V808.5H1202.1V648.9ZM1202.1 840.4H414.9V159.6H1202.1V0H255.3V1000H1202.1V840.4Z",
+        "width": 1456
+      },
+      "search": [
+        "kclstudios-logo"
+      ]
+    },
+    {
       "uid": "5d2d07f112b8de19f2c0dbfec3e42c05",
       "css": "spin5",
       "code": 76,
       "src": "fontelico"
-    },
-    {
-      "uid": "ecb97add13804c190456025e43ec003b",
-      "css": "keyboard",
-      "code": 99,
-      "src": "fontawesome"
     },
     {
       "uid": "559647a6f430b3aeadbecd67194451dd",
@@ -55,15 +63,21 @@
       "src": "fontawesome"
     },
     {
-      "uid": "9e1c33b6849ceb08db8acfaf02188b7d",
-      "css": "plus-squared",
+      "uid": "70370693ada58ef0a60fa0984fe8d52a",
+      "css": "plus",
       "code": 43,
       "src": "entypo"
     },
     {
-      "uid": "4ffa544c1a81c905f0a8a5745d8b9faa",
-      "css": "minus-squared",
+      "uid": "1256e3054823e304d7e452a589cf8bb8",
+      "css": "minus",
       "code": 45,
+      "src": "entypo"
+    },
+    {
+      "uid": "16890362e811b4cb8de36282b071fe30",
+      "css": "comment",
+      "code": 113,
       "src": "entypo"
     }
   ]

@@ -79,6 +79,7 @@ a:link,
 a:visited {
   cursor: pointer;
   color: #336699;
+  color: #6699CC;
   outline: medium none;
   text-decoration: none;
   font-weight: 700;
@@ -128,4 +129,40 @@ a:visited {
   to {
     transform: rotate(360deg);
   }
+}
+/* line 51, ../../components/animation.scss */
+#scene-container {
+  opacity: 1;
+  transition: opacity 1s;
+}
+/* line 55, ../../components/animation.scss */
+#scene-container.loading {
+  opacity: 0;
+}
+
+/* line 65, ../../components/animation.scss */
+.panel .node-align-left .node-back {
+  left: -2500px;
+  transition: left 1s;
+}
+
+/* line 70, ../../components/animation.scss */
+.panel.active .node-align-left .node-back {
+  left: 0;
+}
+
+/* line 74, ../../components/animation.scss */
+.panel .node-align-right .node-back {
+  left: 2500px;
+  transition: left 1s;
+}
+
+/* line 79, ../../components/animation.scss */
+.panel.active .node-align-right .node-back {
+  left: 0;
+}
+
+/* line 83, ../../components/animation.scss */
+.panel.active .node-back {
+  left: 0;
 }
