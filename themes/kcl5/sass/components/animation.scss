@@ -59,27 +59,20 @@
 
 
 //
-// Node Trans Backs
+// Node Backs
 //
 
-.panel .node-align-left .node-back {
-  left:-2500px;
-  transition: left 1s;
-}
-
-.panel.active .node-align-left .node-back {
-  left: 0; 
-}
-
-.panel .node-align-right .node-back {
+.content-dynamic .node-back,
+.content-static .node-back {
   left: 2500px;
   transition: left 1s;
 }
 
-.panel.active .node-align-right .node-back {
+.content-dynamic.active .node-back,
+.content-static.active .node-back {
   left: 0; 
 }
 
-.panel.active .node-back {
-  left: 0; 
-}
+
+
+

@@ -79,16 +79,17 @@ endif;
   </div>  
 
   <div class="node-content node-full-content">
+   <div class="node-back"></div>
 
   <div class="node-section-field-headline">
-     <div class="node-back"></div>
+     <!--<div class="node-back"></div>-->
     <?php print render($content['field_headline']) ?>
   </div>  
   
   <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?> 
 
   <div class="node-section-content">
-    <div class="node-back"></div>
+   
   <div class="clearfix">         
           
      <?php 

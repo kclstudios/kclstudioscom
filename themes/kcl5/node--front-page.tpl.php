@@ -21,8 +21,7 @@ if (isset($node->field_scene['und'])) :
     if(count($layers)>0) :   
       $count = 0; 
       foreach($layers as $layer): 
-
-        //$layer_id = isset($scene_node->field_layers['und'][$count]['nid']) ? $scene_node->field_layers['und'][$count]['nid'] : NULL;
+        
         $layer_node = isset($scene_node->field_layers['und'][$count]['nid']) ? node_load($scene_node->field_layers['und'][$count]['nid']) : NULL; 
         $bg = image_style_url('original', $layer_node->field_bg['und'][0]['uri']);
         $x_start = isset($layer_node->field_bg_x_start['und'][0]['value']) ? $layer_node->field_bg_x_start['und'][0]['value'] : NULL;

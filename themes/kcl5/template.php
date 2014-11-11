@@ -434,7 +434,7 @@ function kcl5_siblings_menu($id, $menu = 'main-menu') {
 			//print "<pre>" . print_r($num_keys[$count]['link']['plid'], TRUE) . "</pre>";
 			//kcl5_get_menu_item_parents($tree,$num_keys[$count]['link']['plid']);
 		}
-		$out .= '<a class="' . implode($classes, ' ') . '" href="/' . drupal_get_path_alias($num_keys[$count]['link']['href']) . '"><span>' . $num_keys[$count]['link']['title'] . '</span></a>';					
+		$out .= '<a class="' . implode($classes, ' ') . '" href="/' . drupal_get_path_alias($num_keys[$count]['link']['href']) . '" title="' . $num_keys[$count]['link']['title'] . '"><span>' . $num_keys[$count]['link']['title'] . '</span></a>';					
 	}	
 	print '<div class="menu-custom-siblings-menu">';
 	$prev = $num_keys[$active - 1]; 

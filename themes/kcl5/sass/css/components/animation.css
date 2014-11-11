@@ -82,7 +82,6 @@ a:visited {
   color: #6699CC;
   outline: medium none;
   text-decoration: none;
-  font-weight: 700;
   transition: color 0.3s;
 }
 
@@ -141,28 +140,14 @@ a:visited {
 }
 
 /* line 65, ../../components/animation.scss */
-.panel .node-align-left .node-back {
-  left: -2500px;
-  transition: left 1s;
-}
-
-/* line 70, ../../components/animation.scss */
-.panel.active .node-align-left .node-back {
-  left: 0;
-}
-
-/* line 74, ../../components/animation.scss */
-.panel .node-align-right .node-back {
+.content-dynamic .node-back,
+.content-static .node-back {
   left: 2500px;
   transition: left 1s;
 }
 
-/* line 79, ../../components/animation.scss */
-.panel.active .node-align-right .node-back {
-  left: 0;
-}
-
-/* line 83, ../../components/animation.scss */
-.panel.active .node-back {
+/* line 71, ../../components/animation.scss */
+.content-dynamic.active .node-back,
+.content-static.active .node-back {
   left: 0;
 }

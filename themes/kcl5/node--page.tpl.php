@@ -122,6 +122,7 @@ $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align
 
 	
 	<div class="node-section-field-headline clearfix">
+	  <div class="node-back"></div>
     <?php print render($content['field_headline']) ?>
   </div>  
 	
@@ -129,7 +130,9 @@ $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align
  
   <div class="node-section-content clearfix">
   
-	<div class="node-inner clearfix">
+    <div class="node-back"></div>
+  
+    <div class="node-inner clearfix">
 
 	  <?php 
 

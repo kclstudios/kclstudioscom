@@ -159,7 +159,10 @@ function hideAlert(msg){
 * Function
 ********************/
 $.fn.writeHash = function(){						
-	location.hash = $(this).attr("href")	
+	
+	var res = $(this).attr("href").replace(/http:\/\/.*\//, "/"); 
+	//location.hash = $(this).attr("href")	
+	location.hash = res;	
 }
 
 /********************
@@ -762,15 +765,15 @@ function adjustResize(){
 
 function editPagerLink(){
 	$("ul.pager li a").each(function(){
-		var queryRegex = $(this).attr('href').match(/\?.*$/)
+		var queryRegex = $(this).attr('href').match(/\?.*$/);
 		$(this).addClass("ajax").attr('href', function(){ 
 			if(queryRegex !== null){
-				return "#/weblog" + queryRegex
+				return "#/weblog" + queryRegex;
 			} else {
-				return "#/weblog"
+				return "#/weblog";
 			}	
-		})
-	})	
+		});
+	});	
 	
 }
 
@@ -780,11 +783,11 @@ function editPagerLink(){
  *
 */ 
 function intro(){
-	var int
+	var int;
 	if($('#status').hasClass('loading')){int = 2000}else{int = 0}	
 	setTimeout(function(){
-		clearTimeout(introTimer)
-		$('#status').removeClass('loading')	
+		clearTimeout(introTimer);
+		$('#status').removeClass('loading');	
 		$('#status').empty().writeText('Site Initialization Complete', function(){
 			
 			$('#status').fadeOut(1000, function(){
@@ -793,9 +796,9 @@ function intro(){
 				//$('#header').animate({top:"0"},1200,'easeOutExpo')	
 				//$('#bottom').animate({height:"6%"},1200,'easeOutExpo',function(){
 
-					$('#panelMenu').fadeTo('3000',1)
-					$('#bottom-inner-one').fadeTo('3000',1)
-					$('#bottom-inner-two').fadeTo('3000',1)
+					$('#panelMenu').fadeTo('3000',1);
+					$('#bottom-inner-one').fadeTo('3000',1);
+					$('#bottom-inner-two').fadeTo('3000',1);
 
 				//})	
 
@@ -803,9 +806,9 @@ function intro(){
 
 		})
 
-	},int)
+	},int);
 
-	$(window).trigger('hashchange')	
+	$(window).trigger('hashchange');
 
 } // end intro 
 
@@ -835,11 +838,14 @@ $("#main-menu li a").live("click",function(e){
 $(document).delegate(".menu-custom-siblings-menu a","mouseenter",function(e){	
     console.log('Mouse entered siblings menu');
 	$(".breadcrumb > span.last").hide(0);	
+	$(".breadcrumb").append('<span class="target">' + $(this).attr('title') + '</span>');	
 })   
 
 $(document).delegate(".menu-custom-siblings-menu a","mouseleave",function(e){	
-    console.log('Mouse left siblings menu');
+  console.log('Mouse left siblings menu');
 	$(".breadcrumb > span.last").show(0);	
+	$(".breadcrumb > span.target").remove();	
+	//alert($(this).attr('title'));
 })   
 
 /**

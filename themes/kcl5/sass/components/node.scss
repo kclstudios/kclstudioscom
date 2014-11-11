@@ -10,18 +10,12 @@
 
 
    .node-back { 
-    background: rgba(0,0,0,0.75);
-    @include zen-grid-item-base();
-    @include zen-grid-item(24,1); 
-    @include zen-clear(both);    
-    @media (max-width: 1280px) {
-      @include zen-grid-item(22,2);      
-    } 
-    //position: fixed;
+    background: rgba(255,255,255,0.85);
     position: absolute;
     top: 0;
     bottom: 0; 
     height: 100%;
+    width: 100%;
   }  
 
 //
@@ -61,6 +55,43 @@
   }  
 }
 
+.field-name-field-node-links {
+  position: relative;  
+  
+  img {
+    display: block;
+  } 
+  
+  .field-item {
+    background: rgba(255,255,255,0.8);
+    margin: 15px 0;
+
+    position: relative;
+    
+    
+  }
+  
+  a {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    padding: 15px 15px 15px 80px;
+    
+    &:before {
+      background: none repeat scroll 0 0 #336699;
+      color: #fff;
+      content: "r";
+      display: block;
+      font-family: "fontello";
+      font-size: 60px;
+      left: 0;
+      padding: 2px 20px 2px 25px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+    }
+  }
+}
 
 
   .node-section-field-headline {
@@ -106,6 +137,7 @@ $zen-gutter-width: 0;
     @media (max-width: 1280px) {
       @include zen-grid-item(22,2);      
     } 
+    margin-top: 10px;
   }
   
   .node-section-field-headline {
@@ -210,17 +242,15 @@ $zen-gutter-width: 0;
     
     .views-row {
       float: left;
-      margin-top: 20px; 
-      width: 33%;   
+      margin-top: 10px; 
+      width: 100%;   
       @include box-sizing(border-box);
       
-      &.even {
-        padding: 0 10px;        
-      }
+     
+        padding: 10px;        
+    
       
-      &.odd {
-        padding: 0 10px;
-      }
+
       
       @media (max-width: 1280px) {
         float: none;
@@ -324,33 +354,41 @@ $zen-gutter-width: 0;
 // Node Teaser
 //
 
+.pubDate {
+  font-size: 14px;
+  padding: 0 10px 10px;
+}
 
 .node-teaser {
+  color: #282833;
   position: relative; 
-  margin: 1em 0;
-  @include box-sizing(border-box);
+  margin: 1em 0 0;
+  @include box-sizing(border-box);  
   
+  .node-back {
+    background: #e2e2e2;
+    background: rgba(255,255,255,0.8);
+  }
   
   .node-teaser-img {
-   background: rgba(0,0,0,0.75);
-   float: left;
-   width: 20%;
-   top: 0;
-   left: 0;
-   padding: 10px;
- 
-   @include box-sizing(border-box);  
+    background: rgba(0,0,0,0.75);
+    float: left;
+    width: 20%;
+    top: 0;
+    left: 0;
+    padding: 10px; 
+    @include box-sizing(border-box);  
   }
 
   .node-content {
     clear: initial;
-    //padding-left: 300px;
-    width: 80% !important;
+    width: 80%;
+    float: right;
     margin: 0;
   }
   
   .node-field-title {
-    padding: 20px 30px 0;
+    padding: 20px 10px 0;
     
    &:before {
     display: block;
@@ -425,62 +463,55 @@ $zen-gutter-width: 0;
     padding: 0 15px 15px;
   
     &:before {
-    display: block;
-    position: absolute;
-    top: 0;
-	width: 0; 
-	height: 0; 
-	border-left: 20px solid transparent;
-	border-right: 20px solid transparent;	
-	border-top: 20px solid #f00;
+      display: block;
+      position: absolute;
+      top: 0;
+      width: 0; 
+      height: 0; 
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;	
+      border-top: 20px solid #f00;
     }
   }
   
-.field-name-body { 
-  padding: 0 15px 1px;
-}
+  .field-name-body { 
+    padding: 0 15px 1px;
+  }
   
-  .node-scrape-content {
+  .node-content {
     width: 100%;
     padding: 0;
     margin: 0;
-  }
-  
+  }  
  
   .field-name-teaser-img {
     box-sizing: border-box;
-    border: 3px solid #fff;
-    
+    border: 3px solid #fff;    
   
     img {
-    position: relative;
-    float: left;
-    width: 300px;
+      position: relative;
+      float: left;
+      width: 300px;
   
-    display: block;
-    float: none;
-    margin: 0;
-    width: 100%; 
+      display: block;
+      float: none;
+      margin: 0;
+      width: 100%; 
     
- @media (max-width: 960px) {
-   float: left;
-    margin: 0 1em 0 0;
-    width: 20%;  
- 
-
-}     }
-  }
-
- 
+      @media (max-width: 960px) {
+        float: left;
+        margin: 0 1em 0 0;
+        width: 20%;  
+      }
+    }
+  } 
   
   .field-name-field-headline {
- @media (max-width: 960px) {
-   text-align: center;
- 
-
-}       
+  
+    @media (max-width: 960px) {
+      text-align: center;
+    }       
   }
-
 }
 
 
@@ -538,21 +569,23 @@ $zen-gutter-width: 0;
 
 
 .menu-custom-siblings-menu { 
-  //padding: 0 30px;
+	background: none rgba(255,255,255,0.85);
+	padding-left: 5px;
+  float: left;
   
 	a {
-	  background: none #fff;
+	  background: none #6699cc;
 		display: inline-block;
 		height: 1em;
 		width: 1em;
-		border: 1px solid #fff;	
+		border: 1px solid #6699cc;	
 		margin: 5px 5px 0 0;
 		position: relative;
 	}
 	
 	a:hover {
-		background: none #99ccff;
-		border-color: #99ccff;
+		background: none #6699cc;
+		border-color: #fff;
 	}
 	
 	span {
@@ -560,7 +593,7 @@ $zen-gutter-width: 0;
 	}
 	
 	a:hover span {
-		background: none rgba(255,255,255,0.9);
+	
 		display: block;
 		left: -1px;
 		position: absolute;
@@ -637,11 +670,16 @@ $zen-gutter-width: 0;
 // Node Layout Colors
 //
 
+.node {
+  color: #404040;
+}
+
 .node.node-light-on-dark {
 
   color: $white;
   .node-back {
-    background: rgba(0,0,0,0.8);
+    background: #f2f2f2;
+    background: rgba(0,0,0,0.85);
   }
 }
 

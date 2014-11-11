@@ -19,14 +19,18 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 
 		<div class="<?php print $classes; ?> clearfix"> 
 
+		  <div class="node-back"></div>
       <div class="node-content clearfix">
-
-        <div class="node-back"></div>
+         
+        
         <div class="node-section-content">
           
           <div class="node-field-title">
             <h3 class="node-title"><a class="ajax" href="<?php print $node_url ?>"><?php print $title ?></a></h3>
           </div> 
+          <div class="pubDate node-field-name-pub-date">
+          <?php print format_date($node->created, 'article'); ?>
+          </div>
           <?php print render($content['body']); ?>
      		</div>
            			  	
@@ -69,7 +73,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 ?>		
    
 		<div class="node-scrape node-type-<?php print $node->type;?> clearfix"> 
-		  <!--<div class="node-back"></div>-->
+		  <div class="node-back"></div>
 		  
 		  <div class="node-teaser-img">
 		    <!--<div class="node-back"></div>-->
