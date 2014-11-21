@@ -7,13 +7,14 @@
 	<?php if(!$is_front) : ?>
 	<div id="pageContent"><?php print render($page['content']); ?></div>
 	<?php endif; ?>
+	
 	<div id="scene-container">
 		<div id="scene">
 			<div id="matte"><img id="matteImg" src="" /></div>
 		</div><!-- /#scene -->
 	</div><!-- /#scenesContainer -->
 
-	<!--<div id="screen"></div>-->
+	<div id="screen"><div id="screen-frame"></div></div>
 
 	<div id="readOut"><div class="inner"></div></div>
 

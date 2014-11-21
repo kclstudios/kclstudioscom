@@ -188,8 +188,10 @@ function kcl5_preprocess_node(&$vars) {
   $classes[] = !empty($vars['field_teaser_img']) ? 'has-field-teaser-img' : NULL;  
   $classes[] = !empty($vars['field_image']) ? 'has-field-image' : NULL;   
   $classes[] = !empty($vars['field_display_img']) ? 'has-field-display-img' : NULL;
+  $classes[] = !empty($vars['field_scene']) ? 'has-field-scene' : NULL;
+  
   $classes[] = 'node-' . $mode;
-  dpm($vars);
+  //dpm($vars);
  
 }
 

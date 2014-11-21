@@ -9,15 +9,96 @@
 @import "zen/background";
 
 
-   .node-back { 
-    background: rgba(255,255,255,0.85);
-    position: absolute;
-    top: 0;
-    bottom: 0; 
+.node-back { 
+  background: #EEEEEE;
+  background: rgba(238,238,238,0.85);
+  position: absolute;
+  top: 0;
+  bottom: 0; 
+  height: 100%;
+  width: 100%;
+}  
+
+
+
+.node-full {
+
+//
+// Content One
+//
+
+  > .content-one { 
+    color: #FFFFFF;
+    font-size: 60px;
+    font-size: 3vw;
+    height: 100%;
+    line-height: 1;
+    padding: 120px 50px;
+    @include box-sizing(border-box);
+  
+    .field {
+      display: table;
+      height: 100%;
+      width: 100%;
+    }
+  
+    .field-items {
+      display: table-cell;
+      vertical-align: middle;
+    }   
+  }
+
+//
+// Content Two
+//
+  > .content-two {
+
+  }
+}
+
+
+
+//
+// Fancy headline treatment
+//
+
+.node-headline {  
+  height: 100%;
+  position: fixed;
+  top: 0;
+  width: 45%; 
+  
+  .field-name-field-fancy-headline {
+    font-weight: 700;
+    text-shadow: 0px 0px 6px rgba(255,255,255,0.7);
+  }
+   
+  .field-items {
+    display: table-cell;    
+  }    
+} 
+
+.node-headline { 
+  color: #FFFFFF;
+  font-size: 60px;
+  font-size: 3vw;
+  height: 100%;
+  line-height: 1;
+  padding: 120px 50px;
+  @include box-sizing(border-box);
+  
+  .field {
+    display: table;
     height: 100%;
     width: 100%;
-  }  
-
+  }
+  
+  .field-items {
+    display: table-cell;
+    vertical-align: middle;
+  }   
+}
+  
 //
 // Fields
 //
@@ -26,7 +107,9 @@
   position: relative;
 }  
 
-
+.field-item ul {
+  margin-bottom: 15px;
+}
 
 .field-name-field-drophead {
   font-size: 25px;
@@ -65,7 +148,6 @@
   .field-item {
     background: rgba(255,255,255,0.8);
     margin: 15px 0;
-
     position: relative;
     
     
@@ -117,31 +199,41 @@ $zen-column-count: 24; // Set the total number of columns in the grid.
 $zen-gutter-width: 0; 
 
 
+
+
 //
 // Full Display
 //
   
 .node-full {
-
   clear: both;
   margin: 0 auto;
-  min-height: 100%; 
+  height: 100%; 
+  padding-bottom: 100px;
+  padding-top: 100px;
   position: relative;
   width: 100%;
   @include box-sizing(border-box); 
   
   .node-breadcrumb {
     @include zen-grid-item-base();
-    @include zen-grid-item(22,2); 
-    @include zen-clear(both);    
-    @media (max-width: 1280px) {
-      @include zen-grid-item(22,2);      
-    } 
-    margin-top: 10px;
+    @include zen-grid-item(24,1); 
+    @include zen-clear(both);   
+    position: fixed;
+    top: 60px;   
+
+    @media (min-width: 960px) and (max-width: 1280px) {
+      //font-size: 36px;
+      top: 100px;
+    }    
   }
   
-  .node-section-field-headline {
-    margin-top: 60px;
+  .node-field-display-img {
+    padding: 0 20px;
+    @include box-sizing(border-box);
+  }
+  
+  .node-section-field-headline {    
     overflow: hidden;
     position: relative;
     
@@ -152,7 +244,7 @@ $zen-gutter-width: 0;
       position: relative;  
   
       @media (max-width: 1280px) {
-      font-size: 36px;
+        font-size: 36px;
       }
     }    
   }
@@ -163,37 +255,37 @@ $zen-gutter-width: 0;
   
   > .node-section-content {
     position: relative;
-    overflow: hidden;
-    
-    
+    overflow: hidden;    
   }  
   
 
  
   .node-content {
-    @include zen-grid-item-base();
-    @include zen-grid-item(13,6); 
-    @include zen-clear(both);    
-    @media (max-width: 1280px) {
-      @include zen-grid-item(24,1);      
-    } 
     position: relative;
-    overflow: hidden;
+    overflow: hidden;    
+    ////@include zen-grid-item-base();
+    //@include zen-grid-item(13,6); 
+    //@include zen-clear(both);  
+    
+    @media (max-width: 1280px) {
+      //@include zen-grid-item(24,1);      
+    } 
+width: 45%;
+margin-left: 55%;
+
    
  
   .field-name-field-drophead p:first-child {
     margin-top: 0;
   }
 
- > .node-content {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
+    > .node-back {
+      margin-left: 55%;
+      width: 45%;
+    }
+
   
-  > .node-section-content {
-   //background: rgba(0,0,0,0.6);
+  > .node-section-content {  
     position: relative;
   }
 
@@ -209,13 +301,13 @@ $zen-gutter-width: 0;
     //background: rgba(0,0,0,0.6);
     @include zen-nested-container();
     @include zen-clear(both); 
-    //padding: 0 10px;
+    padding: 0;
     position: relative;
     left: 5px;
     
     .row {
       float: left;
-      margin-top: 20px;  
+      margin: 30px 0;  
       width: 33%;   
       @include box-sizing(border-box);
       
@@ -228,16 +320,16 @@ $zen-gutter-width: 0;
       }
       
       @media (max-width: 1280px) {
-        float: none;
-        width: auto;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        //float: none;
+        //width: auto;
+        //padding-left: 0 !important;
+        //padding-right: 0 !important;
       }
     }     
   }
 
   > .node-section-views {
-    //background: rgba(0,0,0,0.6);
+    
     @include zen-clear(both);   
     
     .views-row {
@@ -245,12 +337,7 @@ $zen-gutter-width: 0;
       margin-top: 10px; 
       width: 100%;   
       @include box-sizing(border-box);
-      
-     
-        padding: 10px;        
-    
-      
-
+      padding: 10px; 
       
       @media (max-width: 1280px) {
         float: none;
@@ -262,8 +349,8 @@ $zen-gutter-width: 0;
     }
   }  
   
-  > .node-section-field-node-links {
-
+  .node-section-field-node-links {
+    padding: 0 30px;
     @include zen-clear();
     
     .row {
@@ -282,8 +369,8 @@ $zen-gutter-width: 0;
       }
       
       @media (max-width: 1280px) {
-        float: none;
-        width: auto;
+        //float: none;
+        //width: auto;
         padding-left: 0 !important;
         padding-right: 0 !important;
       }      
@@ -297,26 +384,20 @@ $zen-gutter-width: 0;
 
   &.node-align-left {
   
-    .node-content { 
-      @include zen-grid-item(13,2);
-      	    @media (max-width: 960px){
-	      @include zen-grid-item(22,2);
-	       }
-	       .node-content {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
+    > .node-content { 
+  
+    //margin: 0 0 0 45%;
 	   
     } 
 	
-    //.node-back { 
+    > .node-back { 
+    margin: 0 0 0 55%;
+    width: 45%;
     //  @include zen-grid-item(13,2);
     //  @media (max-width: 960px){
 	   //   @include zen-grid-item(22,2);
 	   // }
-    //}	
+    }	
 	}
 	
 
@@ -324,31 +405,26 @@ $zen-gutter-width: 0;
 // Node Right Align
 //
 
-	&.node-align-right {
+  &.node-align-right {
 	
-	  .node-content {
-	    @include zen-grid-item(13,11);
+	  > .node-content {
+	    //margin: 0 0 0 45%;
 	    
-	    @media (max-width: 960px){
-	      @include zen-grid-item(22,2);
-	    }
-	     .node-content {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-	  }
-	  
-    //.node-back {
-	  //  @include zen-grid-item(13,11);	    
-	  //  @media (max-width: 960px){
-	  //    @include zen-grid-item(22,2);
-	  //  }
-	 // }
-	} 
-}
+	    
+	 
 
+  }
+  
+     > .node-back { 
+    margin: 0 0 0 55%;
+    width: 45%;
+    //  @include zen-grid-item(13,2);
+    //  @media (max-width: 960px){
+	   //   @include zen-grid-item(22,2);
+	   // }
+    }	
+  }  
+}
 
 //
 // Node Teaser
@@ -371,12 +447,12 @@ $zen-gutter-width: 0;
   }
   
   .node-teaser-img {
-    background: rgba(0,0,0,0.75);
+    //background: rgba(0,0,0,0.75);
     float: left;
     width: 20%;
     top: 0;
     left: 0;
-    padding: 10px; 
+    //padding: 10px; 
     @include box-sizing(border-box);  
   }
 
@@ -452,25 +528,35 @@ $zen-gutter-width: 0;
   position: relative;  
   @include box-sizing(border-box);
   
-  .node-teaser-img {
-   background: rgba(0,0,0,0.75);
-   padding: 10px; 
-   @include box-sizing(border-box);  
+  .node-teaser-img {   
+    padding: 0 15px; 
+    @include box-sizing(border-box);  
   }
   
   .node-field-title {
     position: relative;
     padding: 0 15px 15px;
+  }
   
-    &:before {
-      display: block;
-      position: absolute;
-      top: 0;
-      width: 0; 
-      height: 0; 
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;	
-      border-top: 20px solid #f00;
+  .node-title {
+    padding-top: 15px;
+    text-align: center;
+  
+    a{
+      &:before {
+        content: "d";
+        display: block;
+        font-family: "fontello";
+        //position: absolute;
+        left: 0;
+        background: #336699;
+        color: #fff;
+        margin-bottom: 8px;
+        top: 0;
+        width: 100%;
+        height: 1em; 
+       
+      }
     }
   }
   
@@ -486,11 +572,12 @@ $zen-gutter-width: 0;
  
   .field-name-teaser-img {
     box-sizing: border-box;
-    border: 3px solid #fff;    
+    //border: 3px solid #fff;   
+    position: relative;
   
     img {
-      position: relative;
-      float: left;
+     
+      //float: left;
       width: 300px;
   
       display: block;
@@ -499,9 +586,7 @@ $zen-gutter-width: 0;
       width: 100%; 
     
       @media (max-width: 960px) {
-        float: left;
-        margin: 0 1em 0 0;
-        width: 20%;  
+ 
       }
     }
   } 
@@ -563,37 +648,51 @@ $zen-gutter-width: 0;
 }
 
 
+
+//
+// Scenarios
+//
+
+.node-full.has-field-scene {
+
+
+}
+
+.node-full.has-field-display-img {
+  padding-top: 0;
+}
+
+
+
 //
 // Siblings Menu
 //
 
-
 .menu-custom-siblings-menu { 
-	background: none rgba(255,255,255,0.85);
-	padding-left: 5px;
+	background: none rgba(255,255,255,1);
+	padding-left: 25px;
   float: left;
   
 	a {
-	  background: none #6699cc;
+	  background: none #6699CC;
 		display: inline-block;
 		height: 1em;
 		width: 1em;
 		border: 1px solid #6699cc;	
-		margin: 5px 5px 0 0;
+		margin: 0 5px 0 0;
 		position: relative;
 	}
 	
 	a:hover {
-		background: none #6699cc;
-		border-color: #fff;
+		background: none #336699;
+		border-color: #336699;
 	}
 	
 	span {
 		display: none;
 	}
 	
-	a:hover span {
-	
+	a:hover span {	
 		display: block;
 		left: -1px;
 		position: absolute;
@@ -620,8 +719,8 @@ $zen-gutter-width: 0;
 	
 	.active,
 	.active:hover {
-		background: none #FFF;
-		border-color: #FFF;
+		background: #DDDDDD;
+		border-color: #DDDDDD;
 	}	
 	
 	.active:hover span {
@@ -659,7 +758,7 @@ $zen-gutter-width: 0;
 //
 
 .node-section-field-headline { 
-  //background: rgba(0,0,0,0.8);
+ 
 	@media (max-width: 1280px) {
 	  font-size: 30px;
   }
@@ -671,7 +770,7 @@ $zen-gutter-width: 0;
 //
 
 .node {
-  color: #404040;
+  //color: #404040;
 }
 
 .node.node-light-on-dark {

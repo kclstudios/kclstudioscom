@@ -92,7 +92,8 @@ function ajax_node_load($arg) {
 /*
  * Load the scene referenced by a node
  */
-function ajax_scene_load($arg = 'front') {  
+function ajax_scene_load($arg = 'front') { 
+  //sleep(3);
   // Get the corresponding node for the path ($arg) 
   if($arg == 'front') {
     watchdog('debug','Using default arg value of: ' . $arg);
@@ -125,54 +126,47 @@ $my_page_count = '';
 
 function my_ajaxnode_preprocess_node(&$variables){
 
+  global $my_alias, $my_system_path, $my_print_path, $parent_candidates, $my_page_count;
 
+  $my_print_path = $my_system_path;
+  $parent_candidates = _get_parent_candidates(drupal_get_path_alias($my_system_path));
 
-global $my_alias, $my_system_path, $my_print_path, $parent_candidates, $my_page_count;
+  $matched_menus = array();
+  $matched_link_titles = array();
+  $results = db_select('menu_links','ml')
+    ->fields('ml',array('menu_name','link_path','link_title','depth'))
+    ->condition('link_path',$parent_candidates,'IN')
+    ->execute();
 
-$my_print_path = $my_system_path;
-$parent_candidates = _get_parent_candidates(drupal_get_path_alias($my_system_path));
+  foreach ($results as $record) { 
+    // If there is more than one matched link in a menu, use the deepest
+    if (!isset($matched_menus[$record->menu_name]) or $record->depth > $matched_menus[$record->menu_name]['depth']) {
+      $matched_menus[$record->menu_name]['link_path'] = $record->link_path;
+      $matched_menus[$record->menu_name]['depth'] = $record->depth;
+    }
 
+    // Get the Link Title if it can be found in a menu item
+    if ($record->link_title AND !isset($matched_link_titles[$record->link_path])) {
+      $matched_link_titles[$record->link_path] = $record->link_title;
+    }
+  }
 
-$matched_menus = array();
-$matched_link_titles = array();
-$results = db_select('menu_links','ml')
- ->fields('ml',array('menu_name','link_path','link_title','depth'))
- ->condition('link_path',$parent_candidates,'IN')
- ->execute();
+  // First breadcrumbs is always Home
+  $breadcrumbs[] = l(t('Home'),'#');
+  //$breadcrumbs[] = l(t(global $my_alias),'<front>');
+  // Remove current page from breadcrumb
+  //array_pop($parent_candidates);
 
-foreach ($results as $record) {
-
- 
- // If there is more than one matched link in a menu, use the deepest
- if (!isset($matched_menus[$record->menu_name]) or $record->depth > $matched_menus[$record->menu_name]['depth']) {
- $matched_menus[$record->menu_name]['link_path'] = $record->link_path;
- $matched_menus[$record->menu_name]['depth'] = $record->depth;
- }
-
- // Get the Link Title if it can be found in a menu item
- if ($record->link_title AND !isset($matched_link_titles[$record->link_path])) {
- $matched_link_titles[$record->link_path] = $record->link_title;
- }
-}
-
-
-
- // First breadcrumbs is always Home
- $breadcrumbs[] = l(t('Home'),'<front>');
- //$breadcrumbs[] = l(t(global $my_alias),'<front>');
- // Remove current page from breadcrumb
- //array_pop($parent_candidates);
-
- foreach($parent_candidates as $link_path) {
-
- // If title of the page is found on a menu item, use it
- if (isset($matched_link_titles[$link_path])) {
- $breadcrumbs[] = l($matched_link_titles[$link_path],$link_path,array('attributes' => array('class' => array('ajax'))));
- }
- 
- }
+  foreach($parent_candidates as $link_path) {
+    // If title of the page is found on a menu item, use it
+    if (isset($matched_link_titles[$link_path])) {
+      $breadcrumbs[] = l($matched_link_titles[$link_path],$link_path,array('attributes' => array('class' => array('ajax'))));
+    } 
+  }
+  
  drupal_set_breadcrumb($breadcrumbs); 
- }
+ 
+}
 
 
 
@@ -189,5 +183,194 @@ function _get_parent_candidates($path = NULL) {
 }
 
 
+
+/**
+ * Instance of hook_forms
+ * Define registration and video access forms
+ */
+function my_ajaxnode_forms($form_id, $args) {
+  $forms = array();  
+  if ($form_id == 'kclstudios_custom_contact_form') {
+    $forms[$form_id] = array('callback' => '__kclstudios_custom_contact_form');
+  }
+  return $forms;
+}
+
+
+
+/**
+ * Instance of hook_form
+ * Custom contact form
+ */
+function __kclstudios_custom_contact_form($form, &$form_state) {
+  $form['first_name'] = array(
+    '#title' => t('First Name'),
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+  $form['last_name'] = array(
+    '#title' => t('Last Name'),    
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+  $form['member_of_gmdc'] = array(
+    '#title' => t('Member of GMDC'),
+    '#type' => 'radios',
+    '#options' => array(
+      'Yes' => 'Yes',
+      'No' => 'No',      
+      )
+  );    
+  $form['job_title'] = array(
+    '#title' => t('Job Title'),    
+    '#type' => 'textfield',
+  );
+  $form['company'] = array(
+    '#title' => t('Company'),
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+  $form['email'] = array(
+    '#title' => t('E-mail'),
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+  $form['phone_number'] = array(
+    '#title' => t('Phone Number'),
+    '#type' => 'textfield',
+  );
+  /*
+  $form['my_captcha_element'] = array(
+      '#type' => 'captcha',
+      '#captcha_type' => 'image_captcha/Image',
+      '#required' => TRUE,
+      ); 
+   */   
+  $form['gmdc_connect_register_submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Register'),
+    '#ajax' => array(
+      'callback' => '__kclstudios_custom_contact_form_submit',
+      'wrapper' => 'kclstudios-custom-contact-form',
+      'method' => 'replace',
+      'effect' => 'fade',
+      ),
+    );         
+  //dpm($form);
+  return $form;
+}
   
+/**
+ * Blocks
+ */
+function my_ajaxnode_block_info() {
+  $blocks['kclstudios_custom_contact_form'] = array(
+  	'info' => t('KCL Studios Contact'), 
+  	'cache' => DRUPAL_NO_CACHE,
+  	);  
+	return $blocks;		
+}
+
+
+/**
+ * Block Content
+ */
+function my_ajaxnode_block_view($delta = '') {
+	$block = array();
+	switch($delta) {	
+    case 'kclstudios_custom_contact_form': 
+      $block['subject'] = NULL;
+      $block['content'] = drupal_get_form('kclstudios_custom_contact_form');
+      break;  
+  }
+	return $block;
+}
+
+/**
+ * Ajax callback for form
+ */
+function __kclstudios_custom_contact_form_submit($form, &$form_state) {  
+  //dpm($form_state);
+ 
+  // Perform some validation for our required elements
+  if( $form_state['values']['first_name'] == '' || $form_state['values']['email'] == '') {    
+    if($form_state['values']['first_name'] == '') {
+      $message = '<p>Please provide a company name.</p>';
+      form_set_error("company", t($message));     
+    }  
+    if($form_state['values']['email'] == '') {
+      $message = '<p>Please provide an email address.</p>';
+      form_set_error("email", t($message));     
+    } 
+    return($form); 
+  } else {   
+    drupal_set_message('Hey yo', 'status');
+     // rebuild the form after submitted successfully
+     //$form_state['rebuild'] = TRUE;
+     // try this if you want to reset the form item values
+     //$form_state['input'] = array();
+    //$form_state['values']['first_name'] = 'Evalllllluator';
+    //watchdog('debug', print_r(array_filter($form_state['values']['events']), 1));
+    // Set our session variable
+    rules_invoke_event('custom_contact_form_submitted', $form_state['first_name'], $form_state['last_name']); 
+    // Initiate a webform submission for each event        
+    $msg = '';
+    $msg .= '<p class="gmdc-connect-reg-confirm">Thank you for registering. An email confirmation has been sent to your registration address (<strong>' . $form_state['values']['email'] .'</strong>).</p>';   
+    // Treat them in Drupal way to load the form in AJAX, so that all the necessary scripts will be loaded.
+    
+    unset($form['first_name']['#value']);
+
+  // Clear form and form state cache
+  $form_state = form_state_defaults();
+  $form_build_id = $_POST['form_build_id'];
+  form_set_cache($form_build_id, $form, $form_state);
+ //   $new_form = drupal_rebuild_form('kclstudios_custom_contact_form',$form_state,$form);
+    
+    $commands[] = ajax_command_html('readOut', '<p>Success</p>'); 
+    $result =  array(
+      '#type' => 'ajax',
+      '#commands' => $commands,
+    );
+    //dpm($form);
+    return($result);     
+  }
+}
+
+
+/**
+ *
+ */
+function __do_the_thing(){
+  $form = drupal_get_form('kclstudios_custom_contact_form');
+ 	$output = drupal_render($form);
+  // Generate the settings:
+  $settings = FALSE;
+  $javascript = drupal_add_js(NULL, NULL);
+  if(isset($javascript['settings'], $javascript['settings']['data']))
+  {
+    $settings = '<script type="text/javascript">jQuery.extend(Drupal.settings, ';
+    $settings .= drupal_json_encode(call_user_func_array('array_merge_recursive', $javascript['settings']['data']));
+    $settings .=  ');</script>';
+  }
+  // Return the rendered form and the settings
+  die($output . $settings);
+}
+
+/**
+ * Implementation of hook_rules_event_info().
+ * @ingroup rules
+ */
+function my_ajaxnode_rules_event_info() {
+  return array(
+    'custom_contact_form_submitted' => array(
+      'label' => t('User submits the KCL Studios custom contact form'),
+      'module' => 'my_ajaxnode',
+      'arguments' => array(
+        'first_name' => array('type' => 'user', 'label' => t('First Name')),
+        'last_name' => array('type' => 'user', 'label' => t('Last Name')),
+      ),
+    ),
+  );
+}
+
 

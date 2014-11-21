@@ -74,15 +74,20 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   src: url("../../fonts/fontello/font/fontello.eot?#iefix") format("embedded-opentype"), url("../../fonts/fontello/font/fontello.woff") format("woff"), url("../../fonts/fontello/font/fontello.ttf") format("truetype"), url("../../fonts/fontello/font/fontello.svg#svgFontName") format("svg");
   /* Legacy iOS */
 }
-/* line 17, ../../components/_base.scss */
+/* line 16, ../../components/_base.scss */
+a,
 a:link,
 a:visited {
   cursor: pointer;
   color: #336699;
-  color: #6699CC;
   outline: medium none;
   text-decoration: none;
   transition: color 0.3s;
+}
+
+/* line 26, ../../components/_base.scss */
+a:hover {
+  color: #6699CC;
 }
 
 @-webkit-keyframes rotate {

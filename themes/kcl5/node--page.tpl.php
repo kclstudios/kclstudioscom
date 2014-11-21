@@ -2,6 +2,8 @@
 // $Id: node--page.tpl.php,v 1.5 2012/1/23 12:00:00 goba Exp $
 $summary = isset($node->body['und']) ? $node->body['und'][0]['safe_summary'] : $node->nid;
 $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align['und'][0]['value'] : 'center';
+$teaser_img = isset($node->field_teaser_img['und']) ? $node->field_teaser_img['und'] : NULL;  
+$images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;     
 //dpm($node);
 
 ?>
@@ -16,13 +18,11 @@ $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align
 		
     <div class="<?php print $classes; ?> clearfix"> 
 		  <div class="node-back"></div>
-		  <div class="node-teaser-content">
+		  <div class="node-content node-teaser-content">
       
 
 <?php 
-
-      $teaser_img = isset($node->field_teaser_img['und']) ? $node->field_teaser_img['und'] : NULL;  
-      $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;     
+   
         
       if ($teaser_img) :        
           
@@ -58,14 +58,10 @@ $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align
   <div class="<?php print $classes; ?> clearfix"> 
 		  <!--<div class="node-back"></div>-->
 		  
+		 <?php if ($teaser_img || $images) : ?>       
 		  <div class="node-teaser-img">
 		    <div class="field-name-teaser-img">
-		  <?php 
-
-      $teaser_img = isset($node->field_teaser_img['und']) ? $node->field_teaser_img['und'] : NULL;  
-      $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;     
-        
-     
+		  <?php     
       if ($teaser_img) :        
           
           $thumb_path = image_style_url('thumbnail', $node->field_teaser_img['und'][0]['uri']);
@@ -80,10 +76,10 @@ $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align
           print '<img src="'. $thumb_path . '" >'; 
         
       endif; 
-
- ?>     
+      ?>     
         </div>   
       </div>
+      <?php endif; ?>
       <div class="node-content node-scrape-content clearfix">
 
 
@@ -112,17 +108,24 @@ $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align
  
 <!--<div class="node-back"></div>-->
 
-	<div class="node-breadcrumb">
-	  <?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
-	  <?php kcl5_siblings_menu($nid); ?>		
-	</div>  
+
+	
+		  <?php 
+
+	    $display_img = isset($node->field_display_img['und']) ? $node->field_display_img['und'] : NULL; 
+
+	    if($display_img) {  
+	      print '<div class="node-field-display-img"><img class="displayImg" src="'. image_style_url('original', $node->field_display_img['und'][0]['uri']) . '" ></div>';
+	    } 
+
+	  ?> 
 	
 	<div class="node-content node-full-content">
  
-
+	  <div class="node-back"></div>
 	
 	<div class="node-section-field-headline clearfix">
-	  <div class="node-back"></div>
+	  
     <?php print render($content['field_headline']) ?>
   </div>  
 	
@@ -130,19 +133,11 @@ $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align
  
   <div class="node-section-content clearfix">
   
-    <div class="node-back"></div>
+   
   
     <div class="node-inner clearfix">
 
-	  <?php 
-
-	    $display_img = isset($node->field_display_img['und']) ? $node->field_display_img['und'] : NULL; 
-
-	    if($display_img) {  
-	      print '<img class="displayImg" src="'. image_style_url('original', $node->field_display_img['und'][0]['uri']) . '" >';
-	    } 
-
-	  ?> 
+	
 	  
 	  <?php 
 
@@ -219,7 +214,10 @@ print render($block['content']);
 		</div>
 		
 
-		
+	<div class="node-breadcrumb">
+	  <?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
+	  <?php kcl5_siblings_menu($nid); ?>		
+	</div>  		
 </div>		
 <?php
     

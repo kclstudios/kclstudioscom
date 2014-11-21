@@ -61,7 +61,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 ?>		
    
 		<div class="node-scrape node-type-<?php print $node->type;?> clearfix"> 
-		  <!--<div class="node-back"></div>-->
+		  <div class="node-back"></div>
 		  
 		  <div class="node-teaser-img">
 		    <div class="field-name-teaser-img">
@@ -91,9 +91,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
       </div>
       <div class="node-content node-scrape-content clearfix">
 
-
-        <div class="node-section-content">
-          <div class="node-back"></div>
+        <div class="node-section-content">         
           <div class="node-field-title">
             <h3 class="node-title"><a class="ajax" href="<?php print $node_url ?>"><?php print $title ?></a></h3>
           </div> 

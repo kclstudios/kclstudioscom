@@ -1,5 +1,11 @@
 <?php
+// $Id: node--featured-panel.tpl.php,v 1.5 2014/11/13 12:00:00 goba Exp $
+$summary = isset($node->body['und']) ? $node->body['und'][0]['safe_summary'] : $node->nid;
 $horiz_align = isset($node->field_horiz_align['und']) ? $node->field_horiz_align['und'][0]['value'] : 'center';
+$teaser_img = isset($node->field_teaser_img['und']) ? $node->field_teaser_img['und'] : NULL;  
+$images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;   
+$display_img = isset($node->field_display_img['und']) ? $node->field_display_img['und'] : NULL; 
+
 ?>
 
 <?php  
@@ -69,18 +75,17 @@ endif;
 
  
 
-<div class="<?php print $classes; ?> clearfix">
-         
-	<!--<div class="node-back"></div>-->
-	
-		<div class="node-breadcrumb">
-    <div class="breadcrumb"><span class="breadcrumb-0"><a href="/#/">#</a></span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div>
-    <?php kcl5_siblings_menu($nid); ?> 
-  </div>  
+<div class="<?php print $classes; ?> clearfix">	
+<div class="node-back"></div>
 
-  <div class="node-content node-full-content">
-   <div class="node-back"></div>
+  <div class="node-headline content-one">   
+    <?php print render($content['field_fancy_headline']) ?>
+  </div>    
 
+  
+  <div class="node-content node-full-content content-two">
+   <!--<div class="node-back"></div>-->
+<div class="inner">
   <div class="node-section-field-headline">
      <!--<div class="node-back"></div>-->
     <?php print render($content['field_headline']) ?>
@@ -88,9 +93,10 @@ endif;
   
   <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?> 
 
-  <div class="node-section-content">
+  <div class="node-section-content clearfix">
+    <!--<div class="node-back"></div>-->
    
-  <div class="clearfix">         
+  
           
      <?php 
 
@@ -129,7 +135,7 @@ endif;
     ?>        
     <?php print render($content['field_drophead']) ?>
     <?php print render($content['body']) ?>
-  </div> 
+ 
 
   </div>
   <?php endif; ?>  
@@ -143,15 +149,17 @@ endif;
 	</div>
 
 	<?php if($content['child_menu']) : ?>
-		<div class="node-section-children">
-		 <div class="node-back"></div>
+		<div class="node-section-children">		
 		 <?php print render($content['child_menu']); ?>
 		</div>
-<?php endif; ?>		
-	
+	<?php endif; ?>		
+	</div>
 		</div>
 		
-
+		<div class="node-breadcrumb">
+    <div class="breadcrumb"><span class="breadcrumb-0"><a href="/#/">#</a></span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div>
+    <?php kcl5_siblings_menu($nid); ?> 
+  </div>  
 </div>		
 <?php 
     break;

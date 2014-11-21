@@ -327,7 +327,8 @@ function loadScene(sceneId){
 	  console.log('Animator scene id not match with scene id arg');
 	  console.log('Current scene id:' + Animator.scene);
 	  console.log('Incoming scene id:' + sceneId);
-	  $('#scene-container').addClass('loading').delay(300);
+	  //$('#scene-container').addClass('loading').delay(300);
+	  $("#screen").addClass('loading');
 	  Animator.sceneId = sceneId;
 		Animator.stop();
 		Animator.clear();
@@ -374,7 +375,7 @@ function loadScene(sceneId){
 					readOut("Asset " + assetsLoaded + " of " + assetCount + " loaded.")	
 					if(assetsLoaded == assetCount) {
 						readOut("Scene loaded.");		
-						$('#scene-container').removeClass('loading');
+						
 						Animator.init();							
 					}
 			})
@@ -490,7 +491,8 @@ function initScene(){
 			} // if layers				
 		
 			
-	$("#scene-container").removeClass('loading');
+	//$("#scene-container").removeClass('loading');			
+	$("#screen").delay(3000).removeClass('loading');
 }
 
 
