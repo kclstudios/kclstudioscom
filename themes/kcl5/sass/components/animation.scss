@@ -64,7 +64,8 @@
 
 .content-dynamic .node-back,
 .content-static .node-back {
-  left: 2500px;
+  //left: 2500px;
+  left: 0;
   transition: left 1s;
 }
 
@@ -75,4 +76,20 @@
 
 
 
+#panelContainer .panel .container .node-align-left{
+  left: -100px;  
+  transition: left 200ms;
+}
 
+#panelContainer .panel .container .active  .node-align-left{
+  left: 0;  
+}
+
+#panelContainer .panel .container .node-align-right{
+  right: -100px;  
+  transition: right 200ms;
+}
+
+#panelContainer .panel .container .active  .node-align-right{
+  right: 0;  
+}

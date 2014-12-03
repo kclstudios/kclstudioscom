@@ -125,25 +125,16 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 
 <div class="<?php print $classes; ?> clearfix">  
  
-<!--<div class="node-back"></div>-->
-
+  <div class="node-inner-one">
+  <?php print render($content['field_headline']); ?>
+  </div>
+  
+  
 	<div class="node-breadcrumb">
 	<?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
-	<?php kcl5_siblings_menu($nid); ?>		
 	</div>  
 	
 	<div class="node-content node-full-content">
- 
-
-	
-	<div class="node-section-field-headline clearfix">
-	  <div class="node-back"></div>
-    <?php print render($content['field_headline']); ?>
-  </div>  
-	
- 
- 
-
 	
 
 	  <?php 
@@ -151,8 +142,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 	  
 
 	    if($display_img) {  
-	      print '<div class="node-section-field-display-img">';
-	      print '<div class="node-back"></div>';
+	      print '<div class="node-section-field-display-img">';	     
 	      print '<div class="field-name-field-display-img">';
 	      print '<img class="displayImg" src="'. image_style_url('original', $node->field_display_img['und'][0]['uri']) . '" >';
 	      print '</div>';
@@ -213,7 +203,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 	  
     <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?>
   <div class="node-section-content clearfix">
-   <div class="node-back"></div>		
+  
     <?php print render($content['field_drophead']) ?>
 		
 		<?php print render($content['body']) ?>

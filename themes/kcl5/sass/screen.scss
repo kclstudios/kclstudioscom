@@ -26,12 +26,13 @@ html,body {
 }
 
 body {
-background: none repeat scroll 0 0 #EEEEEE;
-color: #112233;
+background: none repeat scroll 0 0 #000;
+color: #F1F3F6;
 font-family: "Play","TitilliumMaps",helvetica,arial,sans-serif;
 font-size: 18px;
 line-height: normal;
 margin: 0 auto;
+overflow-x: hidden;
 padding: 0;
 text-align: left;
 vertical-align: baseline;
@@ -124,18 +125,27 @@ display: none !important;
 
 
 #screen {
+  bottom: 0; 
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
   background-color: transparent;
   height: 100%;
   width: 100%;
   padding: 60px 0 0;
   transition: background-color 3s;
   @include box-sizing(border-box);
+  
+  @media (min-width: 900px) and  (max-width: 1279px) {
+    padding-top: 100px;
+  }
 
   #screen-frame {
-    border-top: 25px solid #FFF;
-    border-right: 20px solid #FFF;
-    border-bottom: 40px solid #FFF;
-    border-left: 20px solid #FFF;
+    border-top: 20px solid #101010;
+    //border-right: 20px solid #101010;
+    border-bottom: 20px solid #101010;
+    //border-left: 20px solid #101010;
     height: 100%;
     width: 100%;
     @include box-sizing(border-box);    
@@ -146,6 +156,10 @@ display: none !important;
     transition: background-color 3s;
   }
 }
+
+
+
+
 
 .ajax-progress .throbber {
 //background: url("img/loading.gif") no-repeat center 47%; 
@@ -274,10 +288,6 @@ background: none repeat scroll 0 0 #d8e5f2;
 filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
 }
 
-
-
-
-
 #site-logo {
 	display: block;
 	left: 40px;
@@ -309,18 +319,23 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
 }
 
 #tab-menu {
+  display: none;
   height: 60px;
+  line-height: 60px;
   right: 20px;
   position: absolute;
   text-align: right;
   top: 0;
   width: 200px;
   z-index: 1001;
+  
+  @media (max-width: 960px) {
+    display: block;
+  }
 }
 
 #tab-menu li{
   display: inline-block;
-  height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -375,10 +390,11 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
 
 
 #top {
-	background: #c0d9f3;
-	background: none repeat scroll 0 0 rgba(60, 120, 180, 0.9);
-	background: #336699;
-	//background: #404040;
+	//background: #c0d9f3;
+	//background: none repeat scroll 0 0 rgba(60, 120, 180, 0.9);
+	//background: #336699;
+	background: #404040;
+	background: #6699CC;
 	height: 60px;
 	opacity: 1;
   margin: 0;
@@ -394,7 +410,7 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
     position: absolute;
     width: 100%;
     bottom: 0;
-    //background-color: #306090;
+    background-color: #4488CC;
   }  
 }
 
@@ -405,8 +421,8 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
 	background: #333;
 	background: none repeat scroll 0 0 rgba(60, 120, 180, 0.9);
 	background: #336699;
-	//background: #FFF;
-	border-top: 20px solid #FFFFFF;
+	background: #101010;
+	border-top: 20px solid #101010;
 	font-size: 14px;
 	margin: 0;
 	position: fixed;
@@ -433,6 +449,12 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
   position: relative; 
   text-align: center; 
   @include box-sizing(border-box);
+  
+  @media (min-width: 1280px) {
+    width: 50%;
+    float: left;
+    text-align: left;
+  }
 }
 
 #bottom-inner-two {
@@ -448,17 +470,7 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
   overflow: hidden;
 }
 
-#screen {  
-  background: none transparent;
-  bottom: 0;
-  height: 100%;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%; 
-  @include box-sizing(border-box);
-}
+
 
 
 
@@ -504,9 +516,6 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
 .tabContent .block{
 }
 
-.block-webform .webform-client-form{
-  width: 100%;
-}
 
 .tab-close {
   position: absolute;
@@ -604,14 +613,15 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
 
 
 .breadcrumb {
-  background: none repeat scroll 0 0 rgba(255, 255, 255, 1);
-  //border-bottom: 3px solid #fff;
-  font-size: 14px;
-  //margin: 0 30px 0.5em; 
-  padding: 5px 30px;
+  background: #101010;
+  font-size: 12px;
+  padding: 0 30px;
+  text-transform: uppercase;
+  clear: both;
+  height: 20px;
+  line-height: 20px;
   text-transform: uppercase;
   @include box-sizing(content-box);
-  @include zen-clear();
   
   a, a:visited{
     color: #6699cc;
@@ -632,7 +642,6 @@ filter:alpha(opacity=85); -moz-opacity:0.85; -khtml-opacity:0.85; opacity:0.85;
 .breadcrumb h1 {
 	display: inline-block;
 }
-
 
 
 
@@ -701,12 +710,19 @@ display: block;
 
 
 
+//
+// Contact Form
+//
+
+#kclstudios-custom-contact-form--2 {
+  padding: 15px 30px;
+}
+
 
 
 //
 // Image Styles
 //
-
 
 .displayImg{
   display: block;
@@ -717,7 +733,6 @@ display: block;
 .imageContainer{
   float: right;
   width: 50%;
-  //padding: 0 10px 10px;
   @include box-sizing(border-box);
 
   @media (max-width: 1280px) {
@@ -775,10 +790,11 @@ display: block;
   @include zen-grid-item-base();
   @include zen-grid-item(4,21);
   font-size: 14px;
-  height: 70px;
+  height: 20px;
+  line-height: 20px;
   position: absolute;
   text-align: right;
-  top: 65px;
+  top: 60px;
   z-index: 5000;
 
   .inner {

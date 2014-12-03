@@ -90,7 +90,7 @@ a:hover {
 #main-menu {
   height: 60px;
   padding-left: 380px;
-  padding-right: 180px;
+  padding-right: 60px;
   position: fixed;
   top: 0;
   font-size: 17px;
@@ -147,10 +147,10 @@ a:hover {
   margin: 0;
   padding: 0 1px 2px 0;
   padding: 0 1px 0 0;
-  padding: 4px 1px;
+  padding: 3px 1px;
   position: relative;
   text-transform: uppercase;
-  width: 25%;
+  width: 20%;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -202,7 +202,7 @@ a:hover {
   background-color: #4876a3;
   display: block;
   height: 100%;
-  padding: 18px 0 0 1em;
+  padding: 16px 0 0 1em;
   transition: background-color 200ms;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -211,7 +211,7 @@ a:hover {
 @media (max-width: 1280px) {
   /* line 117, ../../components/menu.scss */
   #main-menu > ul li > a {
-    padding: 7px 0 0 1em;
+    padding: 6px 0 0 1em;
   }
 }
 /* line 138, ../../components/menu.scss */

@@ -61,7 +61,7 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 ?>		
    
 		<div class="node-scrape node-type-<?php print $node->type;?> clearfix"> 
-		  <div class="node-back"></div>
+		 
 		  
 		  <div class="node-teaser-img">
 		    <div class="field-name-teaser-img">
@@ -111,19 +111,16 @@ $display_img = isset($node->field_display_img['und']) ? $node->field_display_img
 
 <div class="<?php print $classes; ?> clearfix">  
  
-<!--<div class="node-back"></div>-->
 
-	<div class="node-breadcrumb">
-	<?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
-	<?php kcl5_siblings_menu($nid); ?>		
-	</div>  
+
+
 	
 	<div class="node-content node-full-content">
  
 
 	
 	<div class="node-section-field-headline clearfix">
-	  <div class="node-back"></div>
+	 
     <?php print render($content['field_headline']) ?>
   </div>  
 	
@@ -229,8 +226,17 @@ print render($block['content']);
 	
 	<div class="node-section-children">
 	  <?php kcl5_child_menu($nid); ?>	
-	</div>		
-		</div>	
+	</div>	
+</div>	
+
+	<div class="node-breadcrumb">
+    <div class="breadcrumb"><span class="breadcrumb-0"><a href="/#/">#</a></span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div> 
+  </div>  
+  
+	<div class="node-sibling-menu">
+    <?php kcl5_siblings_menu($nid); ?> 
+  </div>  	
+		
 </div>		
 <?php
     

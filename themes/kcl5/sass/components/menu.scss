@@ -5,7 +5,7 @@
 #main-menu {
   height: 60px;
   padding-left: 380px;
-  padding-right: 180px;
+  padding-right: 60px;
   position: fixed;
   top: 0;
   font-size: 17px;
@@ -56,10 +56,10 @@
     margin: 0;
     padding: 0 1px 2px 0;
     padding: 0 1px 0 0;
-    padding: 4px 1px;
+    padding: 3px 1px;
     position: relative;
     text-transform: uppercase;
-    width: 25%;
+    width: 20%;
     @include box-sizing(border-box);
     
     @media (max-width: 960px) {
@@ -119,12 +119,12 @@
       //color: #6699cc;
       display: block;
       height: 100%;
-      padding: 18px 0 0 1em;
+      padding: 16px 0 0 1em;
       transition: background-color 200ms;
       @include box-sizing(border-box);      
 
       @media (max-width: 1280px) {
-        padding: 7px 0 0 1em;        
+        padding: 6px 0 0 1em;        
       }
       
       &:hover {

@@ -147,12 +147,34 @@ a:hover {
 /* line 65, ../../components/animation.scss */
 .content-dynamic .node-back,
 .content-static .node-back {
-  left: 2500px;
+  left: 0;
   transition: left 1s;
 }
 
-/* line 71, ../../components/animation.scss */
+/* line 72, ../../components/animation.scss */
 .content-dynamic.active .node-back,
 .content-static.active .node-back {
   left: 0;
+}
+
+/* line 79, ../../components/animation.scss */
+#panelContainer .panel .container .node-align-left {
+  left: -100px;
+  transition: left 200ms;
+}
+
+/* line 84, ../../components/animation.scss */
+#panelContainer .panel .container .active .node-align-left {
+  left: 0;
+}
+
+/* line 88, ../../components/animation.scss */
+#panelContainer .panel .container .node-align-right {
+  right: -100px;
+  transition: right 200ms;
+}
+
+/* line 93, ../../components/animation.scss */
+#panelContainer .panel .container .active .node-align-right {
+  right: 0;
 }

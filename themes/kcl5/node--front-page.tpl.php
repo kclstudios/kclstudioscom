@@ -68,26 +68,25 @@ endif;
 
 <div class="<?php print $classes; ?> clearfix">
          
-	<!--<div class="node-back"></div>-->
+  <div class="node-headline content-one node-inner-one">    
+    <?php print render($content['field_headline']) ?>
+  </div>  
 	
 		<div class="node-breadcrumb">
     <div class="breadcrumb"><span class="breadcrumb-0"><a href="/#/">#</a></span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div>
     <?php kcl5_siblings_menu($nid); ?> 
   </div>  
 
-  <div class="node-content">
+  <div class="node-content content-two node-inner-two">
   
-    <div class="node-back"></div>
+ 
     
-    <div class="node-section-field-headline">    
-     <?php print render($content['field_headline']) ?>
-    </div>  
+ 
   
   <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?> 
 
-  <div class="node-section-content clearfix">
-    
-  <div class="clearfix">         
+  <div class="node-section-content clearfix">    
+ 
           
      <?php 
 
@@ -126,7 +125,7 @@ endif;
     ?>        
     <?php print render($content['field_drophead']) ?>
     <?php print render($content['body']) ?>
-  </div> 
+ 
 
   </div>
   <?php endif; ?>  

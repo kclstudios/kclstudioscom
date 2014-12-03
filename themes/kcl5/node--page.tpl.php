@@ -106,11 +106,12 @@ $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;
 
 <div class="<?php print $classes; ?> clearfix">  
  
-<!--<div class="node-back"></div>-->
 
+
+  <div class="node-inner-one">   
 
 	
-		  <?php 
+		<?php 
 
 	    $display_img = isset($node->field_display_img['und']) ? $node->field_display_img['und'] : NULL; 
 
@@ -119,21 +120,21 @@ $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;
 	    } 
 
 	  ?> 
+	  
+	  <?php print render($content['field_headline']) ?>
+  </div>    
 	
 	<div class="node-content node-full-content">
  
-	  <div class="node-back"></div>
+
 	
-	<div class="node-section-field-headline clearfix">
-	  
-    <?php print render($content['field_headline']) ?>
-  </div>  
+
 	
- <?php if(!empty($content['field_drophead']) || !empty($content['body'])) : ?>
+ <?php if(!empty($content['field_drophead']) || !empty($content['body']) || !empty($content['form'])) : ?>
  
   <div class="node-section-content clearfix">
   
-   
+  
   
     <div class="node-inner clearfix">
 
@@ -189,6 +190,8 @@ $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;
     <?php print render($content['field_drophead']) ?>
 		
 		<?php print render($content['body']) ?>
+		
+		<?php print render($content['form']) ?>
 
 <?php if($title == "The Power of the Drupal CMS"): ?>
     <div class="feedContainer">
@@ -216,8 +219,12 @@ print render($block['content']);
 
 	<div class="node-breadcrumb">
 	  <?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
-	  <?php kcl5_siblings_menu($nid); ?>		
-	</div>  		
+	</div> 
+	
+	<div class="node-sibling-menu">
+    <?php kcl5_siblings_menu($nid); ?> 
+  </div>  
+	
 </div>		
 <?php
     

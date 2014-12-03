@@ -94,13 +94,11 @@ function kcl5_main_menu_as_panels() {
  
      $out .= '<div id="mcs_container_' . $node->nid . '" class="panel">'; 		
      $out .= '  <div class="container">';
-     //$out .= '    <div class="content">';
      $out .= '      <div class="content-static">'; 
      $out .= drupal_render(node_view($node));
      $out .= '      </div>';
      $out .= '      <div class="content-dynamic"></div>';
- 		// $out .= '    </div>';  
-     $out .= '</div>';   
+ 	   $out .= '</div>';   
      $out .= '<a class="panelControl ajax" href="/' . $current_path . '" title="' . $panel_display_name . '"><div><span>' . $panel_display_name . '</span></div></a>';
      $out .= '</div>';
   
@@ -173,16 +171,20 @@ function kcl5_preprocess_node(&$vars) {
   $title_classes = &$vars['title_attributes_array']['class'];
   $content_classes = &$vars['content_attributes_array']['class'];
   $vars['content']['child_menu'] = kcl5_child_menu($vars['nid']);
-  
-  if ($vars['nid'] == 20) {
+   
+  if ($vars['nid'] == 20) { // Blog
     //load and output the view by name
     $vars['content']['views'] = views_embed_view('blog','block');
     unset($vars['content']['child_menu']);
   }
-  if ($vars['nid'] == 24) {
+  if ($vars['nid'] == 24) { // Projects
     //load and output the view by name 
     $vars['content']['views'] = views_embed_view('projects','block');  
   }  
+  if ($vars['nid'] == 113) { // Contact
+    //load and output the view by name 
+    $vars['content']['form'] = drupal_get_form('kclstudios_custom_contact_form');  
+  }    
   
   $classes[] = !empty($vars['field_horiz_align']) ? 'node-align-' . $vars['field_horiz_align'][0]['value'] : 'node-align-center';
   $classes[] = !empty($vars['field_teaser_img']) ? 'has-field-teaser-img' : NULL;  
