@@ -76,16 +76,14 @@ endif;
  
 
 <div class="<?php print $classes; ?> clearfix">	
-<!--<div class="node-back"></div>-->
 
-  <div class="node-headline content-one node-inner-one">   
+  <div class="node-inner-one">   
     <?php print render($content['field_headline']); ?>
-  </div>    
-
+  </div>   
   
-  <div class="node-content node-full-content content-two node-inner-two">
-   <!--<div class="node-back"></div>-->
-<div class="inner">
+  <div class="node-inner-two">
+  
+    <div class="inner">
 
   
   <?php if(!empty($content['field_drophead']) || !empty($content['body']) || !empty($content['form'])) : ?> 
@@ -110,11 +108,11 @@ endif;
           
           if ($count==0):
             $img_details = image_get_info(image_style_path('medium', $node->field_image['und'][$count]['uri']));
-            print '<img class="medImg" src="'. $med_path . '" title="' . $img_title . '" width="' . $img_details['width'] . '">';       
+            print '<img class="img-style-medium" src="'. $med_path . '" title="' . $img_title . '" width="' . $img_details['width'] . '">';       
 
           else:             
             $img_details = image_get_info($thumb_path);
-            print '<img class="thumbImg" src="'. $thumb_path . '" >';            
+            print '<img class="img-style-thumbnail" src="'. $thumb_path . '" >';            
 
           endif;
 
@@ -136,19 +134,10 @@ endif;
   
   <?php endif; ?>  
   
-	<div class="node-section-views"> 
-    <?php print render($content['views']) ?>    
-	</div>
-  
 	<div class="node-section-field-node-links">
 	  <?php print render($content['field_node_links']) ?>
 	</div>
 
-	<?php if($content['child_menu']) : ?>
-		<div class="node-section-children">		
-		 <?php print render($content['child_menu']); ?>
-		</div>
-	<?php endif; ?>		
 	</div>
 		</div>
 		
@@ -156,9 +145,7 @@ endif;
     <div class="breadcrumb"><span class="breadcrumb-0"><a href="/#/">#</a></span><span class="separator">/</span><span class="breadcrumb-1 last"><?php print $title ?></span></div> 
   </div>  
   
-	<div class="node-sibling-menu">
-    <?php kcl5_siblings_menu($nid); ?> 
-  </div>  
+
   
 </div>		
 <?php 

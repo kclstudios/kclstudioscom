@@ -1,7 +1,7 @@
 
 
 <?php  
-dpm($node);
+//dpm($node);
   switch($view_mode) {
     case "teaser" : /*display node in teaser format*/?>
 

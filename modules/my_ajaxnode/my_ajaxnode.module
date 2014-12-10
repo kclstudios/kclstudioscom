@@ -10,13 +10,93 @@
 
 
 
-
-
 function my_ajaxnode_init() {
  drupal_add_library('system', 'drupal.ajax');
 }
 
 
+
+function my_ajaxnode_preprocess_page(&$vars) { 
+  if($vars['is_front'] == TRUE) {
+    $vars['page']['content']['ajax_menu_panels'] = array(
+      '#markup' => __menu_as_panels('main-menu'),
+      '#weight' => 25,
+      );
+  }
+   if ($vars['node'] && $vars['node']->nid == 24) { // Projects
+    //load and output the view by name 
+    //$vars['content']['views'] = views_embed_view('projects','block');  
+  }  
+  dpm($vars);
+}
+
+
+/**
+ * Custom function to generate ajax-delivered content structure 
+ * based on the main menu structure
+ */
+function __menu_as_panels($menu = 'main-menu') {
+ $branch = menu_tree_all_data($menu,NULL,1);
+ if (!empty($branch)) {
+   $out = '<div id="panelContainer">';
+   foreach($branch as $item){     
+     //print "<pre>" . print_r($node, TRUE) . "</pre>";
+     //print "<pre>" . print_r($branch, TRUE) . "</pre>";  
+     $node =  $item['link']['link_path'] !== '<front>' ? menu_get_object('node', 1, $item['link']['link_path']) : node_load(98);     
+     $panel_display_name = !empty($node->field_panel_name) ? $node->field_panel_name['und'][0]['safe_value'] : 'Panel Name';
+     $current_path = drupal_lookup_path('alias',"node/". $node->nid);     
+ 
+     $out .= '<div id="mcs_container_' . $node->nid . '" class="panel">'; 		
+     $out .= '  <div class="container">';
+     $out .= '    <div class="content-static">'; 
+     $out .=  __assemble_panel_content($node);
+     $out .= '    </div>';
+     $out .= '    <div class="content-dynamic"></div>';
+ 	   $out .= '  </div>';   
+     $out .= '  <a class="panelControl ajax" href="/' . $current_path . '" title="' . $panel_display_name . '"><div><span>' . $panel_display_name . '</span></div></a>';
+     $out .= '</div>'; 
+ }
+ $out .= '<div class="loading-icon icon">L</div>';
+ $out .= '</div>';
+ return $out;
+ }
+}
+
+
+
+/**
+ * Custom function to render nodes and node-related content for out custom layout
+ */
+function __assemble_panel_content($node) {
+  //dpm($node);  
+  $classes[] = !empty($node->field_horiz_align) ? 'node-align-' . $node->field_horiz_align[LANGUAGE_NONE][0]['value'] : 'node-align-center';
+  $classes[] = !empty($node->field_teaser_img) ? 'has-field-teaser-img' : NULL;  
+  $classes[] = !empty($node->field_image) ? 'has-field-image' : NULL;   
+  $classes[] = !empty($node->field_display_img) ? 'has-field-display-img' : NULL;
+  $classes[] = !empty($node->field_scene) ? 'has-field-scene' : NULL;
+  $out = '<div class="panel-content ' . implode(" ", $classes) . '">';
+  $out .= drupal_render(node_view($node));
+ 
+  // One-off for Projects
+  if($node->nid == 24) { 
+    $out .= '<div class="node-section-views">';
+    //load and output the view by name 
+    $out .= views_embed_view('projects','block'); 
+    $out .= '</div>';   
+  } else {
+    $out .=  __get_node_menu_children($node->nid, $menu = 'main-menu'); 
+  }
+
+  $out .=  __get_node_menu_siblings($node->nid, $menu = 'main-menu');
+  $out .= '</div>';
+  return $out;
+}
+
+
+
+/**
+ * Implemenets hook_menu(); 
+ */
 function my_ajaxnode_menu() {
   $items['ajax/%foo_tail'] = array(
     'title' => 'AJAX Node Loader',
@@ -75,9 +155,9 @@ function ajax_node_load($arg) {
   // Get the corresponding node for the path
   $node = menu_get_object("node", 1, $my_system_path);
   
-  // 
-  $output =  node_view($node, $view_mode='full');	
-	$content = drupal_render($output);
+  // Generate some output for our AJAX responses 
+  $content = __assemble_panel_content($node);	
+	
 	$scene_id = !empty($node->field_scene) ? $node->field_scene[LANGUAGE_NONE][0]['nid'] : '';
 
   $commands = array();
@@ -184,6 +264,116 @@ function _get_parent_candidates($path = NULL) {
 
 
 
+/*
+ * Custom function to display immediate menu children of current node 
+ */
+function __get_node_menu_children($nid, $menu = 'main-menu') {
+
+  $path = 'node/'. $nid;
+  $parent = menu_link_get_preferred($path);
+  $mlid = $parent['mlid'];
+  $tree = menu_tree_all_data($menu);
+
+  //print_r(array_keys($tree['49956 Web Development 579']['link']['mlid'])); return;
+
+  $subtree = __get_menu_subtree($tree,$mlid);
+  $num_keys = array_values($subtree);
+  $children = $num_keys[0]['below'];
+  //print_r($parent);
+  if($children) {
+    $out = '<div class="node-section-menu-children">';
+    $count = 0;
+    foreach($children as $child){  
+      $child_id = str_ireplace("node/",'',$child['link']['link_path']);
+      $child_node = node_load($child_id);
+      $child_node->attributes_array['class'][] = 'poop';
+      $child_view = node_view($child_node, $view_mode = 'scrape');
+      $row = ($count % 2 == 0) ? 'even' : 'odd';    
+      $out .= '<div class="row ' . $row . '">';
+      $out .= render($child_view);
+      $out .= '</div>';
+      $count++;     
+    }
+    $out .= '</div>';
+    return $out;
+  }
+}
+
+
+
+/*
+ * Custom function to display menu siblings of current node 
+ */
+function __get_node_menu_siblings($nid, $menu = 'main-menu') {
+  // System path
+	$path = 'node/'. $nid;
+	// Get alias for system path, if exists
+	$menu_link = menu_link_get_preferred($path);
+	$mlid = $menu_link['mlid'];
+	$tree = menu_tree_all_data($menu);
+	$branch = __get_menu_subtree($tree,$mlid);	
+	$num_keys = array_values($branch);	
+	$out = '<div class="menu-custom-siblings-menu">';
+	$count = -1;
+	foreach($num_keys as $num_key) {
+		$classes = array();
+		$classes[] = 'ajax';
+		$count++;	
+		if($num_keys[$count]['link']['mlid'] == $mlid) {
+			$active = $count;
+			$classes[] = 'active';	
+			//print "<pre>" . print_r($num_keys[$count], TRUE) . "</pre>";
+			//print "<pre>" . print_r($num_keys[$count]['link']['plid'], TRUE) . "</pre>";
+			//kcl5_get_menu_item_parents($tree,$num_keys[$count]['link']['plid']);
+		}
+		$out .= '<a class="' . implode($classes, ' ') . '" href="/' . drupal_get_path_alias($num_keys[$count]['link']['href']) . '" title="' . $num_keys[$count]['link']['title'] . '"><span>' . $num_keys[$count]['link']['title'] . '</span></a>';					
+	}	
+	$out .= '</div>';
+	$prev = $num_keys[$active - 1]; 	
+	$next = $num_keys[$active + 1]; 	
+	if (!empty($prev)) { $out .= '<a class="prev-link ajax icon" href="/' . drupal_get_path_alias($prev['link']['href']) . '">l</a>'; }
+	if (!empty($next)) { $out .= '<a class="next-link ajax icon" href="/' . drupal_get_path_alias($next['link']['href']) . '">r</a>'; }
+	return $out;
+}	
+
+
+
+/**
+ * Extract a specific subtree from a menu tree based on a menu link id (mlid)
+ *
+ * @param array $tree
+ *   A menu tree data structure as returned by menu_tree_all_data() or menu_tree_page_data()
+ * @param int $mlid
+ *   The menu link id of the menu entry for which to return the subtree
+ * @return array
+ *   The found subtree, or NULL if no entry matched the mlid
+ */
+function __get_menu_subtree($tree, $mlid) {
+  // Check all top level entries
+  foreach ($tree as $key => $element) {
+    // Is this the entry we are looking for?
+    if ($mlid == $element['link']['mlid'])  {
+      // Yes, return while keeping the key
+      return array($key => $element);
+    }
+    else {
+      // No, recurse to children, if any
+      if ($element['below']) {
+        $submatch = __get_menu_subtree($element['below'], $mlid);
+        // Found wanted entry within the children?
+        if ($submatch) {
+          // Yes, return it and stop looking any further
+          return $submatch;
+        }
+      }
+    }
+  }
+  // No match at all
+  return NULL;
+}
+
+
+
 /**
  * Instance of hook_forms
  * Define registration and video access forms
@@ -207,35 +397,37 @@ function __kclstudios_custom_contact_form($form, &$form_state) {
     '#title' => t('Name'),
     '#type' => 'textfield',
     '#required' => TRUE,
-    );
- 
-  $form['email'] = array(
+  );
+ $form['email'] = array(
     '#title' => t('E-mail'),
     '#type' => 'textfield',
     '#required' => TRUE,
-    );
+  );  
+  $form['company'] = array(
+    '#title' => t('Company'),
+    '#type' => 'textfield',
+   );
   $form['phone_number'] = array(
     '#title' => t('Phone Number'),
     '#type' => 'textfield',
-    );
+  );
   $form['message'] = array(
     '#title' => t('Message'),
     '#type' => 'textarea',
-    );
-  $form['choice_of_contact'] = array(
-    '#title' => t('How would you like us to contact you?'),
+  ); 
+  $form['method_of_contact'] = array(
+    '#title' => t('How would you liked to be contacted?'),
     '#type' => 'radios',
     '#options' => array(
-      'Yes' => 'Email',
-      'No' => 'Phone',      
+      'email' => 'Email',
+      'phone' => 'Phone',      
       )
-    );       
+  ); 
   $form['my_captcha_element'] = array(
-    '#type' => 'captcha',
-    //'#description' => t('This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.'),
-    //'#captcha_type' => 'image_captcha/Image',
-    '#required' => TRUE,
-    );      
+      '#type' => 'captcha',
+      '#captcha_type' => 'image_captcha/Image',
+      '#required' => TRUE,
+      );       
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Send'),
@@ -245,10 +437,14 @@ function __kclstudios_custom_contact_form($form, &$form_state) {
       'method' => 'replace',
       'effect' => 'fade',
       ),
-    );    
+    );         
+  //dpm($form);
   return $form;
 }
   
+
+
+
 /**
  * Blocks
  */
@@ -259,6 +455,7 @@ function my_ajaxnode_block_info() {
   	);  
 	return $blocks;		
 }
+
 
 
 /**
@@ -276,8 +473,9 @@ function my_ajaxnode_block_view($delta = '') {
 }
 
 
+
 /**
- * Ajax callback for contact form
+ * Ajax callback for form
  */
 function __custom_contact_form_submit($form, &$form_state) {  
   //dpm($form_state);
@@ -285,7 +483,7 @@ function __custom_contact_form_submit($form, &$form_state) {
   // Perform some validation for our required elements
   if( $form_state['values']['name'] == '' || $form_state['values']['email'] == '') {    
     if($form_state['values']['name'] == '') {
-      $message = '<p>Please provide your name.</p>';
+      $message = '<p>Please provide a contact name.</p>';
       form_set_error("name", t($message));     
     }  
     if($form_state['values']['email'] == '') {
@@ -293,38 +491,26 @@ function __custom_contact_form_submit($form, &$form_state) {
       form_set_error("email", t($message));     
     } 
     return($form); 
-  } else {   
-    //drupal_set_message('Hey yo', 'status');
+  } else {    
+    // Invoke our Rules event
+    rules_invoke_event('custom_contact_form_submitted', $form_state['values']['name'], $form_state['values']['email'], $form_state['values']['company'], $form_state['values']['phone_number'], $form_state['values']['message'], $form_state['values']['method_of_contact']); 
+   //rules_invoke_event('custom_contact_form_submitted', $form_state['values']['name']);
      // rebuild the form after submitted successfully
-     //$form_state['rebuild'] = TRUE;
+     $form_state['rebuild'] = TRUE;
      // try this if you want to reset the form item values
      //$form_state['input'] = array();
-    //$form_state['values']['first_name'] = 'Evalllllluator';
-    //watchdog('debug', print_r(array_filter($form_state['values']['events']), 1));
-    // Set our session variable
-    rules_invoke_event('custom_contact_form_submitted', $form_state['values']['name'], $form_state['values']['email'], $form_state['values']['phone_number'], $form_state['values']['message'], $form_state['values']['choice_of_contact']); 
-    // Initiate a webform submission for each event        
+   
+    watchdog('debug', $form_state['values']['name']);
+   // Initiate a webform submission for each event        
     $msg = '';
-    $msg .= '<div class="custom-contact-confirm"><h3>Thank you for contacting us.</h3><p>We appreciate your interest and will get back to you shortly.</p>';   
-    // Treat them in Drupal way to load the form in AJAX, so that all the necessary scripts will be loaded.
-    
-    //unset($form['name']['#value']);
-
-  // Clear form and form state cache
- // $form_state = form_state_defaults();
- // $form_build_id = $_POST['form_build_id'];
- // form_set_cache($form_build_id, $form, $form_state);
- //   $new_form = drupal_rebuild_form('kclstudios_custom_contact_form',$form_state,$form);
-    
-    //$commands[] = ajax_command_html('.region-contact-overlay', '<p>Success</p>'); 
-    //$result =  array(
-     // '#type' => 'ajax',
-     // '#commands' => $commands,
-    //);
+    $msg .= 'Message sent. Thank you for your interest in KCL Studios.';   
+    // Treat them in Drupal way to load the form in AJAX, so that all the necessary scripts will be loaded.  
     //dpm($form);
-    return($msg);     
+    drupal_set_message($msg);
+    return($form);     
   }
 }
+
 
 
 /**
@@ -334,14 +520,15 @@ function __custom_contact_form_submit($form, &$form_state) {
 function my_ajaxnode_rules_event_info() {
   return array(
     'custom_contact_form_submitted' => array(
-      'label' => t('User submits the custom contact form'),
+      'label' => t('User submits the KCL Studios custom contact form'),
       'module' => 'my_ajaxnode',
       'variables' => array(
         'name' => array('type' => 'text', 'label' => t('Name')),
         'email' => array('type' => 'text', 'label' => t('Email')),
+        'company' => array('type' => 'text', 'label' => t('Company')),
         'phone_number' => array('type' => 'text', 'label' => t('Phone Number')),
         'message' => array('type' => 'text', 'label' => t('Message')),
-        'choice_of_contact' => array('type' => 'text', 'label' => t('Choice of Contact')),
+        'method_of_contact' => array('type' => 'text', 'label' => t('Method of Contact')),
       ),
     ),
   );

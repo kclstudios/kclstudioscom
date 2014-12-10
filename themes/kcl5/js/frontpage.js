@@ -332,7 +332,6 @@ function loadScene(sceneId){
 	  Animator.sceneId = sceneId;
 		Animator.stop();
 		Animator.clear();
-	
 
 
 	
@@ -374,8 +373,7 @@ function loadScene(sceneId){
 					assetsLoaded++		
 					readOut("Asset " + assetsLoaded + " of " + assetCount + " loaded.")	
 					if(assetsLoaded == assetCount) {
-						readOut("Scene loaded.");		
-						
+						readOut("Scene loaded.");							
 						Animator.init();							
 					}
 			})
@@ -406,7 +404,7 @@ function initScene(){
 			} else {
 				boxSize = outerHeight;
 			}
-			scale = outerWidth/2500;
+			scale = boxSize/2500;
 		}
 		$('#scene-container').height(boxSize+'px');
 		$('#scene-container').width(boxSize+'px');
@@ -449,18 +447,18 @@ function initScene(){
 	
 				//scale coordinates to make responsive
 				
-				startX = calcScale(startX,scale)
-				endX = calcScale(endX,scale)
-				startY = calcScale(startY,scale)
-				endY = calcScale(endY,scale)				
+				startX = calcScale(startX,scale);
+				endX = calcScale(endX,scale);
+				startY = calcScale(startY,scale);
+				endY = calcScale(endY,scale);		
 				
 				if (imgSrc != ''){
 					if (bgRepeat == 'no-repeat') {
 						var elem = $('<img />', {
 								'class' : 'scene-layer',
 								src : imgSrc,
-								left : startX,
-								top : startY						
+								//left : startX,
+								//top : startY						
 						})	
 						$("#scene").append(elem)	
 						elem.height(elem.height()*scale)
@@ -828,17 +826,18 @@ formatHash();
 //adjustResize();
 
 $("a.ajax").live("click",function(e){	
+  e.preventDefault();
 	$(this).writeHash();
-	return false;
+	
 })
 
 $("#main-menu li a").live("click",function(e){	
-    e.preventDefault();
-    $(this).writeHash(); 
+  e.preventDefault();
+  $(this).writeHash(); 
 })
 
 $(document).delegate(".menu-custom-siblings-menu a","mouseenter",function(e){	
-    console.log('Mouse entered siblings menu');
+  console.log('Mouse entered siblings menu');
 	$(".breadcrumb > span.last").hide(0);	
 	$(".breadcrumb").append('<span class="target">' + $(this).attr('title') + '</span>');	
 })   

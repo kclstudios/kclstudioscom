@@ -1,13 +1,20 @@
-
-$blue-dark-2: #282833;
+$blue-light-7: #E6FFFF;
+$blue-light-6: #CCFFFF;
+$blue-light-5: #B2E5FF;
+$blue-light-4: #99CCFF;
+$blue-light-3: #80B3E6;
+$blue-light-2: #6699CC;
+$blue-light-1: #4D80B3;
 $blue: #336699;
-$blue-dark: #112233;
-$blue-light-1: #6699CC;
-$blue-light-2: #99CCFF;
-$blue-light-3: #CCEEFF;
-$blue-light-variant: #D8E5F2;
-$white: #FFF;
+$blue-dark-1: #1A4D80;
+$blue-dark-2: #003366;
+$blue-dark-3: #001A4D;
+$blue-dark-4: #000033;
+$blue-dark-5: #00001A;
 
+$white: #F1F3F6;
+
+$alt-text-color: $blue-dark-5;
 
 @import "compass/css3";
 @import "compass/reset";
@@ -17,14 +24,14 @@ a,
 a:link,
 a:visited {
   cursor: pointer;
-  color: #336699;
+  color: #6699CC;
   outline: medium none;
   text-decoration: none; 
   transition: color 0.3s;
 }
 
 a:hover {
-  color: #6699CC;
+  color: #99CCFF;
 }
 
 

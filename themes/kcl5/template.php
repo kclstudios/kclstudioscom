@@ -73,42 +73,7 @@ drupal_add_html_head($element2, 'google_font_orbitron');
 }
  
 
-/**
- *
- * Return markup for our menu-based ajax framework 
- * 
- */
-function kcl5_main_menu_as_panels() {
- $branch = menu_tree_all_data('main-menu',NULL,1);
- if (!empty($branch)) {
-   $out = '<div id="panelContainer">';
-   foreach($branch as $item){    
-     
-     //print "<pre>" . print_r($node, TRUE) . "</pre>";
-     //print "<pre>" . print_r($branch, TRUE) . "</pre>";  
-     $node =  $item['link']['link_path'] !== '<front>' ? menu_get_object('node', 1, $item['link']['link_path']) : node_load(98);     
-     $panel_display_name = !empty($node->field_panel_name) ? $node->field_panel_name['und'][0]['safe_value'] : 'Panel Name';
-     $current_path = drupal_lookup_path('alias',"node/". $node->nid);
-     
-     
- 
-     $out .= '<div id="mcs_container_' . $node->nid . '" class="panel">'; 		
-     $out .= '  <div class="container">';
-     $out .= '      <div class="content-static">'; 
-     $out .= drupal_render(node_view($node));
-     $out .= '      </div>';
-     $out .= '      <div class="content-dynamic"></div>';
- 	   $out .= '</div>';   
-     $out .= '<a class="panelControl ajax" href="/' . $current_path . '" title="' . $panel_display_name . '"><div><span>' . $panel_display_name . '</span></div></a>';
-     $out .= '</div>';
-  
 
- 
- }
- $out .= '<div class="loading-icon icon">L</div></div>';
- print $out;
- }
-}
 
 /**
  * Instance off HOOK_breadcrumb
@@ -170,16 +135,14 @@ function kcl5_preprocess_node(&$vars) {
   $classes = &$vars['classes_array'];
   $title_classes = &$vars['title_attributes_array']['class'];
   $content_classes = &$vars['content_attributes_array']['class'];
-  $vars['content']['child_menu'] = kcl5_child_menu($vars['nid']);
-   
+    
   if ($vars['nid'] == 20) { // Blog
     //load and output the view by name
-    $vars['content']['views'] = views_embed_view('blog','block');
-    unset($vars['content']['child_menu']);
+    //$vars['content']['views'] = views_embed_view('blog','block');    
   }
   if ($vars['nid'] == 24) { // Projects
     //load and output the view by name 
-    $vars['content']['views'] = views_embed_view('projects','block');  
+    //$vars['content']['views'] = views_embed_view('projects','block');  
   }  
   if ($vars['nid'] == 113) { // Contact
     //load and output the view by name 

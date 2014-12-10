@@ -200,7 +200,7 @@ $images = isset($node->field_image['und']) ? $node->field_image['und'] : NULL;
 <?php
 $block = module_invoke('aggregator', 'block_view', 'feed-1'); 
 print render($block['content']); 
-?></h3>
+?>
 
     </div>
   
@@ -211,9 +211,7 @@ print render($block['content']);
 	<?php endif; ?>
 
 	
-	<div class="node-section-children">
-	  <?php kcl5_child_menu($nid); ?>	
-	</div>		
+
 		</div>
 		
 
@@ -221,9 +219,7 @@ print render($block['content']);
 	  <?php print theme('breadcrumb', array('breadcrumb'=>drupal_get_breadcrumb())); ?>
 	</div> 
 	
-	<div class="node-sibling-menu">
-    <?php kcl5_siblings_menu($nid); ?> 
-  </div>  
+
 	
 </div>		
 <?php

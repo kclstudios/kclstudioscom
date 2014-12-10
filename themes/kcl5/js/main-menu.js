@@ -92,6 +92,13 @@
 	  	    $(this).toggleClass('on');
 	  	    $("#main-menu").toggleClass('on');   
 	  	  }); 	
+	  	
+	  // Contact Toggle
+	  
+	  	$("#contact-toggle").click(function(e) {
+	  	    e.preventDefault();	  	  
+	  	    $("#main-menu ul > li.last > a").trigger('click');   
+	  	  }); 		  	
 		
 	});  	
 
